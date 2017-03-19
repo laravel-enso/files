@@ -2,30 +2,26 @@
 
 namespace LaravelEnso\FileManager;
 
-class FileManager {
-
+class FileManager
+{
     public $uploadedFiles;
     private $path;
     private $status = null;
 
-
-    public function __construct($path) {
-
+    public function __construct($path)
+    {
         $this->uploadedFiles = collect();
         $this->path = $path;
-        $this->status = new FileManagerStatus;
+        $this->status = new FileManagerStatus();
     }
 
     /** Starts the 2 step upload process for a list of files
-     *
      * @param $request - array of files
      */
-    public function startUpload($request) {
-
+    public function startUpload($request)
+    {
         foreach ($request as $file) {
-
             if (!$file->isValid()) {
-
                 $this->logError($file);
             }
 
@@ -40,10 +36,9 @@ class FileManager {
      *
      * @param $file
      */
-    public function startSingleFileUpload($file) {
-
+    public function startSingleFileUpload($file)
+    {
         if (!$file->isValid()) {
-
             $this->logError($file);
         }
 
@@ -51,55 +46,53 @@ class FileManager {
         $this->setStatus(__('Upload'));
     }
 
-    public function commitUpload() {
-
+    public function commitUpload()
+    {
         $this->uploadedFiles->each(function ($uploadedFile) {
-
-            \Storage::move(env('TEMP_PATH') . '/' . $uploadedFile['saved_name'],
-                $this->path . '/' . $uploadedFile['saved_name']);
+            \Storage::move(env('TEMP_PATH').'/'.$uploadedFile['saved_name'],
+                $this->path.'/'.$uploadedFile['saved_name']);
         });
 
         return $this->status;
     }
 
-    public function delete(String $fileName) {
-
-        \Storage::delete($this->path . '/' . $fileName);
+    public function delete(String $fileName)
+    {
+        \Storage::delete($this->path.'/'.$fileName);
         $this->setStatus(__('Delete'));
 
         return $this->status;
     }
 
     /** Load file from disk and give it back within a wrapper containing also mimeType
-     *
-     * @param String $fileSavedName
+     * @param string $fileSavedName
      *
      * @return FileWrapper
      */
-    public function getFile(String $fileSavedName) {
-
-        $file = \Storage::get($this->path . '/' . $fileSavedName);
-        $mimeType = \Storage::getMimeType($this->path . '/' . $fileSavedName);
+    public function getFile(String $fileSavedName)
+    {
+        $file = \Storage::get($this->path.'/'.$fileSavedName);
+        $mimeType = \Storage::getMimeType($this->path.'/'.$fileSavedName);
 
         return new FileWrapper($file, $mimeType);
     }
 
-    public function getStatus() {
-
+    public function getStatus()
+    {
         return $this->status;
     }
 
     /************* private functions **************/
 
-    private function setStatus(String $operation) {
-
+    private function setStatus(String $operation)
+    {
         $this->status->level = $this->status->errors->count() ? 'error' : 'success';
-        $this->status->message = $this->status->errors->count() ? $operation . ' encountered ' . $this->status->errors->count() . ' errors'
-            : $operation . ' was successfull';
+        $this->status->message = $this->status->errors->count() ? $operation.' encountered '.$this->status->errors->count().' errors'
+            : $operation.' was successfull';
     }
 
-    private function logError($file) {
-
+    private function logError($file)
+    {
         $this->status->errors->push([
 
             'error' => __('File is not valid'),
@@ -108,18 +101,18 @@ class FileManager {
     }
 
     //TODO on uploadCommit, we should probably cleanup the object for reuse
-    private function cleanupOnUploadCommit() {
-
+    private function cleanupOnUploadCommit()
+    {
         $this->status = null;
         $this->uploadedFiles = collect();
     }
 
-    private function uploadToTemp($file) {
-
+    private function uploadToTemp($file)
+    {
         $fileName = $file->getClientOriginalName();
-        $fileSavedName = md5($fileName . \Date::now()) . '.' . $file->getClientOriginalExtension();
+        $fileSavedName = md5($fileName.\Date::now()).'.'.$file->getClientOriginalExtension();
         $fileSize = $file->getClientSize();
-        $file->move(storage_path('app/' . env('TEMP_PATH')), $fileSavedName);
+        $file->move(storage_path('app/'.env('TEMP_PATH')), $fileSavedName);
 
         $this->uploadedFiles->push([
             'original_name' => $fileName,

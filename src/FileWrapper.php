@@ -6,7 +6,6 @@ use LaravelEnso\Helpers\Classes\AbstractObject;
 
 class FileWrapper extends AbstractObject
 {
-
     public $file;
     public $originalName;
     public $statusCode;
@@ -14,19 +13,18 @@ class FileWrapper extends AbstractObject
 
     public function __construct($file, String $mimeType)
     {
-
-        $this->file       = $file;
+        $this->file = $file;
         $this->statusCode = 200;
-        $this->mimeType   = $mimeType;
+        $this->mimeType = $mimeType;
     }
 
-    public function getDownloadResponse() {
-
+    public function getDownloadResponse()
+    {
         return $this->getResponse('attachment');
     }
 
-    public function getInlineResponse() {
-
+    public function getInlineResponse()
+    {
         return $this->getResponse('inline');
     }
 
@@ -35,7 +33,7 @@ class FileWrapper extends AbstractObject
         return response()->make($this->file, $this->statusCode, [
 
             'Content-Type'        => $this->mimeType,
-            'Content-Disposition' => $contentDisposition . '; filename="' . $this->originalName . '"',
+            'Content-Disposition' => $contentDisposition.'; filename="'.$this->originalName.'"',
         ]);
     }
 }
