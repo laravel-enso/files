@@ -3,8 +3,6 @@
 namespace LaravelEnso\FileManager\Classes;
 
 use Carbon\Carbon;
-use LaravelEnso\FileManager\Classes\FileManagerStatus;
-use LaravelEnso\FileManager\Classes\FileWrapper;
 
 class FileManager
 {
