@@ -1,6 +1,10 @@
 <?php
 
-namespace LaravelEnso\FileManager;
+namespace LaravelEnso\FileManager\Classes;
+
+use Carbon\Carbon;
+use LaravelEnso\FileManager\Classes\FileManagerStatus;
+use LaravelEnso\FileManager\Classes\FileWrapper;
 
 class FileManager
 {
@@ -110,9 +114,11 @@ class FileManager
     private function uploadToTemp($file)
     {
         $fileName = $file->getClientOriginalName();
-        $fileSavedName = md5($fileName.\Date::now()).'.'.$file->getClientOriginalExtension();
+        $fileSavedName = md5($fileName.Carbon::now()).'.'.$file->getClientOriginalExtension();
         $fileSize = $file->getClientSize();
+        \Log::info(storage_path('app/'.env('TEMP_PATH')));
         $file->move(storage_path('app/'.env('TEMP_PATH')), $fileSavedName);
+        \Log::info($fileSavedName);
 
         $this->uploadedFiles->push([
             'original_name' => $fileName,

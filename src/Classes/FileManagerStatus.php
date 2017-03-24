@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelEnso\FileManager;
+namespace LaravelEnso\FileManager\Classes;
 
 use LaravelEnso\Helpers\Classes\AbstractObject;
 
