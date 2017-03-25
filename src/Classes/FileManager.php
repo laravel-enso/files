@@ -23,8 +23,10 @@ class FileManager
     public function startUpload($request)
     {
         foreach ($request as $file) {
-            if (!$file->isValid()) {   $this->logError($file);
+            if (!$file->isValid()) {
+                $this->logError($file);
             }
+
             $this->uploadToTemp($file);
         }
 
@@ -38,8 +40,10 @@ class FileManager
      */
     public function startSingleFileUpload($file)
     {
-        if (!$file->isValid()) {   $this->logError($file);
+        if (!$file->isValid()) {
+            $this->logError($file);
         }
+
         $this->uploadToTemp($file);
         $this->setStatus(__('Upload'));
     }
@@ -88,8 +92,10 @@ class FileManager
         $this->status->message = $this->status->errors->count() ? $operation.' encountered '.$this->status->errors->count().' errors'
             : $operation.' was successfull';
     }
-rivate function logError($file)
+
+    private function logError($file)
     {
+        $this->status->errors->push([
 
             'error' => __('File is not valid'),
             'file'  => $file,
