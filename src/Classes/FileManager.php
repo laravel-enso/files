@@ -23,10 +23,8 @@ class FileManager
     public function startUpload($request)
     {
         foreach ($request as $file) {
-            if (!$file->isValid()) {
-                $this->logError($file);
+            if (!$file->isValid()) {   $this->logError($file);
             }
-
             $this->uploadToTemp($file);
         }
 
@@ -40,10 +38,8 @@ class FileManager
      */
     public function startSingleFileUpload($file)
     {
-        if (!$file->isValid()) {
-            $this->logError($file);
+        if (!$file->isValid()) {   $this->logError($file);
         }
-
         $this->uploadToTemp($file);
         $this->setStatus(__('Upload'));
     }
@@ -92,10 +88,8 @@ class FileManager
         $this->status->message = $this->status->errors->count() ? $operation.' encountered '.$this->status->errors->count().' errors'
             : $operation.' was successfull';
     }
-
-    private function logError($file)
+rivate function logError($file)
     {
-        $this->status->errors->push([
 
             'error' => __('File is not valid'),
             'file'  => $file,
@@ -114,9 +108,7 @@ class FileManager
         $fileName = $file->getClientOriginalName();
         $fileSavedName = md5($fileName.Carbon::now()).'.'.$file->getClientOriginalExtension();
         $fileSize = $file->getClientSize();
-        \Log::info(storage_path('app/'.env('TEMP_PATH')));
         $file->move(storage_path('app/'.env('TEMP_PATH')), $fileSavedName);
-        \Log::info($fileSavedName);
 
         $this->uploadedFiles->push([
             'original_name' => $fileName,
