@@ -51,7 +51,7 @@ class FileManager
     public function commitUpload()
     {
         $this->uploadedFiles->each(function ($uploadedFile) {
-            \Storage::move(env('TEMP_PATH').'/'.$uploadedFile['saved_name'],
+            \Storage::move(config('laravel-enso.paths.temp').'/'.$uploadedFile['saved_name'],
                 $this->path.'/'.$uploadedFile['saved_name']);
         });
 
@@ -114,7 +114,7 @@ class FileManager
         $fileName = $file->getClientOriginalName();
         $fileSavedName = md5($fileName.Carbon::now()).'.'.$file->getClientOriginalExtension();
         $fileSize = $file->getClientSize();
-        $file->move(storage_path('app/'.env('TEMP_PATH')), $fileSavedName);
+        $file->move(storage_path('app/'.config('laravel-enso.paths.temp')), $fileSavedName);
 
         $this->uploadedFiles->push([
             'original_name' => $fileName,
