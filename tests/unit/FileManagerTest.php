@@ -4,28 +4,24 @@
  * Created by PhpStorm.
  * User: mihai
  * Date: 07.06.2017
- * Time: 11:57
+ * Time: 11:57.
  */
-
+use App\User;
 use Illuminate\Support\Facades\Storage;
 use LaravelEnso\FileManager\Classes\FileManager;
 use Tests\TestCase;
-use App\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use LaravelEnso\DataImport\App\Http\Controllers\DataImportController;
-use LaravelEnso\DataImport\app\Models\DataImport;
 
-class FileManagerTest extends TestCase {
-
+class FileManagerTest extends TestCase
+{
     private $testFilePath;
     private $basePath;
 
-    protected function setUp() {
-
+    protected function setUp()
+    {
         parent::setUp();
 
-        $this->basePath = __DIR__ . '/../testFiles/';
-        $this->testFilePath  = $this->basePath . 'test_file.txt';
+        $this->basePath = __DIR__.'/../testFiles/';
+        $this->testFilePath = $this->basePath.'test_file.txt';
     }
 
     protected function tearDown()
@@ -35,15 +31,13 @@ class FileManagerTest extends TestCase {
         Storage::delete($files);
     }
 
-
     /** @test */
-    public function can_start_multiple_upload() {
-
+    public function can_start_multiple_upload()
+    {
         $fileManager = new FileManager(config('laravel-enso.paths.files'));
 
         $createdFiles = collect();
-        for($i=0; $i<3; $i++) {
-
+        for ($i = 0; $i < 3; $i++) {
             $currentOriginalFileName = 'test_file_'.$i.'.txt';
             $file = $this->createUploadedFile($this->testFilePath, $currentOriginalFileName, 'text/plain');
             $createdFiles->put($currentOriginalFileName, $file);
@@ -56,14 +50,12 @@ class FileManagerTest extends TestCase {
     }
 
     /** @test */
-    public function can_start_single_upload() {
-
+    public function can_start_single_upload()
+    {
         $fileManager = new FileManager(config('laravel-enso.paths.files'));
 
         $currentOriginalFileName = 'test_file.txt';
         $file = $this->createUploadedFile($this->testFilePath, $currentOriginalFileName, 'text/plain');
-
-
 
         $fileManager->startSingleFileUpload($file);
 
@@ -72,8 +64,8 @@ class FileManagerTest extends TestCase {
     }
 
     /** @test */
-    public function can_commit_upload_and_delete() {
-
+    public function can_commit_upload_and_delete()
+    {
         $fileManager = new FileManager(config('laravel-enso.paths.files'));
         $currentOriginalFileName = 'test_file.txt';
         $file = $this->createUploadedFile($this->testFilePath, $currentOriginalFileName, 'text/plain');
@@ -91,8 +83,8 @@ class FileManagerTest extends TestCase {
     }
 
     /** @test */
-    public function can_get_uploaded_file() {
-
+    public function can_get_uploaded_file()
+    {
         $fileManager = new FileManager(config('laravel-enso.paths.files'));
         $currentOriginalFileName = 'test_file.txt';
         $file = $this->createUploadedFile($this->testFilePath, $currentOriginalFileName, 'text/plain');
@@ -104,7 +96,6 @@ class FileManagerTest extends TestCase {
         $savedFileName = $fileManager->uploadedFiles->first()['saved_name'];
         $fileWrapper = $fileManager->getFile($savedFileName);
 
-
         $this->assertEquals('text/plain', $fileWrapper->mimeType);
         $this->assertEquals(file_get_contents($this->testFilePath), $fileWrapper->file); //file = contents of the file
 
@@ -114,8 +105,8 @@ class FileManagerTest extends TestCase {
 
     /********************* private helpers ************************/
 
-    private function createUploadedFile($filePath, $originalName, $mimeType=null) {
-
+    private function createUploadedFile($filePath, $originalName, $mimeType = null)
+    {
         $temporaryFilePath = $this->createTempFile($this->testFilePath);
 
         //this file gets automatically deleted at the end of the test by Laravel
@@ -125,20 +116,19 @@ class FileManagerTest extends TestCase {
         return $file;
     }
 
-    private function createTempFile($path) {
-
-        $randomPrefix = mt_rand(100,1000);
-        $tempFilePath = $this->basePath . $randomPrefix . 'temp.txt';
+    private function createTempFile($path)
+    {
+        $randomPrefix = mt_rand(100, 1000);
+        $tempFilePath = $this->basePath.$randomPrefix.'temp.txt';
         copy($path, $tempFilePath);
 
         return $tempFilePath;
     }
 
-    private function excludeGitIgnore(&$files) {
-
-        foreach ($files as $index => $file ) {
-
-            if(str_contains($file, '.gitignore')) {
+    private function excludeGitIgnore(&$files)
+    {
+        foreach ($files as $index => $file) {
+            if (str_contains($file, '.gitignore')) {
                 unset($files[$index]);
             }
         }
