@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-/**
+/*
  * Created by PhpStorm.
  * User: mihai
  * Date: 07.06.2017
@@ -11,7 +11,6 @@ namespace Tests;
 use App\User;
 use Illuminate\Support\Facades\Storage;
 use LaravelEnso\FileManager\Classes\FileManager;
-use Tests\TestCase;
 
 class FileManagerTest extends TestCase
 {
