@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests;
+
 /**
  * Created by PhpStorm.
  * User: mihai
