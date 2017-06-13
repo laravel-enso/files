@@ -2,9 +2,7 @@
 
 namespace LaravelEnso\FileManager\Classes;
 
-use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
-use LaravelEnso\Helpers\Classes\Object;
 
 class FileUploader
 {
@@ -47,7 +45,7 @@ class FileUploader
     private function uploadFile(UploadedFile $file)
     {
         if (!$file->isValid()) {
-            throw new \EnsoException("Error Processing File:".$file->getClientOriginalName(), 409);
+            throw new \EnsoException('Error Processing File:'.$file->getClientOriginalName(), 409);
         }
 
         $this->uploadToTemp($file);
@@ -69,7 +67,7 @@ class FileUploader
 
     private function deleteTempFiles()
     {
-        $this->files->each(function($file) {
+        $this->files->each(function ($file) {
             \Storage::delete(config('laravel-enso.paths.temp').'/'.$file['saved_name']);
         });
     }

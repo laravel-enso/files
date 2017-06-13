@@ -2,10 +2,6 @@
 
 namespace LaravelEnso\FileManager\Classes;
 
-use Carbon\Carbon;
-use Illuminate\Http\UploadedFile;
-use LaravelEnso\Helpers\Classes\Object;
-
 class FileManager
 {
     private $filesPath;
