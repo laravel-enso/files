@@ -3,124 +3,80 @@
 namespace LaravelEnso\FileManager\Classes;
 
 use Carbon\Carbon;
+use Illuminate\Http\UploadedFile;
+use LaravelEnso\Helpers\Classes\Object;
 
 class FileManager
 {
-    public $uploadedFiles;
-    private $path;
-    private $status;
+    private $filesPath;
+    private $uploader;
+    private $inlineContent;
+    private $downloadContent;
 
-    public function __construct($path)
+    public function __construct(string $filesPath, string $tempPath = null)
     {
-        $this->uploadedFiles = collect();
-        $this->path = $path;
-        $this->status = new FileManagerStatus();
+        $this->filesPath = $filesPath;
+        $this->uploader = $tempPath ? new FileUploader($this->filesPath, $tempPath) : null;
+        $this->inlineContent = 'inline';
+        $this->downloadContent = 'attachment';
     }
 
-    /** Starts the 2 step upload process for a list of files
-     * @param $request - array of files
-     */
-    public function startUpload($request)
+    public function startUpload($payload)
     {
-        foreach ($request as $file) {
-            if (!$file->isValid()) {
-                $this->logError($file);
-            }
+        $this->uploader->start($payload);
 
-            $this->uploadToTemp($file);
-        }
-
-        $this->setStatus(__('Upload'));
-    }
-
-    /** Starts the upload process for a single file. Method might be called multiple times if needed, followed by
-     * by a single commitUpload call, that will complete the upload for all given files.
-     *
-     * @param $file
-     */
-    public function startSingleFileUpload($file)
-    {
-        if (!$file->isValid()) {
-            $this->logError($file);
-        }
-
-        $this->uploadToTemp($file);
-        $this->setStatus(__('Upload'));
+        return $this;
     }
 
     public function commitUpload()
     {
-        $this->uploadedFiles->each(function ($uploadedFile) {
-            \Storage::move(config('laravel-enso.paths.temp').'/'.$uploadedFile['saved_name'],
-                $this->path.'/'.$uploadedFile['saved_name']);
-        });
-
-        return $this->status;
+        $this->uploader->commit();
     }
 
-    public function delete(String $fileName)
+    public function getUploadedFiles()
     {
-        \Storage::delete($this->path.'/'.$fileName);
-        $this->setStatus(__('Delete'));
-
-        return $this->status;
+        return $this->uploader->getFiles();
     }
 
-    /** Load file from disk and give it back within a wrapper containing also mimeType
-     * @param string $fileSavedName
-     *
-     * @return FileWrapper
-     */
-    public function getFile(String $fileSavedName)
+    public function deleteTempFiles()
     {
-        $file = \Storage::get($this->path.'/'.$fileSavedName);
-        $mimeType = \Storage::getMimeType($this->path.'/'.$fileSavedName);
-
-        return new FileWrapper($file, $mimeType);
+        $this->uploader->deleteTempFiles();
     }
 
-    public function getStatus()
+    public function getInline(string $originalName, string $savedName)
     {
-        return $this->status;
+        $fileResponse = $this->setFileRequest($originalName, $savedName, $this->inlineContent);
+
+        return $fileResponse->get();
     }
 
-    /************* private functions **************/
-
-    private function setStatus(String $operation)
+    public function download(string $originalName, string $savedName)
     {
-        $this->status->level = $this->status->errors->count() ? 'error' : 'success';
-        $this->status->message = $this->status->errors->count() ? $operation.' encountered '.$this->status->errors->count().' errors'
-            : $operation.' was successfull';
+        $fileResponse = $this->setFileRequest($originalName, $savedName, $this->downloadContent);
+
+        return $fileResponse->get();
     }
 
-    private function logError($file)
+    public function delete(string $fileName)
     {
-        $this->status->errors->push([
-
-            'error' => __('File is not valid'),
-            'file'  => $file,
-        ]);
+        \Storage::delete($this->filesPath.'/'.$fileName);
     }
 
-    //TODO on uploadCommit, we should probably cleanup the object for reuse
-    private function cleanupOnUploadCommit()
+    private function setFileRequest(string $originalName, string $savedName, string $contentDisposition)
     {
-        $this->status = null;
-        $this->uploadedFiles = collect();
+        $file = $this->getFileFromStorage($savedName);
+        $mimeType = $this->getMimeType($savedName);
+
+        return new FileResponse($file, $originalName, $contentDisposition, $mimeType);
     }
 
-    private function uploadToTemp($file)
+    private function getFileFromStorage(string $fileName)
     {
-        $fileName = $file->getClientOriginalName();
-        $randomPrefix = mt_rand(100, 1000);
-        $fileSavedName = md5($randomPrefix.$fileName.Carbon::now()).'.'.$file->getClientOriginalExtension();
-        $fileSize = $file->getClientSize();
-        $file->move(storage_path('app/'.config('laravel-enso.paths.temp')), $fileSavedName);
+        return \Storage::get($this->filesPath.'/'.$fileName);
+    }
 
-        $this->uploadedFiles->push([
-            'original_name' => $fileName,
-            'saved_name'    => $fileSavedName,
-            'size'          => $fileSize,
-        ]);
+    private function getMimeType(string $fileName)
+    {
+        return \Storage::getMimeType($this->filesPath.'/'.$fileName);
     }
 }
