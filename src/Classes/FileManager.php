@@ -112,7 +112,8 @@ class FileManager
     private function uploadToTemp($file)
     {
         $fileName = $file->getClientOriginalName();
-        $fileSavedName = md5($fileName.Carbon::now()).'.'.$file->getClientOriginalExtension();
+        $randomPrefix = mt_rand(100, 1000);
+        $fileSavedName = md5($randomPrefix.$fileName.Carbon::now()).'.'.$file->getClientOriginalExtension();
         $fileSize = $file->getClientSize();
         $file->move(storage_path('app/'.config('laravel-enso.paths.temp')), $fileSavedName);
 
