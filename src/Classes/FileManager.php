@@ -8,7 +8,7 @@ class FileManager
 {
     public $uploadedFiles;
     private $path;
-    private $status = null;
+    private $status;
 
     public function __construct($path)
     {
