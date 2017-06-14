@@ -61,7 +61,7 @@ class FileManagerTest extends TestCase
         $uploadedFile = $this->fileManager->getUploadedFiles()->first();
         $response = $this->fileManager->getInline($uploadedFile['original_name'], $uploadedFile['saved_name']);
 
-        $this->assertEquals(200, $response->status());
+        $this->assertEquals(200, $response->getStatusCode());
 
         $this->cleanUp();
     }
@@ -73,7 +73,7 @@ class FileManagerTest extends TestCase
         $uploadedFile = $this->fileManager->getUploadedFiles()->first();
         $response = $this->fileManager->download($uploadedFile['original_name'], $uploadedFile['saved_name']);
 
-        $this->assertEquals(200, $response->status());
+        $this->assertEquals(200, $response->getStatusCode());
 
         $this->cleanUp();
     }
