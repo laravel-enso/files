@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use App\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use LaravelEnso\FileManager\Classes\FileManager;
@@ -19,8 +18,8 @@ class FileManagerTest extends TestCase
 
         $this->fileManager = new FileManager('uploadTest', config('laravel-enso.paths.temp'));
         $this->files = [
-            'firstFile' => UploadedFile::fake()->image('picture.png'),
-            'secondFile' => UploadedFile::fake()->create('document.doc')
+            'firstFile'  => UploadedFile::fake()->image('picture.png'),
+            'secondFile' => UploadedFile::fake()->create('document.doc'),
         ];
     }
 
@@ -32,13 +31,13 @@ class FileManagerTest extends TestCase
 
         $this->assertEquals(2, $uploadedFiles->count());
 
-        $uploadedFiles->each(function($file) {
+        $uploadedFiles->each(function ($file) {
             Storage::assertExists('temp/'.$file['saved_name']);
         });
 
         $this->fileManager->deleteTempFiles();
 
-        $uploadedFiles->each(function($file) {
+        $uploadedFiles->each(function ($file) {
             Storage::assertMissing('temp/'.$file['saved_name']);
         });
     }
@@ -49,7 +48,7 @@ class FileManagerTest extends TestCase
         $this->fileManager->startUpload($this->files)->commitUpload();
         $uploadedFiles = $this->fileManager->getUploadedFiles();
 
-        $uploadedFiles->each(function($file) {
+        $uploadedFiles->each(function ($file) {
             Storage::assertExists('uploadTest/'.$file['saved_name']);
         });
 
