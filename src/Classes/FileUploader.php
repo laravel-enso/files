@@ -65,7 +65,8 @@ class FileUploader
     public function deleteTempFiles()
     {
         $this->files->each(function ($file) {
-            \Storage::disk($this->disk)->delete(config('laravel-enso.paths.temp').'/'.$file['saved_name']);
+            $fileWithPath = config('laravel-enso.paths.temp').'/'.$file['saved_name'];
+            return (\Storage::has($fileWithPath)) ? \Storage::disk($this->disk)->delete($fileWithPath) : null;
         });
     }
 }
