@@ -8,7 +8,6 @@ use LaravelEnso\FileManager\Classes\FileManager;
 
 class FileManagerTest extends TestCase
 {
-    private $testPath;
     private $fileManager;
     private $files;
 
