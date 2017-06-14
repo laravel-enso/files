@@ -6,15 +6,15 @@ class FileManager
 {
     private $filesPath;
     private $uploader;
-    private $inlineContent;
-    private $downloadContent;
+    private $disk;
+    private const InlineContent = 'inline';
+    private const DownloadContent = 'attachment';
 
-    public function __construct(string $filesPath, string $tempPath = null)
+    public function __construct(string $filesPath, string $tempPath = null, string $disk = 'local')
     {
         $this->filesPath = $filesPath;
-        $this->uploader = $tempPath ? new FileUploader($this->filesPath, $tempPath) : null;
-        $this->inlineContent = 'inline';
-        $this->downloadContent = 'attachment';
+        $this->disk = $disk;
+        $this->uploader = $tempPath ? new FileUploader($this->filesPath, $tempPath, $this->disk) : null;
     }
 
     public function startUpload($payload)
@@ -41,24 +41,24 @@ class FileManager
 
     public function getInline(string $originalName, string $savedName)
     {
-        $fileResponse = $this->setFileRequest($originalName, $savedName, $this->inlineContent);
+        $fileResponse = $this->makeFileResponse($originalName, $savedName, self::InlineContent);
 
         return $fileResponse->get();
     }
 
     public function download(string $originalName, string $savedName)
     {
-        $fileResponse = $this->setFileRequest($originalName, $savedName, $this->downloadContent);
+        $fileResponse = $this->makeFileResponse($originalName, $savedName, self::DownloadContent);
 
         return $fileResponse->get();
     }
 
     public function delete(string $fileName)
     {
-        \Storage::delete($this->filesPath.'/'.$fileName);
+        \Storage::disk($this->disk)->delete($this->filesPath.'/'.$fileName);
     }
 
-    private function setFileRequest(string $originalName, string $savedName, string $contentDisposition)
+    private function makeFileResponse(string $originalName, string $savedName, string $contentDisposition)
     {
         $file = $this->getFileFromStorage($savedName);
         $mimeType = $this->getMimeType($savedName);
@@ -68,11 +68,11 @@ class FileManager
 
     private function getFileFromStorage(string $fileName)
     {
-        return \Storage::get($this->filesPath.'/'.$fileName);
+        return \Storage::disk($this->disk)->get($this->filesPath.'/'.$fileName);
     }
 
     private function getMimeType(string $fileName)
     {
-        return \Storage::getMimeType($this->filesPath.'/'.$fileName);
+        return \Storage::disk($this->disk)->getMimeType($this->filesPath.'/'.$fileName);
     }
 }

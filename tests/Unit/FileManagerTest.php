@@ -2,136 +2,86 @@
 
 namespace Tests;
 
-/*
- * Created by PhpStorm.
- * User: mihai
- * Date: 07.06.2017
- * Time: 11:57.
- */
 use App\User;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use LaravelEnso\FileManager\Classes\FileManager;
 
 class FileManagerTest extends TestCase
 {
-    private $testFilePath;
-    private $basePath;
+    private $testPath;
+    private $fileManager;
+    private $files;
 
     protected function setUp()
     {
         parent::setUp();
 
-        $this->basePath = __DIR__.'/../testFiles/';
-        $this->testFilePath = $this->basePath.'test_file.txt';
-    }
-
-    protected function tearDown()
-    {
-        $files = Storage::files(config('laravel-enso.paths.temp'));
-        $this->excludeGitIgnore($files);
-        Storage::delete($files);
+        $this->fileManager = new FileManager('uploadTest', config('laravel-enso.paths.temp'));
+        $this->files = [
+            'firstFile' => UploadedFile::fake()->image('picture.png'),
+            'secondFile' => UploadedFile::fake()->create('document.doc')
+        ];
     }
 
     /** @test */
-    public function can_start_multiple_upload()
+    public function upload_files_to_temp()
     {
-        $fileManager = new FileManager(config('laravel-enso.paths.files'));
+        $this->fileManager->startUpload($this->files);
+        $uploadedFiles = $this->fileManager->getUploadedFiles();
 
-        $createdFiles = collect();
-        for ($i = 0; $i < 3; $i++) {
-            $currentOriginalFileName = 'test_file_'.$i.'.txt';
-            $file = $this->createUploadedFile($this->testFilePath, $currentOriginalFileName, 'text/plain');
-            $createdFiles->put($currentOriginalFileName, $file);
-        }
+        $this->assertEquals(2, $uploadedFiles->count());
 
-        $fileManager->startUpload($createdFiles->toArray());
+        $uploadedFiles->each(function($file) {
+            Storage::assertExists('temp/'.$file['saved_name']);
+        });
 
-        $this->assertEquals(3, $fileManager->uploadedFiles->count());
-        $this->assertEquals('success', $fileManager->getStatus()->level);
+        $this->fileManager->deleteTempFiles();
+
+        $uploadedFiles->each(function($file) {
+            Storage::assertMissing('temp/'.$file['saved_name']);
+        });
     }
 
     /** @test */
-    public function can_start_single_upload()
+    public function commit_upload()
     {
-        $fileManager = new FileManager(config('laravel-enso.paths.files'));
+        $this->fileManager->startUpload($this->files)->commitUpload();
+        $uploadedFiles = $this->fileManager->getUploadedFiles();
 
-        $currentOriginalFileName = 'test_file.txt';
-        $file = $this->createUploadedFile($this->testFilePath, $currentOriginalFileName, 'text/plain');
+        $uploadedFiles->each(function($file) {
+            Storage::assertExists('uploadTest/'.$file['saved_name']);
+        });
 
-        $fileManager->startSingleFileUpload($file);
-
-        $this->assertEquals(1, $fileManager->uploadedFiles->count());
-        $this->assertEquals('success', $fileManager->getStatus()->level);
+        $this->cleanUp();
     }
 
     /** @test */
-    public function can_commit_upload_and_delete()
+    public function getInline()
     {
-        $fileManager = new FileManager(config('laravel-enso.paths.files'));
-        $currentOriginalFileName = 'test_file.txt';
-        $file = $this->createUploadedFile($this->testFilePath, $currentOriginalFileName, 'text/plain');
+        $this->fileManager->startUpload($this->files)->commitUpload();
+        $uploadedFile = $this->fileManager->getUploadedFiles()->first();
+        $response = $this->fileManager->getInline($uploadedFile['original_name'], $uploadedFile['saved_name']);
 
-        //test commit
-        $fileManager->startSingleFileUpload($file);
-        $fileManager->commitUpload();
+        $this->assertEquals(200, $response->status());
 
-        $this->assertEquals('success', $fileManager->getStatus()->level);
-
-        //test delete
-        $savedFileName = $fileManager->uploadedFiles->first()['saved_name'];
-        $fileManager->delete($savedFileName);
-        $this->assertEquals('success', $fileManager->getStatus()->level);
+        $this->cleanUp();
     }
 
     /** @test */
-    public function can_get_uploaded_file()
+    public function download()
     {
-        $fileManager = new FileManager(config('laravel-enso.paths.files'));
-        $currentOriginalFileName = 'test_file.txt';
-        $file = $this->createUploadedFile($this->testFilePath, $currentOriginalFileName, 'text/plain');
+        $this->fileManager->startUpload($this->files)->commitUpload();
+        $uploadedFile = $this->fileManager->getUploadedFiles()->first();
+        $response = $this->fileManager->download($uploadedFile['original_name'], $uploadedFile['saved_name']);
 
-        $fileManager->startSingleFileUpload($file);
-        $fileManager->commitUpload();
+        $this->assertEquals(200, $response->status());
 
-        //test get
-        $savedFileName = $fileManager->uploadedFiles->first()['saved_name'];
-        $fileWrapper = $fileManager->getFile($savedFileName);
-
-        $this->assertEquals('text/plain', $fileWrapper->mimeType);
-        $this->assertEquals(file_get_contents($this->testFilePath), $fileWrapper->file); //file = contents of the file
-
-        $savedFileName = $fileManager->uploadedFiles->first()['saved_name'];
-        $fileManager->delete($savedFileName);
+        $this->cleanUp();
     }
 
-    /********************* private helpers ************************/
-
-    private function createUploadedFile($filePath, $originalName, $mimeType = null)
+    private function cleanUp()
     {
-        $temporaryFilePath = $this->createTempFile($this->testFilePath);
-
-        //this file gets automatically deleted at the end of the test by Laravel
-        $file = new \Illuminate\Http\UploadedFile($temporaryFilePath, $originalName, $mimeType,
-            filesize($temporaryFilePath), null, true);
-
-        return $file;
-    }
-
-    private function createTempFile($path)
-    {
-        $randomPrefix = mt_rand(100, 1000);
-        $tempFilePath = $this->basePath.$randomPrefix.'temp.txt';
-        copy($path, $tempFilePath);
-
-        return $tempFilePath;
-    }
-
-    private function excludeGitIgnore(&$files)
-    {
-        foreach ($files as $index => $file) {
-            if (str_contains($file, '.gitignore')) {
-                unset($files[$index]);
-            }
-        }
+        Storage::deleteDirectory('uploadTest');
     }
 }

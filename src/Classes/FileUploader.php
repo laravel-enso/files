@@ -9,23 +9,27 @@ class FileUploader
     private $files;
     private $filesPath;
     private $tempPath;
+    private $disk;
 
-    public function __construct(string $filesPath, string $tempPath)
+    public function __construct(string $filesPath, string $tempPath, string $disk)
     {
         $this->filesPath = $filesPath;
         $this->tempPath = $tempPath;
+        $this->disk = $disk;
         $this->files = collect();
     }
 
-    public function start($payload)
+    public function start(array $files)
     {
-        return is_array($payload) ? $this->uploadFiles($payload) : $this->uploadFile($payload);
+        foreach ($files as $file) {
+            $this->upload($file);
+        }
     }
 
     public function commit()
     {
         $this->files->each(function ($file) {
-            \Storage::move(config('laravel-enso.paths.temp').'/'.$file['saved_name'],
+            \Storage::disk($this->disk)->move(config('laravel-enso.paths.temp').'/'.$file['saved_name'],
                 $this->filesPath.'/'.$file['saved_name']);
         });
     }
@@ -35,14 +39,7 @@ class FileUploader
         return $this->files;
     }
 
-    private function uploadFiles(array $files)
-    {
-        foreach ($files as $file) {
-            $this->uploadFile($file);
-        }
-    }
-
-    private function uploadFile(UploadedFile $file)
+    private function upload(UploadedFile $file)
     {
         if (!$file->isValid()) {
             throw new \EnsoException('Error Processing File:'.$file->getClientOriginalName(), 409);
@@ -65,10 +62,10 @@ class FileUploader
         ]);
     }
 
-    private function deleteTempFiles()
+    public function deleteTempFiles()
     {
         $this->files->each(function ($file) {
-            \Storage::delete(config('laravel-enso.paths.temp').'/'.$file['saved_name']);
+            \Storage::disk($this->disk)->delete(config('laravel-enso.paths.temp').'/'.$file['saved_name']);
         });
     }
 }
