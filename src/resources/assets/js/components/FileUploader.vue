@@ -56,10 +56,7 @@
                     this.$emit('upload-successful', response.data);
                 }).catch(error => {
                     this.resetForm();
-
-                    if (error.response.data.level) {
-                        toastr[error.response.data.level](error.response.data.message);
-                    }
+                    this.reportEnsoException(error);
                 });
             },
             getFormData() {
