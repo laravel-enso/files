@@ -4,7 +4,7 @@
 [![Total Downloads](https://poser.pugx.org/laravel-enso/filemanager/downloads)](https://packagist.org/packages/laravel-enso/filemanager)
 [![Latest Stable Version](https://poser.pugx.org/laravel-enso/filemanager/version)](https://packagist.org/packages/laravel-enso/filemanager)
 
-File manager library for managing files.
+File manager dependency for Laravel Enso.
 
 ### Installation Steps
 
@@ -18,7 +18,7 @@ File manager library for managing files.
 
 ### Note
 
-This package is required by the following packages: LaravelEnso Core (for AvatarController), DataImport and DocumentsManager.
+This package is included in Laravel Enso Core.
 
 ### Contributions
 

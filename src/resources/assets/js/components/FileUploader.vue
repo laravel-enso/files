@@ -1,11 +1,11 @@
 <template>
 
     <span>
-        <button @click="openFileBrowser" class="file-upload btn btn-xs">
+        <span @click="openFileBrowser" class="file-upload">
             <slot name="upload-button">
                 <i class="btn btn-xs btn-primary fa fa-upload"></i>
             </slot>
-        </button>
+        </span>
         <form :id="'file-form-' + _uid">
             <input :id="'upload-input-' + _uid"
                 type="file"
@@ -46,7 +46,6 @@
         },
 
         methods: {
-
             openFileBrowser() {
                 this.input.click();
             },
@@ -62,7 +61,6 @@
             getFormData() {
                 let formData = new FormData(),
                     files = this.input.files;
-
                 for (let i = 0; i < files.length; i++) {
                     if (this.sizeCheckPasses(files[i])) {
                         formData.append("file_" + i, files[i]);

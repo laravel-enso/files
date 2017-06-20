@@ -1,7 +1,7 @@
 {
     "name": "laravel-enso/filemanager",
-    "description": "File manager library for upload, download etc.",
-    "type": "library",
+    "description": "File manager dependency for Laravel Enso",
+    "type": "dependency",
     "license": "MIT",
     "authors": [
         {
