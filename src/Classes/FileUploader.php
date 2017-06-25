@@ -29,8 +29,8 @@ class FileUploader
     public function commit()
     {
         $this->files->each(function ($file) {
-            \Storage::disk($this->disk)->move(config('laravel-enso.paths.temp').'/'.$file['saved_name'],
-                $this->filesPath.'/'.$file['saved_name']);
+            \Storage::disk($this->disk)->move(config('laravel-enso.paths.temp').DIRECTORY_SEPARATOR.$file['saved_name'],
+                $this->filesPath.DIRECTORY_SEPARATOR.$file['saved_name']);
         });
     }
 
@@ -53,7 +53,7 @@ class FileUploader
         $fileName = $file->getClientOriginalName();
         $savedName = $file->hashName();
         $fileSize = $file->getClientSize();
-        $file->move(storage_path('app/'.$this->tempPath), $savedName);
+        $file->move(storage_path('app'.DIRECTORY_SEPARATOR.$this->tempPath), $savedName);
 
         $this->files->push([
             'original_name' => $fileName,
@@ -65,7 +65,7 @@ class FileUploader
     public function deleteTempFiles()
     {
         $this->files->each(function ($file) {
-            $fileWithPath = config('laravel-enso.paths.temp').'/'.$file['saved_name'];
+            $fileWithPath = config('laravel-enso.paths.temp').DIRECTORY_SEPARATOR.$file['saved_name'];
 
             return (\Storage::has($fileWithPath)) ? \Storage::disk($this->disk)->delete($fileWithPath) : null;
         });
