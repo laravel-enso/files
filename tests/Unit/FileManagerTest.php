@@ -61,7 +61,7 @@ class FileManagerTest extends TestCase
     {
         $this->fileManager->startUpload($this->files)->commitUpload();
         $uploadedFile = $this->fileManager->getUploadedFiles()->first();
-        $response = $this->fileManager->getInline($uploadedFile['original_name'], $uploadedFile['saved_name']);
+        $response = $this->fileManager->getInline($uploadedFile['saved_name']);
 
         $this->assertEquals(200, $response->getStatusCode());
 
