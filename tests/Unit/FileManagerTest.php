@@ -44,7 +44,9 @@ class FileManagerTest extends TestCase
     /** @test */
     public function commit_upload()
     {
-        $this->fileManager->startUpload($this->files)->commitUpload();
+        $this->fileManager->startUpload($this->files)
+            ->commitUpload();
+
         $uploadedFiles = $this->fileManager->getUploadedFiles();
 
         $uploadedFiles->each(function ($file) {
