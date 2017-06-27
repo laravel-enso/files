@@ -4,22 +4,18 @@
 [![Total Downloads](https://poser.pugx.org/laravel-enso/filemanager/downloads)](https://packagist.org/packages/laravel-enso/filemanager)
 [![Latest Stable Version](https://poser.pugx.org/laravel-enso/filemanager/version)](https://packagist.org/packages/laravel-enso/filemanager)
 
-File manager dependency for Laravel Enso.
+File manager dependency for [Laravel Enso](https://github.com/laravel-enso/Enso).
 
-### Installation Steps
+### Publishes
 
-1. Add `LaravelEnso\FileManager\FileManagerServiceProvider::class` to `config/app.php`. (included if you use LaravelEnso/core)
-
-2. Publish the vue component with `php artisan vendor:publish --tag=filemanager-component`.
-
-3. Include the vue-component in your app.js.
-
-4. Run gulp.
+- `php artisan vendor:publish --tag=filemanager-component` - the VueJS component
+- `php artisan vendor:publish --tag=enso-update` - a common alias for when wanting to update the VueJS component, 
+once a newer version is released
 
 ### Note
 
-This package is included in Laravel Enso Core.
+This package is included in [Laravel Enso Core](https://github.com/laravel-enso/Core).
 
 ### Contributions
 
-...are welcome
+are welcome
