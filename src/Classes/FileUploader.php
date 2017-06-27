@@ -42,7 +42,7 @@ class FileUploader
     private function upload(UploadedFile $file)
     {
         if (!$file->isValid()) {
-            throw new \EnsoException('Error Processing File:'.$file->getClientOriginalName(), 409);
+            throw new \EnsoException('Error Processing File:'.$file->getClientOriginalName(), 'error', [], 409);
         }
 
         $this->uploadToTemp($file);
