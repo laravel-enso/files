@@ -48,12 +48,13 @@ class FileUploader
         $this->uploadToTemp($file);
     }
 
-    private function uploadToTemp($file)
+    private function uploadToTemp(UploadedFile $file)
     {
         $fileName = $file->getClientOriginalName();
         $savedName = $file->hashName();
-        $fileSize = $file->getClientSize();
-        $file->move(storage_path('app'.DIRECTORY_SEPARATOR.$this->tempPath), $savedName);
+        $tempPath = storage_path('app'.DIRECTORY_SEPARATOR.$this->tempPath);
+        $file->move($tempPath, $savedName);
+        $fileSize = \File::size($tempPath.DIRECTORY_SEPARATOR.$savedName);
 
         $this->files->push([
             'original_name' => $fileName,
