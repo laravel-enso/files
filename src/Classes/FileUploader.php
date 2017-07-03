@@ -58,8 +58,8 @@ class FileUploader
 
         $this->files->push([
             'original_name' => $fileName,
-            'saved_name' => $savedName,
-            'size' => $fileSize,
+            'saved_name'    => $savedName,
+            'size'          => $fileSize,
         ]);
     }
 
