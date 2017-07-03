@@ -12,8 +12,7 @@
     "require": {
         "php": ">=7.1.0",
         "laravel/framework": "5.4.*",
-        "laravel-enso/core": "1.1.*",
-        "nesbot/carbon": "^1.0"
+        "laravel-enso/core": "1.1.*"
     },
     "autoload": {
         "psr-4": {

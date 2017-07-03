@@ -15,9 +15,9 @@ class FileManager
         $this->uploader = $tempPath ? new FileUploader($this->filesPath, $tempPath, $this->disk) : null;
     }
 
-    public function startUpload($payload)
+    public function startUpload(array $files)
     {
-        $this->uploader->start($payload);
+        $this->uploader->start($files);
 
         return $this;
     }

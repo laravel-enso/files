@@ -16,4 +16,9 @@ class FileManagerServiceProvider extends ServiceProvider
             __DIR__.'/resources/assets/js/components' => resource_path('assets/js/vendor/laravel-enso/components'),
         ], 'enso-update');
     }
+
+    public function register()
+    {
+        //
+    }
 }
