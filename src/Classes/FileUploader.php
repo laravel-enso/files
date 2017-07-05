@@ -75,7 +75,6 @@ class FileUploader
 
     public function setValidExtensions(array $extensions)
     {
-        \Log::info($extensions);
         $this->validExtensions = $extensions;
     }
 
