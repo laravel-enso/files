@@ -51,4 +51,9 @@ class FileManager
     {
         \Storage::disk($this->disk)->delete($this->filesPath.DIRECTORY_SEPARATOR.$fileName);
     }
+
+    public function setValidExtensions(array $extensions)
+    {
+        $this->uploader->setValidExtensions($extensions);
+    }
 }
