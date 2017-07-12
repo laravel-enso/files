@@ -1,12 +1,21 @@
 {
     "name": "laravel-enso/filemanager",
     "description": "File manager dependency for Laravel Enso",
+    "keywords": [
+        "laravel-enso",
+        "filemanager",
+        "file-manager",
+        "file-uploader"
+    ],
+    "homepage": "https://github.com/laravel-enso/FileManager",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "Mishu",
-            "email": "mishu@xtelecom.ro"
+            "name": "Adrian Ocneanu",
+            "email": "aocneanu@gmail.com",
+            "homepage": "https://laravel-enso.com",
+            "role": "Developer"
         }
     ],
     "require": {
@@ -17,6 +26,14 @@
     "autoload": {
         "psr-4": {
             "LaravelEnso\\FileManager\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LaravelEnso\\FileManagerServiceProvider"
+            ],
+            "aliases": {}
         }
     }
 }
