@@ -31,8 +31,10 @@ class FileUploader
     public function commit()
     {
         $this->files->each(function ($file) {
-            \Storage::disk($this->disk)->move(config('laravel-enso.paths.temp').DIRECTORY_SEPARATOR.$file['saved_name'],
-                $this->filesPath.DIRECTORY_SEPARATOR.$file['saved_name']);
+            \Storage::disk($this->disk)->move(
+                config('laravel-enso.paths.temp').DIRECTORY_SEPARATOR.$file['saved_name'],
+                $this->filesPath.DIRECTORY_SEPARATOR.$file['saved_name']
+            );
         });
     }
 
@@ -67,9 +69,12 @@ class FileUploader
     public function deleteTempFiles()
     {
         $this->files->each(function ($file) {
-            $fileWithPath = config('laravel-enso.paths.temp').DIRECTORY_SEPARATOR.$file['saved_name'];
+            $fileWithPath =
+                config('laravel-enso.paths.temp').DIRECTORY_SEPARATOR.$file['saved_name'];
 
-            return \Storage::has($fileWithPath) ? \Storage::disk($this->disk)->delete($fileWithPath) : null;
+            return \Storage::has($fileWithPath)
+                ? \Storage::disk($this->disk)->delete($fileWithPath)
+                : null;
         });
     }
 
@@ -80,24 +85,28 @@ class FileUploader
 
     private function validateFile(UploadedFile $file)
     {
-        if (!$file->isValid()) {
-            $this->deleteTempFiles();
-            throw new \EnsoException('Error Processing File:'.$file->getClientOriginalName(), 'error', [], 409);
+        if ($file->isValid()) {
+            return true;
         }
+
+        $this->deleteTempFiles();
+
+        throw new \EnsoException(
+            'Error Processing File:'.$file->getClientOriginalName(), 'error', [], 409
+        );
     }
 
     private function validateExtension(UploadedFile $file)
     {
-        if (empty($this->validExtensions)) {
+        if (empty($this->validExtensions) || $this->extensionIsValid($file)) {
             return true;
         }
 
-        if (!$this->extensionIsValid($file)) {
-            $this->deleteTempFiles();
-            throw new \EnsoException(
-                __('Allowed extensions').': '.implode(', ', $this->validExtensions), 'error', [], 409
-            );
-        }
+        $this->deleteTempFiles();
+
+        throw new \EnsoException(
+            __('Allowed extensions').': '.implode(', ', $this->validExtensions), 'error', [], 409
+        );
     }
 
     private function extensionIsValid(UploadedFile $file)

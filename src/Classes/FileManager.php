@@ -12,7 +12,10 @@ class FileManager
     {
         $this->filesPath = $filesPath;
         $this->disk = $disk;
-        $this->uploader = $tempPath ? new FileUploader($this->filesPath, $tempPath, $this->disk) : null;
+
+        $this->uploader = $tempPath
+            ? new FileUploader($this->filesPath, $tempPath, $this->disk)
+            : null;
     }
 
     public function startUpload(array $files)
@@ -39,17 +42,23 @@ class FileManager
 
     public function getInline(string $savedName)
     {
-        return response()->file(storage_path('app'.DIRECTORY_SEPARATOR.$this->filesPath.'/'.$savedName));
+        return response()->file(
+            storage_path('app'.DIRECTORY_SEPARATOR.$this->filesPath.'/'.$savedName)
+        );
     }
 
     public function download(string $originalName, string $savedName)
     {
-        return response()->download(storage_path('app'.DIRECTORY_SEPARATOR.$this->filesPath.'/'.$savedName), $originalName);
+        return response()->download(
+            storage_path('app'.DIRECTORY_SEPARATOR.$this->filesPath.'/'.$savedName),
+            $originalName
+        );
     }
 
     public function delete(string $fileName)
     {
-        \Storage::disk($this->disk)->delete($this->filesPath.DIRECTORY_SEPARATOR.$fileName);
+        \Storage::disk($this->disk)
+            ->delete($this->filesPath.DIRECTORY_SEPARATOR.$fileName);
     }
 
     public function setValidExtensions(array $extensions)
