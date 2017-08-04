@@ -4,9 +4,11 @@ namespace Tests;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use LaravelEnso\Core\app\Exceptions\EnsoException;
 use LaravelEnso\FileManager\Classes\FileManager;
+use LaravelEnso\TestHelper\app\Classes\TestHelper;
 
-class FileManagerTest extends TestCase
+class FileManagerTest extends TestHelper
 {
     private $fileManager;
     private $files;
@@ -14,6 +16,8 @@ class FileManagerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
+
+        // $this->disableExceptionHandling();
 
         $this->fileManager = new FileManager('uploadTest', config('laravel-enso.paths.temp'));
         $this->files = [
@@ -54,6 +58,21 @@ class FileManagerTest extends TestCase
         });
 
         $this->cleanUp();
+    }
+
+    /** @test */
+    public function cant_upload_files_with_invalid_extensions()
+    {
+        $file = UploadedFile::fake()->create('invalid.extension');
+        $this->fileManager->setValidExtensions(['png', 'doc']);
+
+        try {
+            $this->fileManager->startUpload([$file])->commitUpload();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(EnsoException::class, $e);
+        }
+
+        Storage::assertMissing('uploadTest/'.$file->hashName());
     }
 
     /** @test */
