@@ -11,6 +11,7 @@ class FileUploader
     private $tempPath;
     private $disk;
     private $validExtensions;
+    private $validMymeTypes;
 
     public function __construct(string $filesPath, string $tempPath, string $disk)
     {
@@ -19,6 +20,7 @@ class FileUploader
         $this->disk = $disk;
         $this->files = collect();
         $this->validExtensions = [];
+        $this->validMimeTypes = [];
     }
 
     public function start(array $files)
@@ -47,6 +49,7 @@ class FileUploader
     {
         $this->validateFile($file);
         $this->validateExtension($file);
+        $this->validateMimeType($file);
         $this->uploadToTemp($file);
     }
 
@@ -83,6 +86,11 @@ class FileUploader
         $this->validExtensions = $extensions;
     }
 
+    public function setValidMimeTypes(array $mimeTypes)
+    {
+        $this->validMimeTypes = $mimeTypes;
+    }
+
     private function validateFile(UploadedFile $file)
     {
         if ($file->isValid()) {
@@ -112,5 +120,23 @@ class FileUploader
     private function extensionIsValid(UploadedFile $file)
     {
         return in_array($file->getClientOriginalExtension(), $this->validExtensions);
+    }
+
+    private function validateMimeType(UploadedFile $file)
+    {
+        if (empty($this->validMimeTypes) || $this->mimeTypeIsValid($file)) {
+            return true;
+        }
+
+        $this->deleteTempFiles();
+
+        throw new \EnsoException(
+            __('Allowed mime types').': '.implode(', ', $this->validMimeTypes), 'error', [], 409
+        );
+    }
+
+    private function mimeTypeIsValid(UploadedFile $file)
+    {
+        return in_array($file->getClientMimeType(), $this->validMimeTypes);
     }
 }
