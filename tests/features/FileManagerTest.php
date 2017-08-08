@@ -17,7 +17,7 @@ class FileManagerTest extends TestHelper
     {
         parent::setUp();
 
-        $this->disableExceptionHandling();
+        // $this->disableExceptionHandling();
 
         $this->fileManager = new FileManager('uploadTest', config('laravel-enso.paths.temp'));
         $this->files = [
@@ -61,6 +61,19 @@ class FileManagerTest extends TestHelper
     }
 
     /** @test */
+    public function can_upload_file_with_valid_extension()
+    {
+        $file = UploadedFile::fake()->image('image.png');
+        $this->fileManager->setValidExtensions(['png']);
+
+        $this->fileManager->startUpload([$file])->commitUpload();
+
+        Storage::assertExists('uploadTest/'.$file->hashName());
+
+        $this->cleanUp();
+    }
+
+    /** @test */
     public function cant_upload_file_with_invalid_extension()
     {
         $file = UploadedFile::fake()->create('invalid.extension');
@@ -76,10 +89,23 @@ class FileManagerTest extends TestHelper
     }
 
     /** @test */
+    public function can_upload_file_with_valid_mime_type()
+    {
+        $file = UploadedFile::fake()->image('image.png');
+        $this->fileManager->setValidMimeTypes(['image/png']);
+
+        $this->fileManager->startUpload([$file])->commitUpload();
+
+        Storage::assertExists('uploadTest/'.$file->hashName());
+
+        $this->cleanUp();
+    }
+
+    /** @test */
     public function cant_upload_file_with_invalid_mime_type()
     {
-        $file = UploadedFile::fake()->create('invalid.mimeType');
-        $this->fileManager->setValidMimeTypes(['image/png', 'application/msword']);
+        $file = UploadedFile::fake()->image('image.png');
+        $this->fileManager->setValidMimeTypes(['application/msword']);
 
         try {
             $this->fileManager->startUpload([$file])->commitUpload();
