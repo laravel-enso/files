@@ -83,7 +83,6 @@ class FileManagerTest extends TestHelper
 
         try {
             $this->fileManager->startUpload([$file])->commitUpload();
-
         } catch (\Exception $e) {
             $this->assertInstanceOf(EnsoException::class, $e);
         }
