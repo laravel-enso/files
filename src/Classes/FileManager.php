@@ -65,4 +65,9 @@ class FileManager
     {
         $this->uploader->setValidExtensions($extensions);
     }
+
+    public function setValidMimeTypes(array $mimeTypes)
+    {
+        $this->uploader->setValidMimeTypes($mimeTypes);
+    }
 }
