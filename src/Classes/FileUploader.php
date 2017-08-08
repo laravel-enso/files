@@ -11,7 +11,7 @@ class FileUploader
     private $tempPath;
     private $disk;
     private $validExtensions;
-    private $validMymeTypes;
+    private $validMimeTypes;
 
     public function __construct(string $filesPath, string $tempPath, string $disk)
     {
