@@ -1,7 +1,8 @@
 <template>
 
     <span>
-        <span @click="openFileBrowser" class="file-upload">
+        <span class="file-upload"
+            @click="openFileBrowser">
             <slot name="upload-button">
                 <i class="btn btn-xs btn-primary fa fa-upload"></i>
             </slot>
@@ -61,6 +62,7 @@
             getFormData() {
                 let formData = new FormData(),
                     files = this.input.files;
+
                 for (let i = 0; i < files.length; i++) {
                     if (this.sizeCheckPasses(files[i])) {
                         formData.append("file_" + i, files[i]);
