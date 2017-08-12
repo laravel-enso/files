@@ -79,13 +79,9 @@ class FileManagerTest extends TestHelper
         $file = UploadedFile::fake()->create('invalid.extension');
         $this->fileManager->setValidExtensions(['png', 'doc']);
 
-        try {
-            $this->fileManager->startUpload([$file])->commitUpload();
-        } catch (\Exception $e) {
-            $this->assertInstanceOf(EnsoException::class, $e);
-        }
+        $this->expectException(EnsoException::class);
 
-        Storage::assertMissing('uploadTest/'.$file->hashName());
+        $this->fileManager->startUpload([$file])->commitUpload();
     }
 
     /** @test */
@@ -107,13 +103,9 @@ class FileManagerTest extends TestHelper
         $file = UploadedFile::fake()->image('image.png');
         $this->fileManager->setValidMimeTypes(['application/msword']);
 
-        try {
-            $this->fileManager->startUpload([$file])->commitUpload();
-        } catch (\Exception $e) {
-            $this->assertInstanceOf(EnsoException::class, $e);
-        }
+        $this->expectException(EnsoException::class);
 
-        Storage::assertMissing('uploadTest/'.$file->hashName());
+        $this->fileManager->startUpload([$file])->commitUpload();
     }
 
     /** @test */
