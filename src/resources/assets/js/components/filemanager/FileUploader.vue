@@ -51,11 +51,14 @@
                 this.input.click();
             },
             upload() {
+                this.$emit('upload-started');
+
                 axios.post(this.url, this.getFormData()).then(response => {
                     this.resetForm();
                     this.$emit('upload-successful', response.data);
                 }).catch(error => {
                     this.resetForm();
+                    this.$emit('upload-error');
                     this.reportEnsoException(error);
                 });
             },
