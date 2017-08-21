@@ -51,7 +51,7 @@
                 this.input.click();
             },
             upload() {
-                this.$emit('upload-started');
+                this.$emit('upload-start');
 
                 axios.post(this.url, this.getFormData()).then(response => {
                     this.resetForm();
