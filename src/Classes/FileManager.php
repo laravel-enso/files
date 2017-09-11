@@ -43,14 +43,14 @@ class FileManager
     public function getInline(string $savedName)
     {
         return response()->file(
-            storage_path('app'.DIRECTORY_SEPARATOR.$this->filesPath.'/'.$savedName)
+            storage_path('app'.DIRECTORY_SEPARATOR.$this->filesPath.DIRECTORY_SEPARATOR.$savedName)
         );
     }
 
     public function download(string $originalName, string $savedName)
     {
         return response()->download(
-            storage_path('app'.DIRECTORY_SEPARATOR.$this->filesPath.'/'.$savedName),
+            storage_path('app'.DIRECTORY_SEPARATOR.$this->filesPath.DIRECTORY_SEPARATOR.$savedName),
             $originalName
         );
     }
