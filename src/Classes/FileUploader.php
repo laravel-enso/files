@@ -34,7 +34,7 @@ class FileUploader
     {
         $this->files->each(function ($file) {
             \Storage::disk($this->disk)->move(
-                config('laravel-enso.paths.temp').DIRECTORY_SEPARATOR.$file['saved_name'],
+                config('enso.config.paths.temp').DIRECTORY_SEPARATOR.$file['saved_name'],
                 $this->filesPath.DIRECTORY_SEPARATOR.$file['saved_name']
             );
         });
@@ -60,7 +60,7 @@ class FileUploader
         $tempPath = storage_path('app'.DIRECTORY_SEPARATOR.$this->tempPath);
         $file->move($tempPath, $savedName);
         $fileSize = \File::size($tempPath.DIRECTORY_SEPARATOR.$savedName);
-
+        //fixme. Implement EnsoObject instead of array for file wrapper
         $this->files->push([
             'original_name' => $fileName,
             'saved_name'    => $savedName,
@@ -73,7 +73,7 @@ class FileUploader
     {
         $this->files->each(function ($file) {
             $fileWithPath =
-                config('laravel-enso.paths.temp').DIRECTORY_SEPARATOR.$file['saved_name'];
+                config('enso.config.paths.temp').DIRECTORY_SEPARATOR.$file['saved_name'];
 
             return \Storage::has($fileWithPath)
                 ? \Storage::disk($this->disk)->delete($fileWithPath)
@@ -100,7 +100,7 @@ class FileUploader
         $this->deleteTempFiles();
 
         throw new \EnsoException(
-            'Error Processing File:'.$file->getClientOriginalName(), 'error', [], 409
+            'Error Processing File:'.$file->getClientOriginalName(), 409
         );
     }
 
@@ -113,7 +113,7 @@ class FileUploader
         $this->deleteTempFiles();
 
         throw new \EnsoException(
-            __('Allowed extensions').': '.implode(', ', $this->validExtensions), 'error', [], 409
+            __('Allowed extensions').': '.implode(', ', $this->validExtensions), 409
         );
     }
 
@@ -131,7 +131,7 @@ class FileUploader
         $this->deleteTempFiles();
 
         throw new \EnsoException(
-            __('Allowed mime types').': '.implode(', ', $this->validMimeTypes), 'error', [], 409
+            __('Allowed mime types').': '.implode(', ', $this->validMimeTypes), 409
         );
     }
 

@@ -19,7 +19,7 @@ class FileManagerTest extends TestHelper
 
         // $this->disableExceptionHandling();
 
-        $this->fileManager = new FileManager('uploadTest', config('laravel-enso.paths.temp'));
+        $this->fileManager = new FileManager('uploadTest', config('enso.config.paths.temp'));
         $this->files = [
             'firstFile'  => UploadedFile::fake()->image('picture.png'),
             'secondFile' => UploadedFile::fake()->create('document.doc'),
