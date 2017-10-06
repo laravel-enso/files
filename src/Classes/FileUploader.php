@@ -99,9 +99,7 @@ class FileUploader
 
         $this->deleteTempFiles();
 
-        throw new \EnsoException(
-            'Error Processing File:'.$file->getClientOriginalName(), 'error', [], 409
-        );
+        throw new \EnsoException('Error Processing File:'.$file->getClientOriginalName());
     }
 
     private function validateExtension(UploadedFile $file)
@@ -112,9 +110,7 @@ class FileUploader
 
         $this->deleteTempFiles();
 
-        throw new \EnsoException(
-            __('Allowed extensions').': '.implode(', ', $this->validExtensions), 'error', [], 409
-        );
+        throw new \EnsoException(__('Allowed extensions').': '.implode(', ', $this->validExtensions));
     }
 
     private function extensionIsValid(UploadedFile $file)
@@ -130,9 +126,7 @@ class FileUploader
 
         $this->deleteTempFiles();
 
-        throw new \EnsoException(
-            __('Allowed mime types').': '.implode(', ', $this->validMimeTypes), 'error', [], 409
-        );
+        throw new \EnsoException(__('Allowed mime types').': '.implode(', ', $this->validMimeTypes));
     }
 
     private function mimeTypeIsValid(UploadedFile $file)
