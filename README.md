@@ -41,6 +41,7 @@ Vue.component('fileUploader', require('./vendor/laravel-enso/components/fileuplo
 - `multiple` - boolean flag for the single/multiple selection of files; default is false | optional
 - `url` - the url to post the uploaded file(s) to | required
 - `file-size-limit` - the maximum file size limit; default is 8388608 | optional
+- `params` - parameters object that gets passed to the backend, may be used when processing the upload | (optional)
 
 ### Events
 
