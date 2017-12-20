@@ -63,9 +63,9 @@ class FileUploader
         //fixme. Implement EnsoObject instead of array for file wrapper
         $this->files->push([
             'original_name' => $fileName,
-            'saved_name'    => $savedName,
-            'size'          => $fileSize,
-            'full_path'     => $tempPath.DIRECTORY_SEPARATOR.$savedName,
+            'saved_name' => $savedName,
+            'size' => $fileSize,
+            'full_path' => $tempPath.DIRECTORY_SEPARATOR.$savedName,
         ]);
     }
 
