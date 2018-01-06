@@ -55,16 +55,14 @@ class FileUploader
 
     private function uploadToTemp(UploadedFile $file)
     {
-        $fileName = $file->getClientOriginalName();
         $savedName = $file->hashName();
         $tempPath = storage_path('app'.DIRECTORY_SEPARATOR.$this->tempPath);
         $file->move($tempPath, $savedName);
-        $fileSize = \File::size($tempPath.DIRECTORY_SEPARATOR.$savedName);
-        //fixme. Implement EnsoObject instead of array for file wrapper
+
         $this->files->push([
-            'original_name' => $fileName,
+            'original_name' => $file->getClientOriginalName(),
             'saved_name' => $savedName,
-            'size' => $fileSize,
+            'size' => \File::size($tempPath.DIRECTORY_SEPARATOR.$savedName),
             'full_path' => $tempPath.DIRECTORY_SEPARATOR.$savedName,
         ]);
     }
@@ -100,7 +98,8 @@ class FileUploader
         $this->deleteTempFiles();
 
         throw new \EnsoException(
-            'Error Processing File:'.$file->getClientOriginalName(), 409
+            'Error Processing File:'.$file->getClientOriginalName(),
+            409
         );
     }
 
@@ -113,7 +112,8 @@ class FileUploader
         $this->deleteTempFiles();
 
         throw new \EnsoException(
-            __('Allowed extensions').': '.implode(', ', $this->validExtensions), 409
+            __('Allowed extensions').': '.implode(', ', $this->validExtensions),
+            409
         );
     }
 
@@ -131,7 +131,8 @@ class FileUploader
         $this->deleteTempFiles();
 
         throw new \EnsoException(
-            __('Allowed mime types').': '.implode(', ', $this->validMimeTypes), 409
+            __('Allowed mime types').': '.implode(', ', $this->validMimeTypes),
+            409
         );
     }
 
