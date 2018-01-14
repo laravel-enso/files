@@ -24,7 +24,7 @@ class FileUploader
 
     public function start(array $files)
     {
-        collect($files)->each(function($file) {
+        collect($files)->each(function ($file) {
             $this->upload($file);
         });
     }
