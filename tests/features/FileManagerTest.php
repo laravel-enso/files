@@ -4,8 +4,8 @@ namespace Tests;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use LaravelEnso\Core\app\Exceptions\EnsoException;
-use LaravelEnso\FileManager\Classes\FileManager;
+use LaravelEnso\FileManager\app\Exceptions\FileUploadException;
+use LaravelEnso\FileManager\app\Classes\FileManager;
 
 class FileManagerTest extends TestCase
 {
@@ -16,9 +16,11 @@ class FileManagerTest extends TestCase
     {
         parent::setUp();
 
-        // $this->withoutExceptionHandling();
+        // $this->disableExceptionHandling();
 
-        $this->fileManager = new FileManager('uploadTest', config('enso.config.paths.temp'));
+        $this->fileManager = (new FileManager('uploadTest'))
+            ->tempPath(config('enso.config.paths.temp'));
+
         $this->files = [
             'firstFile'  => UploadedFile::fake()->image('picture.png'),
             'secondFile' => UploadedFile::fake()->create('document.doc'),
@@ -29,7 +31,7 @@ class FileManagerTest extends TestCase
     public function upload_files_to_temp()
     {
         $this->fileManager->startUpload($this->files);
-        $uploadedFiles = $this->fileManager->getUploadedFiles();
+        $uploadedFiles = $this->fileManager->uploadedFiles();
 
         $this->assertEquals(2, $uploadedFiles->count());
 
@@ -50,7 +52,7 @@ class FileManagerTest extends TestCase
         $this->fileManager->startUpload($this->files)
             ->commitUpload();
 
-        $uploadedFiles = $this->fileManager->getUploadedFiles();
+        $uploadedFiles = $this->fileManager->uploadedFiles();
 
         $uploadedFiles->each(function ($file) {
             Storage::assertExists('uploadTest/'.$file['saved_name']);
@@ -63,7 +65,7 @@ class FileManagerTest extends TestCase
     public function can_upload_file_with_valid_extension()
     {
         $file = UploadedFile::fake()->image('image.png');
-        $this->fileManager->setValidExtensions(['png']);
+        $this->fileManager->validExtensions(['png']);
 
         $this->fileManager->startUpload([$file])->commitUpload();
 
@@ -76,9 +78,9 @@ class FileManagerTest extends TestCase
     public function cant_upload_file_with_invalid_extension()
     {
         $file = UploadedFile::fake()->create('invalid.extension');
-        $this->fileManager->setValidExtensions(['png', 'doc']);
+        $this->fileManager->validExtensions(['png', 'doc']);
 
-        $this->expectException(EnsoException::class);
+        $this->expectException(FileUploadException::class);
 
         $this->fileManager->startUpload([$file])->commitUpload();
     }
@@ -87,7 +89,7 @@ class FileManagerTest extends TestCase
     public function can_upload_file_with_valid_mime_type()
     {
         $file = UploadedFile::fake()->image('image.png');
-        $this->fileManager->setValidMimeTypes(['image/png']);
+        $this->fileManager->validMimeTypes(['image/png']);
 
         $this->fileManager->startUpload([$file])->commitUpload();
 
@@ -100,9 +102,9 @@ class FileManagerTest extends TestCase
     public function cant_upload_file_with_invalid_mime_type()
     {
         $file = UploadedFile::fake()->image('image.png');
-        $this->fileManager->setValidMimeTypes(['application/msword']);
+        $this->fileManager->validMimeTypes(['application/msword']);
 
-        $this->expectException(EnsoException::class);
+        $this->expectException(FileUploadException::class);
 
         $this->fileManager->startUpload([$file])->commitUpload();
     }
@@ -111,7 +113,7 @@ class FileManagerTest extends TestCase
     public function getInline()
     {
         $this->fileManager->startUpload($this->files)->commitUpload();
-        $uploadedFile = $this->fileManager->getUploadedFiles()->first();
+        $uploadedFile = $this->fileManager->uploadedFiles()->first();
         $response = $this->fileManager->getInline($uploadedFile['saved_name']);
 
         $this->assertEquals(200, $response->getStatusCode());
@@ -123,7 +125,7 @@ class FileManagerTest extends TestCase
     public function download()
     {
         $this->fileManager->startUpload($this->files)->commitUpload();
-        $uploadedFile = $this->fileManager->getUploadedFiles()->first();
+        $uploadedFile = $this->fileManager->uploadedFiles()->first();
         $response = $this->fileManager->download($uploadedFile['original_name'], $uploadedFile['saved_name']);
 
         $this->assertEquals(200, $response->getStatusCode());

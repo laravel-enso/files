@@ -1,41 +1,40 @@
 <?php
 
-namespace LaravelEnso\FileManager\Classes;
+namespace LaravelEnso\FileManager\app\Classes;
 
 use Illuminate\Http\UploadedFile;
+use LaravelEnso\FileManager\app\Exceptions\FileUploadException;
 
 class FileUploader
 {
     private $files;
-    private $filesPath;
+    private $path;
     private $tempPath;
     private $disk;
-    private $validExtensions;
-    private $validMimeTypes;
+    private $validExtensions = [];
+    private $validMimeTypes = [];
 
-    public function __construct(string $filesPath, string $tempPath, string $disk)
+    public function __construct(string $path, string $tempPath, string $disk)
     {
-        $this->filesPath = $filesPath;
+        $this->path = $path;
         $this->tempPath = $tempPath;
         $this->disk = $disk;
         $this->files = collect();
-        $this->validExtensions = [];
-        $this->validMimeTypes = [];
     }
 
     public function start(array $files)
     {
-        foreach ($files as $file) {
+        collect($files)->each(function($file) {
             $this->upload($file);
-        }
+        });
     }
 
     public function commit()
     {
         $this->files->each(function ($file) {
             \Storage::disk($this->disk)->move(
-                config('enso.config.paths.temp').DIRECTORY_SEPARATOR.$file['saved_name'],
-                $this->filesPath.DIRECTORY_SEPARATOR.$file['saved_name']
+                $this->tempPath.DIRECTORY_SEPARATOR.$file['saved_name'],
+                $this->path.DIRECTORY_SEPARATOR.$file['saved_name']
             );
         });
     }
@@ -97,10 +96,10 @@ class FileUploader
 
         $this->deleteTempFiles();
 
-        throw new \EnsoException(
-            'Error Processing File:'.$file->getClientOriginalName(),
-            409
-        );
+        throw new FileUploadException(__(
+            'Error uploading file :name',
+            ['name' => $file->getClientOriginalName()]
+        ));
     }
 
     private function validateExtension(UploadedFile $file)
@@ -111,15 +110,15 @@ class FileUploader
 
         $this->deleteTempFiles();
 
-        throw new \EnsoException(
-            __('Allowed extensions').': '.implode(', ', $this->validExtensions),
-            409
-        );
+        throw new FileUploadException(__(
+            'Extension :ext is not allowed. Valid extensions are :exts',
+            ['ext' => $file->getClientOriginalExtension(), 'exts' => implode(', ', $this->validExtensions)]
+        ));
     }
 
     private function extensionIsValid(UploadedFile $file)
     {
-        return in_array($file->getClientOriginalExtension(), $this->validExtensions);
+        return collect($this->validExtensions)->contains($file->getClientOriginalExtension());
     }
 
     private function validateMimeType(UploadedFile $file)
@@ -130,14 +129,14 @@ class FileUploader
 
         $this->deleteTempFiles();
 
-        throw new \EnsoException(
-            __('Allowed mime types').': '.implode(', ', $this->validMimeTypes),
-            409
-        );
+        throw new FileUploadException(__(
+            'Mime type :mime not allowed. Allowed mime types are :mimes',
+            ['mime' => $file->getClientMimeType(), 'mimes' => implode(', ', $this->validMimeTypes)]
+        ));
     }
 
     private function mimeTypeIsValid(UploadedFile $file)
     {
-        return in_array($file->getClientMimeType(), $this->validMimeTypes);
+        return collect($this->validMimeTypes)->contains($file->getClientMimeType());
     }
 }
