@@ -46,10 +46,8 @@ class FileUploader
 
     private function upload(UploadedFile $file)
     {
-        $this->validateFile($file);
-        $this->validateExtension($file);
-        $this->validateMimeType($file);
-        $this->uploadToTemp($file);
+        $this->validate($file)
+            ->uploadToTemp($file);
     }
 
     private function uploadToTemp(UploadedFile $file)
@@ -88,10 +86,13 @@ class FileUploader
         $this->validMimeTypes = $mimeTypes;
     }
 
-    private function validateFile(UploadedFile $file)
+    private function validate(UploadedFile $file)
     {
         if ($file->isValid()) {
-            return true;
+            $this->validateExtension($file)
+                ->validateMimeType($file);
+
+            return $this;
         }
 
         $this->deleteTempFiles();
@@ -105,7 +106,7 @@ class FileUploader
     private function validateExtension(UploadedFile $file)
     {
         if (empty($this->validExtensions) || $this->extensionIsValid($file)) {
-            return true;
+            return $this;
         }
 
         $this->deleteTempFiles();
@@ -124,7 +125,7 @@ class FileUploader
     private function validateMimeType(UploadedFile $file)
     {
         if (empty($this->validMimeTypes) || $this->mimeTypeIsValid($file)) {
-            return true;
+            return $this;
         }
 
         $this->deleteTempFiles();

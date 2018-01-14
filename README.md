@@ -11,20 +11,10 @@ File manager dependency for [Laravel Enso](https://github.com/laravel-enso/Enso)
 
 ### Features
 
-- can upload one or multiple files
-- includes a VueJS component that handles the selection of files and POSTs them to the route you need
-- the `FileUploader` object manages the upload of the files
-- the `FileManager` object manages the actual file operations and can be configured with a file storage location, a temporary storage as well as a (laravel) disk
-
-### Installation Steps
-
-1. Publish the config file with `php artisan vendor:publish --tag=vue-components`
-
-2. Include the VueJS component in your `app.js` file and then compile with `gulp` / `npm run dev`
-
-```js
-Vue.component('fileUploader', require('./vendor/laravel-enso/components/fileuploader/FileUploader.vue'));
-```
+- can upload, download, open inline or delete files
+- works with a VueJS component that handles the selection of files and POSTs them to the specified route
+- the `FileUploader` object manages the files upload
+- the `FileManager` object manages the actual file operations and can be configured with a file storage location, a temporary storage and a disk
 
 ### Use
 
@@ -60,9 +50,7 @@ once a newer version is released
 The [Laravel Enso Core](https://github.com/laravel-enso/Core) package comes with this package included.
 
 Depends on:
- - [Core](https://github.com/laravel-enso/Core) for utility classes
  - [VueComponents](https://github.com/laravel-enso/VueComponents) for the accompanying VueJS component
-
 
 <!--h-->
 ### Contributions

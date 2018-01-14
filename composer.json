@@ -21,7 +21,6 @@
     "require": {
         "php": ">=7.1.0",
         "laravel/framework": "5.5.*",
-        "laravel-enso/core": "2.1.*",
         "laravel-enso/helpers": "1.7.*",
         "laravel-enso/vuecomponents": "2.0.*"
     },
