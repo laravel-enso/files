@@ -22,7 +22,7 @@ class FileManagerTest extends TestCase
             ->tempPath(config('enso.config.paths.temp'));
 
         $this->files = [
-            'firstFile'  => UploadedFile::fake()->image('picture.png'),
+            'firstFile' => UploadedFile::fake()->image('picture.png'),
             'secondFile' => UploadedFile::fake()->create('document.doc'),
         ];
     }
@@ -110,11 +110,11 @@ class FileManagerTest extends TestCase
     }
 
     /** @test */
-    public function getInline()
+    public function inline()
     {
         $this->fileManager->startUpload($this->files)->commitUpload();
         $uploadedFile = $this->fileManager->uploadedFiles()->first();
-        $response = $this->fileManager->getInline($uploadedFile['saved_name']);
+        $response = $this->fileManager->inline($uploadedFile['saved_name']);
 
         $this->assertEquals(200, $response->getStatusCode());
 

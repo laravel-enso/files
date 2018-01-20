@@ -42,7 +42,7 @@ class FileManager
         $this->uploader->deleteTempFiles();
     }
 
-    public function getInline(string $savedName)
+    public function inline(string $savedName)
     {
         return response()->file(
             storage_path('app'.DIRECTORY_SEPARATOR.$this->path.DIRECTORY_SEPARATOR.$savedName)
