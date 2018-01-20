@@ -3,9 +3,9 @@
 namespace LaravelEnso\FileManager\app\Classes;
 
 use Illuminate\Http\UploadedFile;
-use LaravelEnso\FileManager\app\Exceptions\FileUploadException;
+use LaravelEnso\FileManager\app\Exceptions\UploadException;
 
-class FileUploader
+class Uploader
 {
     private $files;
     private $path;
@@ -97,7 +97,7 @@ class FileUploader
 
         $this->deleteTempFiles();
 
-        throw new FileUploadException(__(
+        throw new UploadException(__(
             'Error uploading file :name',
             ['name' => $file->getClientOriginalName()]
         ));
@@ -111,7 +111,7 @@ class FileUploader
 
         $this->deleteTempFiles();
 
-        throw new FileUploadException(__(
+        throw new UploadException(__(
             'Extension :ext is not allowed. Valid extensions are :exts',
             ['ext' => $file->getClientOriginalExtension(), 'exts' => implode(', ', $this->validExtensions)]
         ));
@@ -130,7 +130,7 @@ class FileUploader
 
         $this->deleteTempFiles();
 
-        throw new FileUploadException(__(
+        throw new UploadException(__(
             'Mime type :mime not allowed. Allowed mime types are :mimes',
             ['mime' => $file->getClientMimeType(), 'mimes' => implode(', ', $this->validMimeTypes)]
         ));
