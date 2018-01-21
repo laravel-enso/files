@@ -105,6 +105,6 @@ class FileManager
             throw new FileUploadException(__('You must set a temporary path before uploading a file'));
         }
 
-        $this->uploader = new FileUploader($this->path, $this->tempPath, $this->disk);
+        $this->uploader = new Uploader($this->path, $this->tempPath, $this->disk);
     }
 }

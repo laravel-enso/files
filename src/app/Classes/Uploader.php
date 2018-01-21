@@ -5,7 +5,7 @@ namespace LaravelEnso\FileManager\app\Classes;
 use Illuminate\Http\UploadedFile;
 use LaravelEnso\FileManager\app\Exceptions\FileUploadException;
 
-class FileUploader
+class Uploader
 {
     private $files;
     private $path;
