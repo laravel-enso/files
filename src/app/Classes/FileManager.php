@@ -51,8 +51,8 @@ class FileManager
 
     public function download(string $originalName, string $savedName)
     {
-        return response()->download(
-            storage_path('app'.DIRECTORY_SEPARATOR.$this->path.DIRECTORY_SEPARATOR.$savedName),
+        return \Storage::download(
+            $this->path.DIRECTORY_SEPARATOR.$savedName,
             $originalName
         );
     }
