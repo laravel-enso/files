@@ -39,7 +39,7 @@ class Uploader
         });
     }
 
-    public function getFiles()
+    public function files()
     {
         return $this->files;
     }

@@ -34,7 +34,7 @@ class FileManager
 
     public function uploadedFiles()
     {
-        return $this->uploader->getFiles();
+        return $this->uploader->files();
     }
 
     public function deleteTempFiles()
