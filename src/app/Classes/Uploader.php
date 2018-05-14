@@ -67,11 +67,12 @@ class Uploader
     public function deleteTempFiles()
     {
         $this->files->each(function ($file) {
-            $fileWithPath =
-                config('enso.config.paths.temp').DIRECTORY_SEPARATOR.$file['saved_name'];
+            $fileWithPath = config('enso.config.paths.temp')
+                .DIRECTORY_SEPARATOR.$file['saved_name'];
 
             return \Storage::has($fileWithPath)
-                ? \Storage::disk($this->disk)->delete($fileWithPath)
+                ? \Storage::disk($this->disk)
+                    ->delete($fileWithPath)
                 : null;
         });
     }
@@ -113,13 +114,17 @@ class Uploader
 
         throw new FileUploadException(__(
             'Extension :ext is not allowed. Valid extensions are :exts',
-            ['ext' => $file->getClientOriginalExtension(), 'exts' => implode(', ', $this->validExtensions)]
+            [
+                'ext' => $file->getClientOriginalExtension(),
+                'exts' => implode(', ', $this->validExtensions)
+            ]
         ));
     }
 
     private function extensionIsValid(UploadedFile $file)
     {
-        return collect($this->validExtensions)->contains($file->getClientOriginalExtension());
+        return collect($this->validExtensions)
+            ->contains($file->getClientOriginalExtension());
     }
 
     private function validateMimeType(UploadedFile $file)
@@ -132,12 +137,16 @@ class Uploader
 
         throw new FileUploadException(__(
             'Mime type :mime not allowed. Allowed mime types are :mimes',
-            ['mime' => $file->getClientMimeType(), 'mimes' => implode(', ', $this->validMimeTypes)]
+            [
+                'mime' => $file->getClientMimeType(),
+                'mimes' => implode(', ', $this->validMimeTypes)
+            ]
         ));
     }
 
     private function mimeTypeIsValid(UploadedFile $file)
     {
-        return collect($this->validMimeTypes)->contains($file->getClientMimeType());
+        return collect($this->validMimeTypes)
+            ->contains($file->getClientMimeType());
     }
 }

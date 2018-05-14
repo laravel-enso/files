@@ -45,7 +45,7 @@ class FileManager
     public function inline(string $savedName)
     {
         return response()->file(
-            storage_path('app'.DIRECTORY_SEPARATOR.$this->path.DIRECTORY_SEPARATOR.$savedName)
+            storage_path('app/'.$this->path.'/'.$savedName)
         );
     }
 
@@ -102,9 +102,15 @@ class FileManager
         }
 
         if (!isset($this->tempPath)) {
-            throw new FileUploadException(__('You must set a temporary path before uploading a file'));
+            throw new FileUploadException(__(
+                'You must set a temporary path before uploading a file'
+            ));
         }
 
-        $this->uploader = new Uploader($this->path, $this->tempPath, $this->disk);
+        $this->uploader = new Uploader(
+            $this->path,
+            $this->tempPath,
+            $this->disk
+        );
     }
 }
