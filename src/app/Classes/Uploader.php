@@ -116,7 +116,7 @@ class Uploader
             'Extension :ext is not allowed. Valid extensions are :exts',
             [
                 'ext' => $file->getClientOriginalExtension(),
-                'exts' => implode(', ', $this->validExtensions)
+                'exts' => implode(', ', $this->validExtensions),
             ]
         ));
     }
@@ -139,7 +139,7 @@ class Uploader
             'Mime type :mime not allowed. Allowed mime types are :mimes',
             [
                 'mime' => $file->getClientMimeType(),
-                'mimes' => implode(', ', $this->validMimeTypes)
+                'mimes' => implode(', ', $this->validMimeTypes),
             ]
         ));
     }
