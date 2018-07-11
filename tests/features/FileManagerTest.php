@@ -1,11 +1,10 @@
 <?php
 
-namespace Tests;
-
+use Tests\TestCase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use LaravelEnso\FileManager\app\Exceptions\FileUploadException;
 use LaravelEnso\FileManager\app\Classes\FileManager;
+use LaravelEnso\FileManager\app\Exceptions\FileUploadException;
 
 class FileManagerTest extends TestCase
 {
