@@ -20,7 +20,6 @@ class FileManager
     private $optimize;
     private $resize;
     private $transformer;
-    private $uploader;
 
     public function __construct(Attachable $model)
     {

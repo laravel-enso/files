@@ -17,7 +17,6 @@ class FileManagerTest extends TestCase
     use RefreshDatabase, SignIn;
 
     private $model;
-    private $manager;
     private $file;
 
     protected function setUp()
