@@ -11,22 +11,8 @@ class File extends Model
 
     protected $fillable = ['original_name', 'saved_name', 'size', 'mime_type'];
 
-    protected $appends = ['owner'];
-
     public function attachable()
     {
         return $this->morphTo();
-    }
-
-    public function getOwnerAttribute()
-    {
-        $owner = [
-            'name' => $this->createdBy->fullName,
-            'avatarId' => optional($this->createdBy->avatar)->id,
-        ];
-
-        unset($this->createdBy);
-
-        return $owner;
     }
 }

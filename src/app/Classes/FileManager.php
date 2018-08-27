@@ -202,8 +202,8 @@ class FileManager
 
     private function folder()
     {
-        return app()->environment() === self::TestingFolder
-            ? 'testing'
+        return app()->environment() === 'testing'
+            ? self::TestingFolder
             : $this->model->folder();
     }
 }
