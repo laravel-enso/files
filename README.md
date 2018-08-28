@@ -10,9 +10,10 @@ File manager dependency for [Laravel Enso](https://github.com/laravel-enso/Enso)
 ### Features
 
 - can upload, download, open inline or delete files
+- validates the file, the extension and the mime type
+- handles the optimization and resize for the supported image files  
+- for upload and deletion, the changes are committed only if the filesystem operation was successful
 - works with a VueJS component that handles the selection of files and POSTs them to the specified route
-- the `FileUploader` object manages the files upload
-- the `FileManager` object manages the actual file operations and can be configured with a file storage location, a temporary storage and a disk
 
 ### Configuration & Usage
 
