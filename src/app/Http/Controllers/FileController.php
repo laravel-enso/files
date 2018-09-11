@@ -15,7 +15,7 @@ class FileController extends Controller
         return new Collection(
             Resource::collection(
                 File::visible()
-                    ->with('attachable')
+                    ->with(['createdBy', 'attachable'])
                     ->forUser($request->user())
                     ->between(json_decode($request->get('interval')))
                     ->ordered()
