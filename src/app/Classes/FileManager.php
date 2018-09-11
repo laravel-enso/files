@@ -65,7 +65,9 @@ class FileManager
             }
 
             if ($this->resize) {
-                $this->transformer()->resize($this->resize[0], $this->resize[1]);
+                $this->transformer()
+                    ->width($this->resize[0])
+                    ->height($this->resize[1]);
             }
         }
 

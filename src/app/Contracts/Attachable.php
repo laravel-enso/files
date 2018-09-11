@@ -12,6 +12,8 @@ interface Attachable
 
     public function download();
 
+    public function temporaryLink();
+
     public function upload(UploadedFile $file);
 
     public function folder();

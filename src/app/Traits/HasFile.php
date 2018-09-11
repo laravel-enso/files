@@ -33,6 +33,11 @@ trait HasFile
             ->download();
     }
 
+    public function temporaryLink()
+    {
+        return $this->file->temporaryLink();
+    }
+
     public function upload(UploadedFile $file)
     {
         return (new FileManager($this))
