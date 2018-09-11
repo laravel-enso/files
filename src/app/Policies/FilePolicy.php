@@ -3,8 +3,8 @@
 namespace LaravelEnso\FileManager\app\Policies;
 
 use LaravelEnso\Core\app\Models\User;
-use Illuminate\Auth\Access\HandlesAuthorization;
 use LaravelEnso\FileManager\app\Models\File;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class FilePolicy
 {
