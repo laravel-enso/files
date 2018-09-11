@@ -61,7 +61,7 @@
                     </span>
                 </button>
                 <div class="box has-margin-top-large">
-                    <h4 class="title is-4 has-text-centered">
+                    <h4 class="title is-4">
                         {{ __('Storage used') }}: {{ totalStorage / 1000 | numberFormat }} KB
                     </h4>
                     <chart :data="chartData"
