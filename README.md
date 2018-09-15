@@ -7,13 +7,24 @@
 
 File manager dependency for [Laravel Enso](https://github.com/laravel-enso/Enso).
 
+
+[![Watch the demo](https://laravel-enso.github.io/filemanager/screenshots/bulma_001_thumb.png)](https://laravel-enso.github.io/filemanager/videos/bulma_filemanager.mp4)
+
+
+<sup>click on the photo to view a short demo in compatible browsers</sup>
+
 ### Features
 
-- can upload, download, open inline or delete files
-- validates the file, the extension and the mime type
-- handles the optimization and resize for the supported image files  
+- provides a generic approach when working with files through using a `File` model
+- package comes with a `HasFile` trait that can be added to models who work with files
+- has utility classes for the upload, download, inline-opening and deletion of files
+- on upload, performs validation of the file and checks the extension and the mime type
+- handles the optimization and resize for the supported image file types  
 - for upload and deletion, the changes are committed only if the filesystem operation was successful
-- works with a VueJS component that handles the selection of files and POSTs them to the specified route
+- works with a `FileUploader` VueJS component that handles the selection of files and POSTs them to the specified route
+- uses a policy to restrict access/changes to files that don't belong to the respective user
+- provides a unified interface where you can view all the files you are working with, that you have access to, as well as search and filter them
+- the types of files that are visible in the interfaces are configurable
 
 ### Configuration & Usage
 
