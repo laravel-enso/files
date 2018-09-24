@@ -3,13 +3,16 @@
 namespace LaravelEnso\FileManager\app\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use LaravelEnso\FileManager\app\Models\File;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use LaravelEnso\FileManager\app\Http\Resources\Collection;
 use LaravelEnso\FileManager\app\Http\Resources\File as Resource;
 
 class FileController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index(Request $request)
     {
         return new Collection(
