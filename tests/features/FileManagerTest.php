@@ -1,22 +1,21 @@
 <?php
 
-use LaravelEnso\Core\app\Models\User;
 use Tests\TestCase;
 use Illuminate\Http\UploadedFile;
+use LaravelEnso\Core\app\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use LaravelEnso\TestHelper\app\Traits\SignIn;
 use LaravelEnso\FileManager\app\Traits\HasFile;
-use LaravelEnso\FileManager\app\Classes\FileManager;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use LaravelEnso\FileManager\app\Classes\FileManager;
 use LaravelEnso\FileManager\app\Contracts\Attachable;
 use LaravelEnso\FileManager\app\Exceptions\FileUploadException;
 
 class FileManagerTest extends TestCase
 {
-    use RefreshDatabase, SignIn;
+    use RefreshDatabase;
 
-    private $model;
+    private $testModel;
     private $file;
 
     protected function setUp()
@@ -26,31 +25,34 @@ class FileManagerTest extends TestCase
         // $this->withoutExceptionHandling();
 
         $this->seed()
-            ->createAttachableModelsTable()
-            ->signIn(User::first());
+            ->actingAs(User::first());
 
         $this->file = UploadedFile::fake()->image('picture.png');
-        $this->model = AttachableModel::create();
+        $this->testModel = $this->model();
+    }
+
+    public function tearDown()
+    {
+        $this->cleanUp();
+        parent::tearDown();
     }
 
     /** @test */
-    public function upload()
+    public function can_upload_file()
     {
-        $this->model->upload($this->file);
+        $this->testModel->upload($this->file);
 
-        $this->assertNotNull($this->model->file);
+        $this->assertNotNull($this->testModel->file);
 
         Storage::assertExists(
-            FileManager::TestingFolder.DIRECTORY_SEPARATOR.$this->model->file->saved_name
+            FileManager::TestingFolder.DIRECTORY_SEPARATOR.$this->testModel->file->saved_name
         );
-
-        $this->cleanUp();
     }
 
     /** @test */
     public function cant_upload_file_with_invalid_extension()
     {
-        $manager = new FileManager($this->model);
+        $manager = new FileManager($this->testModel);
 
         $this->expectException(FileUploadException::class);
 
@@ -62,7 +64,7 @@ class FileManagerTest extends TestCase
     /** @test */
     public function cant_upload_file_with_invalid_mime_type()
     {
-        $manager = new FileManager($this->model);
+        $manager = new FileManager($this->testModel);
 
         $this->expectException(FileUploadException::class);
 
@@ -72,9 +74,9 @@ class FileManagerTest extends TestCase
     }
 
     /** @test */
-    public function inline()
+    public function can_display_file_inline()
     {
-        $manager = new FileManager($this->model);
+        $manager = new FileManager($this->testModel);
 
         $manager->file($this->file)
             ->upload();
@@ -82,26 +84,32 @@ class FileManagerTest extends TestCase
         $response = $manager->inline($this->file->hashname());
 
         $this->assertEquals(200, $response->getStatusCode());
-
-        $this->cleanUp();
     }
 
     /** @test */
-    public function download()
+    public function can_download_file()
     {
-        $manager = new FileManager($this->model);
+        $manager = new FileManager($this->testModel);
 
         $manager->file($this->file)
             ->upload();
 
-        $response = $manager->download($this->model->file->original_name, $this->model->file->saved_name);
+        $response = $manager->download(
+            $this->testModel->file->original_name,
+            $this->testModel->file->saved_name
+        );
 
         $this->assertEquals(200, $response->getStatusCode());
-
-        $this->cleanUp();
     }
 
-    private function createAttachableModelsTable()
+    private function model()
+    {
+        $this->createTestTable();
+
+        return AttachableModel::create();
+    }
+
+    private function createTestTable()
     {
         Schema::create('attachable_models', function ($table) {
             $table->increments('id');
