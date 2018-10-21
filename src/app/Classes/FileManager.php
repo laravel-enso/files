@@ -41,7 +41,7 @@ class FileManager
 
     public function delete()
     {
-        if (!$this->model->file) {
+        if (! $this->model->file) {
             return;
         }
 
@@ -153,7 +153,7 @@ class FileManager
 
     private function validateFile()
     {
-        if (!$this->file->isValid()) {
+        if (! $this->file->isValid()) {
             throw new FileUploadException(__(
                 'Error uploading file :name',
                 ['name' => $this->file->getClientOriginalName()]
