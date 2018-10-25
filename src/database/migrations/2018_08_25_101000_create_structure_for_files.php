@@ -4,10 +4,6 @@ use LaravelEnso\StructureManager\app\Classes\StructureMigration;
 
 class CreateStructureForFiles extends StructureMigration
 {
-    protected $permissionGroup = [
-        'name' => 'core.files', 'description' => 'Files permissions group',
-    ];
-
     protected $permissions = [
         ['name' => 'core.files.index', 'description' => 'List files', 'type' => 0, 'is_default' => true],
         ['name' => 'core.files.link', 'description' => 'Get file download temporary link', 'type' => 0, 'is_default' => true],
@@ -17,7 +13,7 @@ class CreateStructureForFiles extends StructureMigration
     ];
 
     protected $menu = [
-        'name' => 'Files', 'icon' => 'folder-open', 'link' => 'core.files.index', 'order_index' => 300, 'has_children' => false,
+        'name' => 'Files', 'icon' => 'folder-open', 'route' => 'core.files.index', 'order_index' => 300, 'has_children' => false,
     ];
 
     protected $parentMenu = '';
