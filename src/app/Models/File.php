@@ -53,11 +53,11 @@ class File extends Model
 
     public function scopeBetween($query, $interval)
     {
-        if (! is_null($interval->min)) {
+        if (! empty($interval->min)) {
             $query->where('created_at', '>', Carbon::parse($interval->min));
         }
 
-        if (! is_null($interval->max)) {
+        if (! empty($interval->max)) {
             $query->where('created_at', '<', Carbon::parse($interval->max));
         }
     }
