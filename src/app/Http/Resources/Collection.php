@@ -11,7 +11,28 @@ class Collection extends ResourceCollection
     {
         return [
             'data' => $this->collection,
-            'types' => VisibleFiles::values(),
+            'folders' => VisibleFiles::values(),
+            'stats' => [
+                'filteredSpaceUsed' => $this->filteredSpaceUsed(),
+                'totalSpaceUsed' => $this->totalSpaceUsed($request),
+                'storageLimit' => config('enso.files.storageLimit'),
+            ],
         ];
+    }
+
+    private function filteredSpaceUsed()
+    {
+        return round(
+            $this->collection->sum('size') / 1000
+        );
+    }
+
+    private function totalSpaceUsed($request)
+    {
+        return round(
+            $request->user()->files()
+                ->visible()
+                ->sum('size') / 1000
+        );
     }
 }
