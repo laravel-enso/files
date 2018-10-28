@@ -10,5 +10,5 @@ return [
         'documents' => Document::class,
         'uploads' => Upload::class,
     ],
-    'storageLimit' => '1000'
+    'storageLimit' => '500000'
 ];
