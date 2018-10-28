@@ -13,11 +13,11 @@ Route::middleware(['web', 'auth', 'core'])
             });
 
         Route::resource('files', 'FileController', [
-            'only' => ['show', 'index', 'destroy']
+            'only' => ['show', 'index', 'destroy'],
         ]);
 
         Route::resource('uploads', 'UploadController', [
-                'only' => ['store', 'destroy']
+                'only' => ['store', 'destroy'],
             ]);
     });
 
