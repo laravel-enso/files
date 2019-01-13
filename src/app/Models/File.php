@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use LaravelEnso\TrackWho\app\Traits\CreatedBy;
 use LaravelEnso\FileManager\app\Enums\VisibleFiles;
+use LaravelEnso\FileManager\app\Classes\FileManager;
 
 class File extends Model
 {
@@ -32,6 +33,17 @@ class File extends Model
     public function type()
     {
         return VisibleFiles::get($this->attachable_type);
+    }
+
+    public function path()
+    {
+        return storage_path(
+            'app'.DIRECTORY_SEPARATOR.
+            (app()->environment('testing')
+                ? FileManager::TestingFolder
+                : $this->attachable->folder())
+            .DIRECTORY_SEPARATOR.$this->saved_name
+        );
     }
 
     public function scopeVisible($query)
