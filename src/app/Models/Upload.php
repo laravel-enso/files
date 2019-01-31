@@ -6,12 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 use LaravelEnso\FileManager\app\Traits\HasFile;
 use LaravelEnso\FileManager\app\Contracts\Attachable;
 use LaravelEnso\FileManager\app\Contracts\VisibleFile;
+use LaravelEnso\Multitenancy\app\Traits\SystemConnection;
 use LaravelEnso\FileManager\app\Exceptions\UploadException;
 use LaravelEnso\FileManager\app\Http\Resources\File as Resource;
 
 class Upload extends Model implements Attachable, VisibleFile
 {
-    use HasFile;
+    use HasFile, SystemConnection;
 
     protected $optimizeImages = true;
 
