@@ -6,26 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 use LaravelEnso\FileManager\app\Traits\HasFile;
 use LaravelEnso\FileManager\app\Contracts\Attachable;
 use LaravelEnso\FileManager\app\Contracts\VisibleFile;
-use LaravelEnso\Multitenancy\app\Traits\SystemConnection;
+use LaravelEnso\Multitenancy\app\Traits\MixedConnection;
 use LaravelEnso\FileManager\app\Exceptions\UploadException;
+use LaravelEnso\Multitenancy\app\Traits\ConnectionStoragePath;
 use LaravelEnso\FileManager\app\Http\Resources\File as Resource;
 
 class Upload extends Model implements Attachable, VisibleFile
 {
-    use HasFile, SystemConnection;
+    use ConnectionStoragePath, HasFile, MixedConnection;
 
     protected $optimizeImages = true;
-
-    public function isDeletable()
-    {
-        return request()->user()
-            ->can('handle', $this->file);
-    }
-
-    public function folder()
-    {
-        return config('enso.config.paths.files');
-    }
 
     public function store(array $files)
     {
@@ -58,5 +48,16 @@ class Upload extends Model implements Attachable, VisibleFile
         return File::forUser(auth()->user())
             ->whereAttachableType(self::class)
             ->pluck('original_name');
+    }
+
+    public function isDeletable()
+    {
+        return request()->user()
+            ->can('handle', $this->file);
+    }
+
+    public function folder()
+    {
+        return $this->storagePath('files');
     }
 }

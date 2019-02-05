@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use LaravelEnso\TrackWho\app\Traits\CreatedBy;
 use LaravelEnso\FileManager\app\Enums\VisibleFiles;
 use LaravelEnso\FileManager\app\Classes\FileManager;
-use LaravelEnso\Multitenancy\app\Traits\SystemConnection;
+use LaravelEnso\Multitenancy\app\Traits\MixedConnection;
 
 class File extends Model
 {
-    use CreatedBy, SystemConnection;
+    use CreatedBy, MixedConnection;
 
     const ExpiresIn = 60 * 60 * 24;
 
