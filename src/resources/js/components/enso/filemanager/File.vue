@@ -9,7 +9,7 @@
                 size="3x"/>
         </p>
         <h5 class="title is-5 has-text-centered" v-tooltip="file.name">
-            {{ file.name|truncate }}
+            {{ file.name | truncate }}
         </h5>
         <p class="has-text-centered"
            v-tooltip="file.createdAt">
@@ -93,15 +93,12 @@ export default {
     directives: { tooltip: VTooltip },
 
     components: { Popover, Modal },
+    
     filters: {
-        truncate: function(value) {
-            if (value.length > 30) {
-                value = value.substring(0, 16) + '...' + value.slice(-10);
-            }
-
-
-            return value
-
+        truncate(value) {
+            return value.length > 30
+                ? `${value.substring(0, 16)}...${value.slice(-10)}`
+                : value;
         }
     },
 
