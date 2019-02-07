@@ -6,14 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use LaravelEnso\FileManager\app\Traits\HasFile;
 use LaravelEnso\FileManager\app\Contracts\Attachable;
 use LaravelEnso\FileManager\app\Contracts\VisibleFile;
-use LaravelEnso\Multitenancy\app\Traits\MixedConnection;
 use LaravelEnso\FileManager\app\Exceptions\UploadException;
-use LaravelEnso\Multitenancy\app\Traits\ConnectionStoragePath;
 use LaravelEnso\FileManager\app\Http\Resources\File as Resource;
 
 class Upload extends Model implements Attachable, VisibleFile
 {
-    use ConnectionStoragePath, HasFile, MixedConnection;
+    use HasFile;
 
     protected $optimizeImages = true;
 
@@ -58,6 +56,6 @@ class Upload extends Model implements Attachable, VisibleFile
 
     public function folder()
     {
-        return $this->storagePath('files');
+        return config('enso.config.paths.files');
     }
 }
