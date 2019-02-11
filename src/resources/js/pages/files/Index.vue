@@ -1,17 +1,17 @@
 <template>
-    <enso-tabs alignment="centered"
-        custom>
-        <span slot="label"
-            slot-scope="{ tab }">
-            {{ tab }}
-            <span class="tag is-dark file-counter">
+    <enso-tabs>
+        <template v-slot:label="{ tab }">
+            <span>
+                {{ tab }}
+            </span>
+            <span class="tag is-dark file-counter has-margin-left-medium">
                 {{ content(tab).length }}
             </span>
-        </span>
+        </template>
         <div class="columns is-reverse-mobile">
             <div class="column is-two-thirds">
-                <tab v-for="(folder, index) in folders"
-                    :key="index"
+                <tab v-for="folder in folders"
+                    :key="folder"
                     :id="folder">
                     <transition-group class="columns is-multiline is-mobile"
                         enter-active-class="fadeInUp"
