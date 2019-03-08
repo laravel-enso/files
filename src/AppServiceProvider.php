@@ -13,14 +13,6 @@ class AppServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/database/migrations');
 
         $this->publishes([
-            __DIR__.'/resources/js' => resource_path('js'),
-        ], 'filemanager-assets');
-
-        $this->publishes([
-            __DIR__.'/resources/js' => resource_path('js'),
-        ], 'enso-assets');
-
-        $this->publishes([
             __DIR__.'/config' => config_path('enso'),
         ], 'enso-config');
 
