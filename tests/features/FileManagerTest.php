@@ -18,7 +18,7 @@ class FileManagerTest extends TestCase
     private $testModel;
     private $file;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -31,7 +31,7 @@ class FileManagerTest extends TestCase
         $this->testModel = $this->model();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->cleanUp();
         parent::tearDown();
