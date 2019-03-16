@@ -73,4 +73,11 @@ class File extends Model
             $query->where('created_at', '<', Carbon::parse($interval->max));
         }
     }
+
+    public function scopeFiltered($query, $search)
+    {
+        if (! empty($search)) {
+            $query->where('original_name', 'LIKE', '%'.$search.'%');
+        }
+    }
 }

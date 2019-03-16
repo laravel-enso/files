@@ -21,7 +21,10 @@ class FileController extends Controller
                     ->with(['createdBy', 'attachable'])
                     ->forUser($request->user())
                     ->between(json_decode($request->get('interval')))
+                    ->filtered($request->get('query'))
                     ->ordered()
+                    ->skip($request->get('offset'))
+                    ->take(24)
                     ->get()
                 )
             );
