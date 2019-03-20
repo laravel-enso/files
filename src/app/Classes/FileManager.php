@@ -2,6 +2,7 @@
 
 namespace LaravelEnso\FileManager\app\Classes;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use LaravelEnso\FileManager\app\Contracts\Attachable;
 use LaravelEnso\ImageTransformer\app\Classes\ImageTransformer;
@@ -35,7 +36,7 @@ class FileManager
     {
         return \Storage::download(
             $this->uploadedFile(),
-            $this->model->file->original_name
+            Str::ascii($this->model->file->original_name)
         );
     }
 
