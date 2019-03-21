@@ -26,7 +26,7 @@ class FilePolicy
             && is_callable([$attachedTo, 'canAccess'])) {
             return $attachedTo->canAccess($user, $file);
         }
-        
+
         return $user->id === intval($file->created_by);
     }
 }
