@@ -20,9 +20,10 @@ class FilePolicy
     public function handle(User $user, File $file)
     {
         $attachedTo = ($file->attachable->documentable ?: $file->attachable);
-        if(method_exists($attachedTo, 'canAccess') && is_callable([$attachedTo, 'canAccess']))
+        if (method_exists($attachedTo, 'canAccess') && is_callable([$attachedTo, 'canAccess'])) {
             return $attachedTo->canAccess($user, $file);
-        else
+        } else {
             return $user->id === intval($file->created_by);
+        }
     }
 }
