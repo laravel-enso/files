@@ -16,10 +16,7 @@ class File extends JsonResource
             'mimeType' => $this->mime_type,
             'type' => $this->type(),
             'owner' => new TrackWho($this->whenLoaded('createdBy')),
-            'isDeletable' => $this->whenLoaded(
-                'attachable',
-                $this->attachable->isDeletable()
-            ),
+            'isDeletable' => $this->attachable->isDeletable(),
             'createdAt' => $this->created_at->toDatetimeString(),
         ];
     }
