@@ -15,7 +15,7 @@ class FileManager
     private $model;
     private $file;
     private $isImage;
-    private $disk = 'local';
+    private $disk;
     private $extensions;
     private $mimeTypes;
     private $optimize;
@@ -25,6 +25,7 @@ class FileManager
     public function __construct(Attachable $model)
     {
         $this->model = $model;
+        $this->disk = 'local';
     }
 
     public function inline()
@@ -173,12 +174,10 @@ class FileManager
         }
 
         throw new FileUploadException(__(
-            'Extension :ext is not allowed. Valid extensions are :exts',
-            [
+            'Extension :ext is not allowed. Valid extensions are :exts', [
                 'ext' => $this->file->getClientOriginalExtension(),
                 'exts' => implode(', ', $this->extensions),
-            ]
-        ));
+            ]));
     }
 
     private function validateMimeType()
@@ -190,12 +189,10 @@ class FileManager
         }
 
         throw new FileUploadException(__(
-            'Mime type :mime not allowed. Allowed mime types are :mimes',
-            [
+            'Mime type :mime not allowed. Allowed mime types are :mimes', [
                 'mime' => $this->file->getClientMimeType(),
                 'mimes' => implode(', ', $this->mimeTypes),
-            ]
-        ));
+            ]));
     }
 
     private function supportedMimeTypes()

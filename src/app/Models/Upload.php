@@ -34,7 +34,9 @@ class Upload extends Model implements Attachable, VisibleFile
             collect($files)->each(function ($file) use ($uploads) {
                 $upload = Upload::create();
                 $upload->upload($file);
-                $uploads->push(new Resource($upload->file->load(['attachable', 'createdBy'])));
+                $uploads->push(new Resource(
+                    $upload->file->load(['attachable', 'createdBy']))
+                );
             });
         });
 

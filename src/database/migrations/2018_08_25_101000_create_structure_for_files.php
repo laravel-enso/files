@@ -15,6 +15,4 @@ class CreateStructureForFiles extends StructureMigration
     protected $menu = [
         'name' => 'Files', 'icon' => 'folder-open', 'route' => 'core.files.index', 'order_index' => 300, 'has_children' => false,
     ];
-
-    protected $parentMenu = '';
 }

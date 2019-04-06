@@ -12,13 +12,11 @@ Route::middleware(['web', 'auth', 'core'])
                     ->name('download');
             });
 
-        Route::resource('files', 'FileController', [
-            'only' => ['show', 'index', 'destroy'],
-        ]);
+        Route::resource('files', 'FileController')
+            ->only('show', 'index', 'destroy');
 
-        Route::resource('uploads', 'UploadController', [
-                'only' => ['store', 'destroy'],
-            ]);
+        Route::resource('uploads', 'UploadController')
+            ->only('store', 'destroy');
     });
 
 Route::middleware(['signed', 'bindings'])
