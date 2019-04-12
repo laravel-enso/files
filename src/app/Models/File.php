@@ -69,12 +69,12 @@ class File extends Model
             $query->where('created_at', '>', Carbon::createFromFormat(
                 config('enso.config.dateFormat'),
                 $interval->min
-            ));
+            )->format('Y-m-d'));
         })->when(! empty($interval->max), function ($query) use ($interval) {
             $query->where('created_at', '<', Carbon::createFromFormat(
                 config('enso.config.dateFormat'),
                 $interval->max
-            ));
+            )->format('Y-m-d'));
         });
     }
 
