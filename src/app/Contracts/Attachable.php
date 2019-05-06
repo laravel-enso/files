@@ -2,7 +2,7 @@
 
 namespace LaravelEnso\FileManager\app\Contracts;
 
-use Illuminate\Http\UploadedFile;
+use \Symfony\Component\HttpFoundation\File\File;
 
 interface Attachable
 {
@@ -14,7 +14,11 @@ interface Attachable
 
     public function temporaryLink();
 
-    public function upload(UploadedFile $file);
+    /**
+     * @param \Illuminate\Http\UploadedFile|\Illuminate\Http\File $file
+     * @return mixed
+     */
+    public function upload(File $file);
 
     public function folder();
 

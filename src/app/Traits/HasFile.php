@@ -2,7 +2,7 @@
 
 namespace LaravelEnso\FileManager\app\Traits;
 
-use Illuminate\Http\UploadedFile;
+use \Symfony\Component\HttpFoundation\File\File as SymfonyFile;
 use LaravelEnso\FileManager\app\Models\File;
 use LaravelEnso\FileManager\app\Classes\FileManager;
 
@@ -38,8 +38,15 @@ trait HasFile
         return $this->file->temporaryLink();
     }
 
-    public function upload(UploadedFile $file)
+    /**
+     * @param \Illuminate\Http\UploadedFile|\Illuminate\Http\File $file
+     */
+    public function upload(SymfonyFile $file)
     {
+        if (!$file instanceof \Illuminate\Http\File && !$file instanceof \Illuminate\Http\UploadedFile) {
+            throw new \InvalidArgumentException('$file must be a File or UploadedFile object.');
+        }
+
         return (new FileManager($this))
             ->file($file)
             ->mimeTypes($this->mimeTypes())

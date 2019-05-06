@@ -2,8 +2,10 @@
 
 namespace LaravelEnso\FileManager\app\Classes;
 
+use Illuminate\Container\Container;
 use Illuminate\Support\Str;
-use Illuminate\Http\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
+use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use LaravelEnso\FileManager\app\Contracts\Attachable;
 use LaravelEnso\ImageTransformer\app\Classes\ImageTransformer;
 use LaravelEnso\FileManager\app\Exceptions\FileUploadException;
@@ -79,16 +81,18 @@ class FileManager
     private function persist()
     {
         \DB::transaction(function () {
+            $original_name = method_exists($this->file, 'getClientOriginalName')
+                ? $this->file->getClientOriginalName()
+                : $this->file->getBaseName();
             $this->model->file()->create([
-                'original_name' => $this->file->getClientOriginalName(),
+                'original_name' => $original_name,
                 'saved_name' => $this->file->hashName(),
-                'size' => $this->file->getClientSize(),
-                'mime_type' => $this->file->getClientMimeType(),
+                'size' => $this->file->getSize(),
+                'mime_type' => $this->file->getMimeType(),
             ]);
 
-            $this->file->store(
-                $this->folder(),
-                ['disk' => $this->disk]
+            Container::getInstance()->make(FilesystemFactory::class)->disk($this->disk)->putFileAs(
+                $this->folder(), $this->file, $this->file->hashName(), ['disk' => $this->disk]
             );
         });
     }
@@ -100,8 +104,15 @@ class FileManager
             .$this->model->file->saved_name;
     }
 
-    public function file(UploadedFile $file)
+    /**
+     * @param \Illuminate\Http\UploadedFile|\Illuminate\Http\File $file
+     * @return $this
+     */
+    public function file(File $file)
     {
+        if (!$file instanceof \Illuminate\Http\File && !$file instanceof \Illuminate\Http\UploadedFile) {
+            throw new \InvalidArgumentException('$file must be a File or UploadedFile object.');
+        }
         $this->file = $file;
 
         $this->isImage = \Validator::make(
@@ -155,7 +166,7 @@ class FileManager
 
     private function validateFile()
     {
-        if (! $this->file->isValid()) {
+        if (method_exists($this->file, 'isValid') && ! $this->file->isValid()) {
             throw new FileUploadException(__(
                 'Error uploading file :name',
                 ['name' => $this->file->getClientOriginalName()]
@@ -169,13 +180,13 @@ class FileManager
     {
         if (empty($this->extensions) ||
             collect($this->extensions)
-                ->contains($this->file->getClientOriginalExtension())) {
+                ->contains($this->file->guessExtention())) {
             return $this;
         }
 
         throw new FileUploadException(__(
             'Extension :ext is not allowed. Valid extensions are :exts', [
-                'ext' => $this->file->getClientOriginalExtension(),
+                'ext' => $this->file->guessExtention(),
                 'exts' => implode(', ', $this->extensions),
             ]));
     }
@@ -184,13 +195,13 @@ class FileManager
     {
         if (empty($this->mimeTypes) ||
             collect($this->mimeTypes)
-                ->contains($this->file->getClientMimeType())) {
+                ->contains($this->file->getMimeType())) {
             return $this;
         }
 
         throw new FileUploadException(__(
             'Mime type :mime not allowed. Allowed mime types are :mimes', [
-                'mime' => $this->file->getClientMimeType(),
+                'mime' => $this->file->getMimeType(),
                 'mimes' => implode(', ', $this->mimeTypes),
             ]));
     }
