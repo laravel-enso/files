@@ -2,9 +2,9 @@
 
 namespace LaravelEnso\FileManager\app\Traits;
 
-use \Symfony\Component\HttpFoundation\File\File as SymfonyFile;
 use LaravelEnso\FileManager\app\Models\File;
 use LaravelEnso\FileManager\app\Classes\FileManager;
+use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
 
 trait HasFile
 {
@@ -43,7 +43,7 @@ trait HasFile
      */
     public function upload(SymfonyFile $file)
     {
-        if (!$file instanceof \Illuminate\Http\File && !$file instanceof \Illuminate\Http\UploadedFile) {
+        if (! $file instanceof \Illuminate\Http\File && ! $file instanceof \Illuminate\Http\UploadedFile) {
             throw new \InvalidArgumentException('$file must be a File or UploadedFile object.');
         }
 

@@ -2,13 +2,13 @@
 
 namespace LaravelEnso\FileManager\app\Classes;
 
-use Illuminate\Container\Container;
 use Illuminate\Support\Str;
+use Illuminate\Container\Container;
 use Symfony\Component\HttpFoundation\File\File;
-use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use LaravelEnso\FileManager\app\Contracts\Attachable;
 use LaravelEnso\ImageTransformer\app\Classes\ImageTransformer;
 use LaravelEnso\FileManager\app\Exceptions\FileUploadException;
+use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 
 class FileManager
 {
@@ -106,11 +106,12 @@ class FileManager
 
     /**
      * @param \Illuminate\Http\UploadedFile|\Illuminate\Http\File $file
+     *
      * @return $this
      */
     public function file(File $file)
     {
-        if (!$file instanceof \Illuminate\Http\File && !$file instanceof \Illuminate\Http\UploadedFile) {
+        if (! $file instanceof \Illuminate\Http\File && ! $file instanceof \Illuminate\Http\UploadedFile) {
             throw new \InvalidArgumentException('$file must be a File or UploadedFile object.');
         }
         $this->file = $file;

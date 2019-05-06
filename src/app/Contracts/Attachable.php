@@ -2,7 +2,7 @@
 
 namespace LaravelEnso\FileManager\app\Contracts;
 
-use \Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\File;
 
 interface Attachable
 {
@@ -16,6 +16,7 @@ interface Attachable
 
     /**
      * @param \Illuminate\Http\UploadedFile|\Illuminate\Http\File $file
+     *
      * @return mixed
      */
     public function upload(File $file);
