@@ -1,8 +1,8 @@
 <?php
 
-use LaravelEnso\StructureManager\app\Classes\StructureMigration;
+use LaravelEnso\Migrator\app\Database\Migration;
 
-class CreateStructureForUploads extends StructureMigration
+class CreateStructureForUploads extends Migration
 {
     protected $permissions = [
         ['name' => 'core.uploads.store', 'description' => 'Upload file', 'type' => 1, 'is_default' => true],

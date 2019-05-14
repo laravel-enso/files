@@ -1,8 +1,8 @@
 <?php
 
-use LaravelEnso\StructureManager\app\Classes\StructureMigration;
+use LaravelEnso\Migrator\app\Database\Migration;
 
-class CreateStructureForFiles extends StructureMigration
+class CreateStructureForFiles extends Migration
 {
     protected $permissions = [
         ['name' => 'core.files.index', 'description' => 'List files', 'type' => 0, 'is_default' => true],

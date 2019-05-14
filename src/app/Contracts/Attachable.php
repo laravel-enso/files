@@ -1,28 +1,33 @@
 <?php
 
-namespace LaravelEnso\FileManager\app\Contracts;
+namespace LaravelEnso\Files\app\Contracts;
 
+use Illuminate\Http\File;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 interface Attachable
 {
-    public function file();
+    public function file(): Relation;
 
-    public function inline();
+    public function inline(): StreamedResponse;
 
-    public function download();
+    public function download(): StreamedResponse;
 
-    public function temporaryLink();
+    public function temporaryLink(): string;
 
-    public function upload(UploadedFile $file);
+    public function upload(UploadedFile $file): void;
 
-    public function folder();
+    public function attach(File $file, string $originalName): void;
 
-    public function mimeTypes();
+    public function folder(): string;
 
-    public function extensions();
+    public function mimeTypes(): array;
 
-    public function resizeImages();
+    public function extensions(): array;
 
-    public function optimizeImages();
+    public function resizeImages(): array;
+
+    public function optimizeImages(): bool;
 }

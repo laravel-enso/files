@@ -1,8 +1,8 @@
 <?php
 
-namespace LaravelEnso\FileManager\app\Traits;
+namespace LaravelEnso\Files\app\Traits;
 
-use LaravelEnso\FileManager\app\Models\Upload;
+use LaravelEnso\Files\app\Models\Upload;
 
 trait Uploads
 {

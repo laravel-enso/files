@@ -1,9 +1,9 @@
 <?php
 
-namespace LaravelEnso\FileManager;
+namespace LaravelEnso\Files;
 
-use LaravelEnso\FileManager\app\Models\File;
-use LaravelEnso\FileManager\app\Policies\FilePolicy;
+use LaravelEnso\Files\app\Models\File;
+use LaravelEnso\Files\app\Policies\FilePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider

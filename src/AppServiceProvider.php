@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelEnso\FileManager;
+namespace LaravelEnso\Files;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -31,6 +31,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/config' => config_path('enso'),
-        ], 'filemanager-config');
+        ], 'files-config');
+
+        $this->publishes([
+            __DIR__.'/../stubs/FileServiceProvider.stub' => app_path('Providers/FileServiceProvider.php'),
+        ], 'file-provider');
     }
 }

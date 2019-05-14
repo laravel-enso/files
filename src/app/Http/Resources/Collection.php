@@ -1,8 +1,8 @@
 <?php
 
-namespace LaravelEnso\FileManager\app\Http\Resources;
+namespace LaravelEnso\Files\app\Http\Resources;
 
-use LaravelEnso\FileManager\app\Enums\VisibleFiles;
+use LaravelEnso\Files\app\Facades\FileBrowser;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class Collection extends ResourceCollection
@@ -11,7 +11,7 @@ class Collection extends ResourceCollection
     {
         return [
             'data' => $this->collection,
-            'folders' => VisibleFiles::values(),
+            'folders' => FileBrowser::folders(),
             'stats' => [
                 'filteredSpaceUsed' => $this->filteredSpaceUsed(),
                 'totalSpaceUsed' => $this->totalSpaceUsed($request),

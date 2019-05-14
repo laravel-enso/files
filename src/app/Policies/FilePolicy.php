@@ -1,9 +1,9 @@
 <?php
 
-namespace LaravelEnso\FileManager\app\Policies;
+namespace LaravelEnso\Files\app\Policies;
 
 use LaravelEnso\Core\app\Models\User;
-use LaravelEnso\FileManager\app\Models\File;
+use LaravelEnso\Files\app\Models\File;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class FilePolicy
@@ -22,8 +22,7 @@ class FilePolicy
         $attachedTo = $file->attachable->documentable
             ?? $file->attachable;
 
-        if (method_exists($attachedTo, 'canAccess')
-            && is_callable([$attachedTo, 'canAccess'])) {
+        if (method_exists($attachedTo, 'canAccess')) {
             return $attachedTo->canAccess($user, $file);
         }
 

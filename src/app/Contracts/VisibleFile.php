@@ -1,8 +1,8 @@
 <?php
 
-namespace LaravelEnso\FileManager\app\Contracts;
+namespace LaravelEnso\Files\app\Contracts;
 
 interface VisibleFile
 {
-    public function isDeletable();
+    public function isDeletable(): bool;
 }

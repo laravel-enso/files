@@ -5,11 +5,12 @@ use Illuminate\Http\UploadedFile;
 use LaravelEnso\Core\app\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use LaravelEnso\FileManager\app\Traits\HasFile;
+use LaravelEnso\Files\app\Traits\HasFile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use LaravelEnso\FileManager\app\Classes\FileManager;
-use LaravelEnso\FileManager\app\Contracts\Attachable;
-use LaravelEnso\FileManager\app\Exceptions\FileUploadException;
+use LaravelEnso\Files\app\Contracts\Attachable;
+use LaravelEnso\Files\app\Services\Files;
+use LaravelEnso\Files\app\Exceptions\InvalidFileTypeException;
+use LaravelEnso\Files\app\Exceptions\InvalidExtensionException;
 
 class FileManagerTest extends TestCase
 {
@@ -22,7 +23,7 @@ class FileManagerTest extends TestCase
     {
         parent::setUp();
 
-        // $this->withoutExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->seed()
             ->actingAs(User::first());
@@ -45,41 +46,36 @@ class FileManagerTest extends TestCase
         $this->assertNotNull($this->testModel->file);
 
         Storage::assertExists(
-            FileManager::TestingFolder.DIRECTORY_SEPARATOR.$this->testModel->file->saved_name
+            $this->testModel->folder().DIRECTORY_SEPARATOR.$this->testModel->file->saved_name
         );
     }
 
     /** @test */
     public function cant_upload_file_with_invalid_extension()
     {
-        $manager = new FileManager($this->testModel);
-
-        $this->expectException(FileUploadException::class);
-
-        $manager->file($this->file)
+        $this->expectException(InvalidExtensionException::class);
+        
+        (new Files($this->testModel))
             ->extensions(['jpg'])
-            ->upload();
+            ->upload($this->file);
     }
 
     /** @test */
     public function cant_upload_file_with_invalid_mime_type()
     {
-        $manager = new FileManager($this->testModel);
+        $this->expectException(InvalidFileTypeException::class);
 
-        $this->expectException(FileUploadException::class);
-
-        $manager->file($this->file)
+        (new Files($this->testModel))
             ->mimeTypes(['application/msword'])
-            ->upload();
+            ->upload($this->file);
     }
 
     /** @test */
     public function can_display_file_inline()
     {
-        $manager = new FileManager($this->testModel);
+        $manager = new Files($this->testModel);
 
-        $manager->file($this->file)
-            ->upload();
+        $manager->upload($this->file);
 
         $response = $manager->inline($this->file->hashname());
 
@@ -89,10 +85,9 @@ class FileManagerTest extends TestCase
     /** @test */
     public function can_download_file()
     {
-        $manager = new FileManager($this->testModel);
+        $manager = new Files($this->testModel);
 
-        $manager->file($this->file)
-            ->upload();
+        $manager->upload($this->file);
 
         $response = $manager->download(
             $this->testModel->file->original_name,
@@ -121,7 +116,7 @@ class FileManagerTest extends TestCase
 
     private function cleanUp()
     {
-        \Storage::deleteDirectory(FileManager::TestingFolder);
+        Storage::deleteDirectory(config('enso.files.paths.testing'));
     }
 }
 

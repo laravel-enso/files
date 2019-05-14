@@ -1,18 +1,16 @@
 <?php
 
-namespace LaravelEnso\FileManager\app\Models;
+namespace LaravelEnso\Files\app\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use LaravelEnso\TrackWho\app\Traits\CreatedBy;
-use LaravelEnso\FileManager\app\Enums\VisibleFiles;
-use LaravelEnso\FileManager\app\Classes\FileManager;
+use LaravelEnso\Files\app\Facades\FileBrowser;
 
 class File extends Model
 {
     use CreatedBy;
-
-    const ExpiresIn = 60 * 60 * 24;
 
     protected $fillable = ['original_name', 'saved_name', 'size', 'mime_type'];
 
@@ -25,30 +23,31 @@ class File extends Model
     {
         return url()->temporarySignedRoute(
             'core.files.share',
-            now()->addSeconds(self::ExpiresIn),
+            now()->addSeconds(config('enso.files.linkExpiration')),
             ['file' => $this->id]
         );
     }
 
     public function type()
     {
-        return VisibleFiles::get($this->attachable_type);
+        return FileBrowser::folder($this->attachable_type);
     }
 
     public function path()
     {
-        return storage_path(
-            'app'.DIRECTORY_SEPARATOR.
-            (app()->environment('testing')
-                ? FileManager::TestingFolder
-                : $this->attachable->folder())
-            .DIRECTORY_SEPARATOR.$this->saved_name
+        return Storage::path(
+            $this->attachable->folder()
+            .DIRECTORY_SEPARATOR
+            .$this->saved_name
         );
     }
 
     public function scopeVisible($query)
     {
-        $query->whereIn('attachable_type', VisibleFiles::keys());
+        $query->whereIn(
+            'attachable_type',
+            FileBrowser::models()
+        );
     }
 
     public function scopeForUser($query, $user)
@@ -78,7 +77,7 @@ class File extends Model
         });
     }
 
-    public function scopeFiltered($query, $search)
+    public function scopeFilter($query, $search)
     {
         if (! empty($search)) {
             $query->where('original_name', 'LIKE', '%'.$search.'%');

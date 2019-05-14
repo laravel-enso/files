@@ -1,9 +1,10 @@
 # File Manager
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6e342eff10f24db5b89be5fe203e424d)](https://www.codacy.com/app/laravel-enso/FileManager?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=laravel-enso/FileManager&amp;utm_campaign=Badge_Grade)
-[![StyleCI](https://styleci.io/repos/85492361/shield?branch=master)](https://styleci.io/repos/85492361)
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6e342eff10f24db5b89be5fe203e424d)](https://www.codacy.com/app/laravel-enso/files?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=laravel-enso/files&amp;utm_campaign=Badge_Grade)
+[![StyleCI](https://github.styleci.io/repos/85492361/shield?branch=master)](https://github.styleci.io/repos/85492361)
 [![License](https://poser.pugx.org/laravel-enso/datatable/license)](https://packagist.org/packages/laravel-enso/datatable)
-[![Total Downloads](https://poser.pugx.org/laravel-enso/filemanager/downloads)](https://packagist.org/packages/laravel-enso/filemanager)
-[![Latest Stable Version](https://poser.pugx.org/laravel-enso/filemanager/version)](https://packagist.org/packages/laravel-enso/filemanager)
+[![Total Downloads](https://poser.pugx.org/laravel-enso/files/downloads)](https://packagist.org/packages/laravel-enso/files)
+[![Latest Stable Version](https://poser.pugx.org/laravel-enso/files/version)](https://packagist.org/packages/laravel-enso/files)
 
 File manager dependency for [Laravel Enso](https://github.com/laravel-enso/Enso).
 
@@ -13,7 +14,7 @@ The front end assets that utilize this api are present in the [ui](https://githu
 
 For live examples and demos, you may visit [laravel-enso.com](https://www.laravel-enso.com)
 
-[![Watch the demo](https://laravel-enso.github.io/filemanager/screenshots/bulma_001_thumb.png)](https://laravel-enso.github.io/filemanager/videos/bulma_filemanager.mp4)
+[![Watch the demo](https://laravel-enso.github.io/files/screenshots/bulma_001_thumb.png)](https://laravel-enso.github.io/files/videos/bulma_filemanager.mp4)
 
 <sup>click on the photo to view a short demo in compatible browsers</sup>
 

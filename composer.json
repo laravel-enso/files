@@ -1,13 +1,13 @@
 {
-    "name": "laravel-enso/filemanager",
+    "name": "laravel-enso/files",
     "description": "File manager dependency for Laravel Enso",
     "keywords": [
         "laravel-enso",
-        "filemanager",
+        "files",
         "file-manager",
         "file-uploader"
     ],
-    "homepage": "https://github.com/laravel-enso/FileManager",
+    "homepage": "https://github.com/laravel-enso/files",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -20,25 +20,27 @@
     ],
     "require": {
         "php": ">=7.1.0",
-        "laravel/framework": "5.8.*",
-        "laravel-enso/core": "4.2.*",
-        "laravel-enso/helpers": "1.10.*",
-        "laravel-enso/imagetransformer": "1.4.*",
-        "laravel-enso/structuremanager": "3.0.*",
-        "laravel-enso/trackwho": "1.7.*"
+        "laravel-enso/core": "4.3.*",
+        "laravel-enso/helpers": "1.11.*",
+        "laravel-enso/image-transformer": "1.5.*",
+        "laravel-enso/migrator": "1.0.*",
+        "laravel-enso/track-who": "1.8.*"
     },
     "autoload": {
         "psr-4": {
-            "LaravelEnso\\FileManager\\": "src/"
+            "LaravelEnso\\Files\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "LaravelEnso\\FileManager\\AppServiceProvider",
-                "LaravelEnso\\FileManager\\AuthServiceProvider"
+                "LaravelEnso\\Files\\AppServiceProvider",
+                "LaravelEnso\\Files\\AuthServiceProvider",
+                "LaravelEnso\\Files\\FileServiceProvider"
             ],
-            "aliases": {}
+            "aliases": {
+                "FileBrowser": "LaravelEnso\\Files\\app\\Facades\\FileBrowser"
+            }
         }
     }
 }

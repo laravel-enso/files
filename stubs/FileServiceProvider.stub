@@ -1,0 +1,15 @@
+<?php
+
+namespace App\Providers;
+
+use LaravelEnso\Files\FileServiceProvider as ServiceProvider;
+
+class FileServiceProvider extends ServiceProvider
+{
+    public $register = [
+        // 'folder' => [
+        //    'model' => Model::class,
+        //    'order' => 100,
+        // ]
+    ];
+}
