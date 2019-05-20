@@ -10,6 +10,6 @@ class UploadServiceProvider extends FileServiceProvider
         'uploads' => [
             'model' => Upload::class,
             'order' => 100,
-        ]
+        ],
     ];
 }
