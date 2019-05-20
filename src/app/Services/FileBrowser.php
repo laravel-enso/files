@@ -46,7 +46,7 @@ class FileBrowser
 
     public function remove($folders)
     {
-        collect($folders)->each(function($folder) {
+        collect($folders)->each(function ($folder) {
             $this->sources->forget($folder);
         });
     }

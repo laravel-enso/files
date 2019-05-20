@@ -3,9 +3,14 @@
 namespace LaravelEnso\Files;
 
 use Illuminate\Support\ServiceProvider;
+use LaravelEnso\Files\app\Services\FileBrowser;
 
 class AppServiceProvider extends ServiceProvider
 {
+    public $singletons = [
+        'file-browser' => FileBrowser::class,
+    ];
+
     public function boot()
     {
         $this->loadDependencies()

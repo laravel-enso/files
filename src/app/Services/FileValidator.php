@@ -31,11 +31,11 @@ class FileValidator
         if (collect($this->extensions)->isNotEmpty() &&
             ! collect($this->extensions)
                 ->contains($this->file->getClientOriginalExtension())) {
-                throw new InvalidExtensionException(__(
-                    'Extension :ext is not allowed. Valid extensions are :exts', [
-                        'ext' => $this->file->getClientOriginalExtension(),
-                        'exts' => implode(', ', $this->extensions),
-                ]));
+            throw new InvalidExtensionException(__(
+                'Extension :ext is not allowed. Valid extensions are :exts', [
+                    'ext' => $this->file->getClientOriginalExtension(),
+                    'exts' => implode(', ', $this->extensions),
+            ]));
         }
 
         return $this;
@@ -46,7 +46,7 @@ class FileValidator
         if (collect($this->mimeTypes)->isNotEmpty() &&
             ! collect($this->mimeTypes)
                 ->contains($this->file->getClientMimeType())) {
-                throw new InvalidFileTypeException(__(
+            throw new InvalidFileTypeException(__(
                     'Mime type :mime not allowed. Allowed mime types are :mimes', [
                         'mime' => $this->file->getClientMimeType(),
                         'mimes' => implode(', ', $this->mimeTypes),

@@ -36,7 +36,8 @@
             "providers": [
                 "LaravelEnso\\Files\\AppServiceProvider",
                 "LaravelEnso\\Files\\AuthServiceProvider",
-                "LaravelEnso\\Files\\FileServiceProvider"
+                "LaravelEnso\\Files\\FileServiceProvider",
+                "LaravelEnso\\Files\\UploadServiceProvider"
             ],
             "aliases": {
                 "FileBrowser": "LaravelEnso\\Files\\app\\Facades\\FileBrowser"

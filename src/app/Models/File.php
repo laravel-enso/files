@@ -5,8 +5,8 @@ namespace LaravelEnso\Files\app\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use LaravelEnso\TrackWho\app\Traits\CreatedBy;
 use LaravelEnso\Files\app\Facades\FileBrowser;
+use LaravelEnso\TrackWho\app\Traits\CreatedBy;
 
 class File extends Model
 {

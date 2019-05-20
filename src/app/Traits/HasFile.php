@@ -4,11 +4,11 @@ namespace LaravelEnso\Files\app\Traits;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\File as IlluminateFile;
 use LaravelEnso\Files\app\Models\File;
-use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Storage;
 use LaravelEnso\Files\app\Services\Files;
+use Illuminate\Http\File as IlluminateFile;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 trait HasFile
@@ -54,7 +54,7 @@ trait HasFile
             ->resize($this->resizeImages())
             ->upload($file);
     }
-   
+
     public function ensureFolderExists()
     {
         $folder = $this->folder();
@@ -76,7 +76,6 @@ trait HasFile
             ? $this->folder
             : config('enso.files.paths.files');
     }
-    
 
     public function mimeTypes(): array
     {
