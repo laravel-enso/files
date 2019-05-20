@@ -28,9 +28,9 @@ class FileBrowser
 
     public function folder($model)
     {
-        return $this->sources->first(function ($source) use ($model) {
-            return $source['model'] = $model;
-        })['folder'];
+        return $this->sources->search(function ($source) use ($model) {
+            return $source['model'] === $model;
+        });
     }
 
     public function order($folder, $order)
