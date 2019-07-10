@@ -14,7 +14,7 @@ class Files implements Responsable
         return new Collection(
             Resource::collection(
                 File::visible()
-                    ->with(['createdBy', 'attachable'])
+                    ->with(['createdBy.avatar', 'attachable'])
                     ->forUser($request->user())
                     ->between(json_decode($request->get('interval')))
                     ->filter($request->get('query'))
