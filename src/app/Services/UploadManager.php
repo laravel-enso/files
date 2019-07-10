@@ -54,7 +54,7 @@ class UploadManager
                 ->upload($file);
 
             $this->uploadedFiles->push(new Resource(
-                $upload->file->load(['attachable', 'createdBy']))
+                $upload->file->load(['attachable', 'createdBy.avatar']))
             );
         });
     }
