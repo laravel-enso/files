@@ -6,11 +6,12 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use LaravelEnso\Files\app\Facades\FileBrowser;
+use LaravelEnso\Files\app\Traits\FilePolicies;
 use LaravelEnso\TrackWho\app\Traits\CreatedBy;
 
 class File extends Model
 {
-    use CreatedBy;
+    use CreatedBy, FilePolicies;
 
     protected $fillable = ['original_name', 'saved_name', 'size', 'mime_type'];
 
@@ -44,9 +45,9 @@ class File extends Model
 
     public function scopeVisible($query)
     {
-        $query->whereIn(
-            'attachable_type',
-            FileBrowser::models()
+        $query->hasMorph(
+            'attachable',
+            FileBrowser::models()->toArray()
         );
     }
 

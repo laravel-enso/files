@@ -12,7 +12,7 @@ class Link extends Controller
 
     public function __invoke(File $file)
     {
-        $this->authorize('handle', $file);
+        $this->authorize('share', $file);
 
         return ['link' => $file->temporaryLink()];
     }

@@ -12,7 +12,7 @@ class Show extends Controller
 
     public function __invoke(File $file)
     {
-        $this->authorize('handle', $file);
+        $this->authorize('view', $file);
 
         return $file->attachable->inline();
     }

@@ -12,7 +12,7 @@ class Destroy extends Controller
 
     public function __invoke(File $file)
     {
-        $this->authorize('handle', $file);
+        $this->authorize('destroy', $file);
 
         $file->attachable->delete();
     }

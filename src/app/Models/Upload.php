@@ -4,13 +4,14 @@ namespace LaravelEnso\Files\app\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use LaravelEnso\Files\app\Traits\HasFile;
+use LaravelEnso\Files\app\Traits\FilePolicies;
 use LaravelEnso\Files\app\Contracts\Attachable;
-use LaravelEnso\Files\app\Contracts\VisibleFile;
 use LaravelEnso\Files\app\Services\UploadManager;
+use LaravelEnso\Files\app\Contracts\AuthorizesFileAcces;
 
-class Upload extends Model implements Attachable, VisibleFile
+class Upload extends Model implements Attachable, AuthorizesFileAcces
 {
-    use HasFile;
+    use HasFile, FilePolicies;
 
     protected $optimizeImages = true;
 
@@ -18,11 +19,5 @@ class Upload extends Model implements Attachable, VisibleFile
     {
         return (new UploadManager($this, $files))
             ->handle();
-    }
-
-    public function isDeletable(): bool
-    {
-        return request()->user()
-            ->can('handle', $this->file);
     }
 }

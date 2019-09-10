@@ -3,6 +3,7 @@
 namespace LaravelEnso\Files\app\Services;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use LaravelEnso\Files\app\Models\File;
 use LaravelEnso\Files\app\Models\Upload;
 use LaravelEnso\Files\app\Exceptions\FileExistsException;
@@ -61,7 +62,7 @@ class UploadManager
 
     private function existingFiles()
     {
-        return File::forUser(auth()->user())
+        return File::forUser(Auth::user())
             ->whereAttachableType(Upload::class)
             ->pluck('original_name');
     }

@@ -13,14 +13,13 @@ class CreateFilesTable extends Migration
 
             $table->morphs('attachable');
 
-            $table->string('original_name');
+            $table->string('original_name')->index();
             $table->string('saved_name');
             $table->integer('size');
             $table->string('mime_type')->nullable();
 
             $table->integer('created_by')->unsigned()->nullable();
-            $table->foreign('created_by')->references('id')
-                ->on('users');
+            $table->foreign('created_by')->references('id')->on('users');
 
             $table->timestamps();
         });
