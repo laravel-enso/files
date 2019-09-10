@@ -16,7 +16,8 @@ class File extends JsonResource
             'mimeType' => $this->mime_type,
             'type' => $this->type(),
             'owner' => new TrackWho($this->whenLoaded('createdBy')),
-            'isDeletable' => $this->destroyableBy($request->user()),
+            'isDestroyable' => $this->destroyableBy($request->user()),
+            'isShareable' => $this->shareableBy($request->user()),
             'isViewable' => $this->viewableBy($request->user()),
             'createdAt' => $this->created_at->toDatetimeString(),
         ];
