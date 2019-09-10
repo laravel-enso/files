@@ -24,7 +24,7 @@ class FilePolicy
             ? $this->attachable->viewableBy($user)
             : $this->ownsFile($user, $file);
     }
-    
+
     public function share(User $user, File $file)
     {
         return $file->attachable instanceof AuthorizesFileAcces

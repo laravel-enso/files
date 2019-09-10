@@ -21,7 +21,7 @@ class UploadPolicy
     {
         return $this->ownsUpload($user, $upload);
     }
-    
+
     public function share(User $user, Upload $upload)
     {
         return $this->ownsUpload($user, $upload);
