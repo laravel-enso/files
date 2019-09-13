@@ -7,9 +7,9 @@ use LaravelEnso\Files\app\Traits\HasFile;
 use LaravelEnso\Files\app\Traits\FilePolicies;
 use LaravelEnso\Files\app\Contracts\Attachable;
 use LaravelEnso\Files\app\Services\UploadManager;
-use LaravelEnso\Files\app\Contracts\AuthorizesFileAcces;
+use LaravelEnso\Files\app\Contracts\AuthorizesFileAccess;
 
-class Upload extends Model implements Attachable, AuthorizesFileAcces
+class Upload extends Model implements Attachable, AuthorizesFileAccess
 {
     use HasFile, FilePolicies;
 
