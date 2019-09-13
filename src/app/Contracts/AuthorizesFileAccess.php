@@ -4,7 +4,7 @@ namespace LaravelEnso\Files\app\Contracts;
 
 use LaravelEnso\Core\app\Models\User;
 
-interface AuthorizesFileAcces
+interface AuthorizesFileAccess
 {
     public function viewableBy(User $user): bool;
 
