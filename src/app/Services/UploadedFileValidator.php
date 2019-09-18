@@ -2,7 +2,7 @@
 
 namespace LaravelEnso\Files\app\Services;
 
-use LaravelEnso\Files\app\Exceptions\FileUploadException;
+use LaravelEnso\Files\app\Exceptions\FileException;
 
 class UploadedFileValidator extends FileValidator
 {
@@ -16,10 +16,7 @@ class UploadedFileValidator extends FileValidator
     private function validateFile()
     {
         if (! $this->file->isValid()) {
-            throw new FileUploadException(__(
-                'Error uploading file :name',
-                ['name' => $this->file->getClientOriginalName()]
-            ));
+            throw FileException::uploadError($this->file->getClientOriginalName());
         }
 
         return $this;

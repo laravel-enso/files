@@ -5,12 +5,11 @@ use Illuminate\Http\UploadedFile;
 use LaravelEnso\Core\app\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use LaravelEnso\Files\app\Traits\HasFile;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use LaravelEnso\Files\app\Contracts\Attachable;
 use LaravelEnso\Files\app\Services\Files;
-use LaravelEnso\Files\app\Exceptions\InvalidFileTypeException;
-use LaravelEnso\Files\app\Exceptions\InvalidExtensionException;
+use LaravelEnso\Files\app\Traits\HasFile;
+use LaravelEnso\Files\app\Contracts\Attachable;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use LaravelEnso\Files\app\Exceptions\FileException;
 
 class FileManagerTest extends TestCase
 {
@@ -53,7 +52,15 @@ class FileManagerTest extends TestCase
     /** @test */
     public function cant_upload_file_with_invalid_extension()
     {
-        $this->expectException(InvalidExtensionException::class);
+        $this->expectException(FileException::class);
+
+        $this->expectExceptionMessage(
+            FileException::invalidExtension(
+                $this->file->getClientOriginalExtension(),
+                'jpg'
+            )->getMessage()
+        );
+
         
         (new Files($this->testModel))
             ->extensions(['jpg'])
@@ -63,7 +70,15 @@ class FileManagerTest extends TestCase
     /** @test */
     public function cant_upload_file_with_invalid_mime_type()
     {
-        $this->expectException(InvalidFileTypeException::class);
+        $this->expectException(FileException::class);
+
+        $this->expectExceptionMessage(
+            FileException::invalidMimeType(
+                $this->file->getClientMimeType(),
+                'application/msword'
+            )->getMessage()
+        );
+
 
         (new Files($this->testModel))
             ->mimeTypes(['application/msword'])

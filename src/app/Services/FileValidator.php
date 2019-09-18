@@ -3,8 +3,7 @@
 namespace LaravelEnso\Files\app\Services;
 
 use Symfony\Component\HttpFoundation\File\File;
-use LaravelEnso\Files\app\Exceptions\InvalidFileTypeException;
-use LaravelEnso\Files\app\Exceptions\InvalidExtensionException;
+use LaravelEnso\Files\app\Exceptions\FileException;
 
 class FileValidator
 {
@@ -31,11 +30,10 @@ class FileValidator
         if (collect($this->extensions)->isNotEmpty() &&
             ! collect($this->extensions)
                 ->contains($this->file->getClientOriginalExtension())) {
-            throw new InvalidExtensionException(__(
-                'Extension :ext is not allowed. Valid extensions are :exts', [
-                    'ext' => $this->file->getClientOriginalExtension(),
-                    'exts' => implode(', ', $this->extensions),
-            ]));
+            throw FileException::invalidExtension(
+                $this->file->getClientOriginalExtension(),
+                implode(', ', $this->extensions)
+            );
         }
 
         return $this;
@@ -46,11 +44,10 @@ class FileValidator
         if (collect($this->mimeTypes)->isNotEmpty() &&
             ! collect($this->mimeTypes)
                 ->contains($this->file->getClientMimeType())) {
-            throw new InvalidFileTypeException(__(
-                    'Mime type :mime not allowed. Allowed mime types are :mimes', [
-                        'mime' => $this->file->getClientMimeType(),
-                        'mimes' => implode(', ', $this->mimeTypes),
-                ]));
+            throw FileException::invalidMimeType(
+                $this->file->getClientMimeType(),
+                implode(', ', $this->mimeTypes),
+            );
         }
 
         return $this;

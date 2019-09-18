@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use LaravelEnso\Files\app\Models\File;
 use LaravelEnso\Files\app\Models\Upload;
-use LaravelEnso\Files\app\Exceptions\FileExistsException;
+use LaravelEnso\Files\app\Exceptions\FileException;
 use LaravelEnso\Files\app\Http\Resources\File as Resource;
 
 class UploadManager
@@ -39,10 +39,7 @@ class UploadManager
         })->intersect($this->existingFiles());
 
         if ($existing->isNotEmpty()) {
-            throw new FileExistsException(__(
-                'File(s): :files already uploaded',
-                ['files' => $existing->implode(', ')]
-            ));
+            throw FileException::duplicates($existing->implode(', '));
         }
 
         return $this;
