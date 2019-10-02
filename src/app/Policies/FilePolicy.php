@@ -22,21 +22,21 @@ class FilePolicy
     {
         return $file->attachable instanceof AuthorizesFileAccess
             ? $file->attachable->viewableBy($user)
-            : $file->ownsFile($user, $file);
+            : $this->ownsFile($user, $file);
     }
 
     public function share(User $user, File $file)
     {
         return $file->attachable instanceof AuthorizesFileAccess
             ? $file->attachable->shareableBy($user)
-            : $file->ownsFile($user, $file);
+            : $this->ownsFile($user, $file);
     }
 
     public function destroy(User $user, File $file)
     {
         return $file->attachable instanceof AuthorizesFileAccess
             ? $file->attachable->destroyableBy($user)
-            : $file->ownsFile($user, $file);
+            : $this->ownsFile($user, $file);
     }
 
     private function ownsFile(User $user, File $file)
