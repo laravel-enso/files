@@ -14,6 +14,6 @@ class Link extends Controller
     {
         $this->authorize('share', $file);
 
-        return ['link' => $file->temporaryLink()];
+        return ['link' => $file->attachable->temporaryLink()];
     }
 }

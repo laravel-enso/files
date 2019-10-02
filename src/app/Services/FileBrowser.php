@@ -4,38 +4,38 @@ namespace LaravelEnso\Files\app\Services;
 
 class FileBrowser
 {
-    private $sources;
+    private $models;
 
     public function __construct()
     {
-        $this->sources = collect();
+        $this->models = collect();
     }
 
-    public function register($sources)
+    public function register($models)
     {
-        $this->sources = $this->sources->merge($sources);
+        $this->models = $this->models->merge($models);
     }
 
     public function folders()
     {
-        return $this->sources->sortBy('order')->keys();
+        return $this->models->sortBy('order')->keys();
     }
 
     public function models()
     {
-        return $this->sources->pluck('model');
+        return $this->models->pluck('model');
     }
 
     public function folder($model)
     {
-        return $this->sources->search(function ($source) use ($model) {
+        return $this->models->search(function ($source) use ($model) {
             return $source['model'] === $model;
         });
     }
 
     public function order($folder, $order)
     {
-        $this->sources = $this->sources->map(function ($source, $key) use ($folder, $order) {
+        $this->models = $this->models->map(function ($source, $key) use ($folder, $order) {
             if ($folder === $key) {
                 $source['order'] = $order;
             }
@@ -47,12 +47,12 @@ class FileBrowser
     public function remove($folders)
     {
         collect($folders)->each(function ($folder) {
-            $this->sources->forget($folder);
+            $this->models->forget($folder);
         });
     }
 
     public function all()
     {
-        return $this->sources;
+        return $this->models;
     }
 }
