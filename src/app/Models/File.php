@@ -67,14 +67,14 @@ class File extends Model
     {
         $query->when(! empty($interval->min), function ($query) use ($interval) {
             $query->where('created_at', '>', Carbon::createFromFormat(
-                config('enso.config.dateFormat'),
+                config('enso.config.dateTimeFormat'),
                 $interval->min
-            )->format('Y-m-d'));
+            ));
         })->when(! empty($interval->max), function ($query) use ($interval) {
             $query->where('created_at', '<', Carbon::createFromFormat(
-                config('enso.config.dateFormat'),
+                config('enso.config.dateTimeFormat'),
                 $interval->max
-            )->format('Y-m-d'));
+            ));
         });
     }
 
