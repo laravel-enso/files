@@ -6,12 +6,14 @@ use Illuminate\Http\File;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use LaravelEnso\Core\app\Models\User;
 use Illuminate\Support\Facades\Storage;
 use LaravelEnso\Files\app\Contracts\Attachable;
 use Symfony\Component\HttpFoundation\File\File as BaseFile;
 
 class Files
 {
+    private $userId;
     private $attachable;
     private $file;
     private $disk;
@@ -55,12 +57,12 @@ class Files
         }
     }
 
-    public function attach(File $file, string $originalName)
+    public function attach(File $file, string $originalName, ?User $user)
     {
         $this->file($file)
             ->validateFile()
             ->processImage()
-            ->persistAttachedFile($originalName);
+            ->persistAttachedFile($originalName, $user);
     }
 
     public function upload(UploadedFile $file)
@@ -71,6 +73,13 @@ class Files
             ->persistUploadedFile();
     }
 
+    public function userId($userId)
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+    
     public function optimize($optimize)
     {
         $this->optimize = $optimize;
@@ -140,13 +149,14 @@ class Files
         return $this;
     }
 
-    private function persistAttachedFile(string $originalName)
+    private function persistAttachedFile(string $originalName, ?User $user)
     {
         $this->attachable->file()->create([
             'original_name' => $originalName,
             'saved_name' => $this->file->getBaseName(),
             'size' => $this->file->getSize(),
             'mime_type' => $this->file->getMimeType(),
+            'created_by' => optional($user)->id,
         ]);
     }
 

@@ -4,6 +4,7 @@ namespace LaravelEnso\Files\app\Traits;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\App;
+use LaravelEnso\Core\app\Models\User;
 use LaravelEnso\Files\app\Models\File;
 use Illuminate\Support\Facades\Storage;
 use LaravelEnso\Files\app\Services\Files;
@@ -40,9 +41,9 @@ trait HasFile
         return $this->file->temporaryLink();
     }
 
-    public function attach(IlluminateFile $file, string $originalName): void
+    public function attach(IlluminateFile $file, string $originalName, ?User $user): void
     {
-        (new Files($this))->attach($file, $originalName);
+        (new Files($this))->attach($file, $originalName, $user);
     }
 
     public function upload(UploadedFile $file): void

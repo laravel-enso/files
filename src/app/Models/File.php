@@ -13,7 +13,7 @@ class File extends Model
 {
     use CreatedBy, FilePolicies;
 
-    protected $fillable = ['original_name', 'saved_name', 'size', 'mime_type'];
+    protected $fillable = ['original_name', 'saved_name', 'size', 'mime_type', 'created_by'];
 
     public function attachable()
     {
@@ -66,12 +66,12 @@ class File extends Model
     public function scopeBetween($query, $interval)
     {
         $query->when(! empty($interval->min), function ($query) use ($interval) {
-            $query->where('created_at', '>', Carbon::createFromFormat(
+            $query->where('created_at', '>=', Carbon::createFromFormat(
                 config('enso.config.dateTimeFormat'),
                 $interval->min
             ));
         })->when(! empty($interval->max), function ($query) use ($interval) {
-            $query->where('created_at', '<', Carbon::createFromFormat(
+            $query->where('created_at', '<=', Carbon::createFromFormat(
                 config('enso.config.dateTimeFormat'),
                 $interval->max
             ));
