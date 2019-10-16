@@ -79,7 +79,7 @@ class Files
 
         return $this;
     }
-    
+
     public function optimize($optimize)
     {
         $this->optimize = $optimize;
