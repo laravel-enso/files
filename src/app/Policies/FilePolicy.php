@@ -39,7 +39,7 @@ class FilePolicy
             : $this->ownsFile($user, $file);
     }
 
-    private function ownsFile(User $user, File $file)
+    protected function ownsFile(User $user, File $file)
     {
         return $user->id === (int) $file->created_by;
     }
