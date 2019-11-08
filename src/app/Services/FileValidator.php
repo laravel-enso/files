@@ -2,8 +2,8 @@
 
 namespace LaravelEnso\Files\app\Services;
 
-use Symfony\Component\HttpFoundation\File\File;
 use LaravelEnso\Files\app\Exceptions\FileException;
+use Symfony\Component\HttpFoundation\File\File;
 
 class FileValidator
 {

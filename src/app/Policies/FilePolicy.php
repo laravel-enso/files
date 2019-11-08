@@ -2,10 +2,10 @@
 
 namespace LaravelEnso\Files\app\Policies;
 
-use LaravelEnso\Core\app\Models\User;
-use LaravelEnso\Files\app\Models\File;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use LaravelEnso\Core\app\Models\User;
 use LaravelEnso\Files\app\Contracts\AuthorizesFileAccess;
+use LaravelEnso\Files\app\Models\File;
 
 class FilePolicy
 {

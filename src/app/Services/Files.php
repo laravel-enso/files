@@ -3,11 +3,11 @@
 namespace LaravelEnso\Files\app\Services;
 
 use Illuminate\Http\File;
-use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
-use LaravelEnso\Core\app\Models\User;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use LaravelEnso\Core\app\Models\User;
 use LaravelEnso\Files\app\Contracts\Attachable;
 use Symfony\Component\HttpFoundation\File\File as BaseFile;
 

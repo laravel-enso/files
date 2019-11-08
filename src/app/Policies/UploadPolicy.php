@@ -2,9 +2,9 @@
 
 namespace LaravelEnso\Files\app\Policies;
 
+use Illuminate\Auth\Access\HandlesAuthorization;
 use LaravelEnso\Core\app\Models\User;
 use LaravelEnso\Files\app\Models\Upload;
-use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UploadPolicy
 {

@@ -2,9 +2,9 @@
 
 namespace LaravelEnso\Files\app\Http\Controllers\Upload;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Routing\Controller;
 use LaravelEnso\Files\app\Models\Upload;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Destroy extends Controller
 {

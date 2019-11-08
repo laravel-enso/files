@@ -2,14 +2,14 @@
 
 namespace LaravelEnso\Files\app\Traits;
 
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Http\File as IlluminateFile;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Storage;
 use LaravelEnso\Core\app\Models\User;
 use LaravelEnso\Files\app\Models\File;
-use Illuminate\Support\Facades\Storage;
 use LaravelEnso\Files\app\Services\Files;
-use Illuminate\Http\File as IlluminateFile;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 trait HasFile

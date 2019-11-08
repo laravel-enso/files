@@ -2,8 +2,8 @@
 
 namespace LaravelEnso\Files\app\Http\Resources;
 
-use LaravelEnso\Files\app\Facades\FileBrowser;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use LaravelEnso\Files\app\Facades\FileBrowser;
 
 class Collection extends ResourceCollection
 {

@@ -2,11 +2,11 @@
 
 namespace LaravelEnso\Files;
 
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use LaravelEnso\Files\app\Models\File;
 use LaravelEnso\Files\app\Models\Upload;
 use LaravelEnso\Files\app\Policies\FilePolicy;
 use LaravelEnso\Files\app\Policies\UploadPolicy;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {

@@ -2,9 +2,9 @@
 
 namespace LaravelEnso\Files\app\Http\Controllers\File;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Routing\Controller;
 use LaravelEnso\Files\app\Models\File;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Show extends Controller
 {

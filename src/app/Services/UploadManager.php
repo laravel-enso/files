@@ -2,12 +2,12 @@
 
 namespace LaravelEnso\Files\app\Services;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use LaravelEnso\Files\app\Models\File;
-use LaravelEnso\Files\app\Models\Upload;
+use Illuminate\Support\Facades\DB;
 use LaravelEnso\Files\app\Exceptions\FileException;
 use LaravelEnso\Files\app\Http\Resources\File as Resource;
+use LaravelEnso\Files\app\Models\File;
+use LaravelEnso\Files\app\Models\Upload;
 
 class UploadManager
 {
