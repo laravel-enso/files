@@ -66,15 +66,13 @@ class File extends Model
     public function scopeBetween($query, $interval)
     {
         $query->when(! empty($interval->min), function ($query) use ($interval) {
-            $query->where('created_at', '>=', Carbon::createFromFormat(
-                config('enso.config.dateTimeFormat'),
-                $interval->min
-            ));
+            $query->where(
+                'created_at', '>=', Carbon::parse($interval->min)
+            );
         })->when(! empty($interval->max), function ($query) use ($interval) {
-            $query->where('created_at', '<=', Carbon::createFromFormat(
-                config('enso.config.dateTimeFormat'),
-                $interval->max
-            ));
+            $query->where(
+                'created_at', '<=', Carbon::parse($interval->max)
+            );
         });
     }
 
