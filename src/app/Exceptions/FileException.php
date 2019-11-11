@@ -33,7 +33,7 @@ class FileException extends EnsoException
     public static function invalidMimeType($mime, $allowed)
     {
         return new static(__(
-            'Mime type :mime not allowed. Allowed mime types are :mimes',
+            'Mime type :mime not allowed. Allowed mime types are :allowed',
             ['mime' => $mime, 'allowed' => $allowed]
         ));
     }
