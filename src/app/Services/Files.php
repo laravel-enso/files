@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\File\File as BaseFile;
 
 class Files
 {
-    private $userId;
     private $attachable;
     private $file;
     private $disk;
@@ -71,13 +70,6 @@ class Files
             ->validateUploadedFile()
             ->processImage()
             ->persistUploadedFile();
-    }
-
-    public function userId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
     }
 
     public function optimize($optimize)

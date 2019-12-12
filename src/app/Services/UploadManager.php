@@ -4,7 +4,7 @@ namespace LaravelEnso\Files\app\Services;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use LaravelEnso\Files\app\Exceptions\FileException;
+use LaravelEnso\Files\app\Exceptions\File as FileException;
 use LaravelEnso\Files\app\Http\Resources\File as Resource;
 use LaravelEnso\Files\app\Models\File;
 use LaravelEnso\Files\app\Models\Upload;
@@ -12,13 +12,11 @@ use LaravelEnso\Files\app\Models\Upload;
 class UploadManager
 {
     private $uploadedFiles;
-    private $upload;
     private $files;
 
-    public function __construct(Upload $upload, array $files)
+    public function __construct(array $files)
     {
         $this->uploadedFiles = collect();
-        $this->upload = $upload;
         $this->files = $files;
     }
 

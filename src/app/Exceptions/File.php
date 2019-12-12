@@ -4,7 +4,7 @@ namespace LaravelEnso\Files\app\Exceptions;
 
 use LaravelEnso\Helpers\app\Exceptions\EnsoException;
 
-class FileException extends EnsoException
+class File extends EnsoException
 {
     public static function duplicates($files)
     {
