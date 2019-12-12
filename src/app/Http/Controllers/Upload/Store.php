@@ -8,8 +8,8 @@ use LaravelEnso\Files\app\Models\Upload;
 
 class Store extends Controller
 {
-    public function __invoke(Request $request, Upload $upload)
+    public function __invoke(Request $request)
     {
-        return $upload->store($request->allFiles());
+        return Upload::store($request->allFiles());
     }
 }

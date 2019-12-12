@@ -9,7 +9,7 @@ use LaravelEnso\Files\app\Services\Files;
 use LaravelEnso\Files\app\Traits\HasFile;
 use LaravelEnso\Files\app\Contracts\Attachable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use LaravelEnso\Files\app\Exceptions\FileException;
+use LaravelEnso\Files\app\Exceptions\File;
 
 class FileManagerTest extends TestCase
 {
@@ -52,16 +52,16 @@ class FileManagerTest extends TestCase
     /** @test */
     public function cant_upload_file_with_invalid_extension()
     {
-        $this->expectException(FileException::class);
+        $this->expectException(File::class);
 
         $this->expectExceptionMessage(
-            FileException::invalidExtension(
+            File::invalidExtension(
                 $this->file->getClientOriginalExtension(),
                 'jpg'
             )->getMessage()
         );
 
-        
+
         (new Files($this->testModel))
             ->extensions(['jpg'])
             ->upload($this->file);
@@ -70,10 +70,10 @@ class FileManagerTest extends TestCase
     /** @test */
     public function cant_upload_file_with_invalid_mime_type()
     {
-        $this->expectException(FileException::class);
+        $this->expectException(File::class);
 
         $this->expectExceptionMessage(
-            FileException::invalidMimeType(
+            File::invalidMimeType(
                 $this->file->getClientMimeType(),
                 'application/msword'
             )->getMessage()

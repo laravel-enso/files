@@ -2,15 +2,15 @@
 
 namespace LaravelEnso\Files\app\Services;
 
-use LaravelEnso\Files\app\Exceptions\FileException;
+use LaravelEnso\Files\app\Exceptions\File as FileException;
 use Symfony\Component\HttpFoundation\File\File;
 
 class FileValidator
 {
+    protected $file;
+
     private $extensions;
     private $mimeTypes;
-
-    protected $file;
 
     public function __construct(File $file, array $extensions, array $mimeTypes)
     {
