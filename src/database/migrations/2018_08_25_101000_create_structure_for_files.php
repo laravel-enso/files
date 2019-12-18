@@ -13,6 +13,6 @@ class CreateStructureForFiles extends Migration
     ];
 
     protected $menu = [
-        'name' => 'Files', 'icon' => 'folder-open', 'route' => 'core.files.index', 'order_index' => 400, 'has_children' => false,
+        'name' => 'Files', 'icon' => 'folder-open', 'route' => 'core.files.index', 'order_index' => 255, 'has_children' => false,
     ];
 }
