@@ -44,7 +44,6 @@ class ImageProcessor
 
     private function transformer()
     {
-        return $this->transformer
-            ?? $this->transformer = new ImageTransformer($this->file);
+        return $this->transformer ??= new ImageTransformer($this->file);
     }
 }

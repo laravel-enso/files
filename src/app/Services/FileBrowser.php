@@ -28,9 +28,7 @@ class FileBrowser
 
     public function folder($model)
     {
-        return $this->models->search(function ($source) use ($model) {
-            return $source['model'] === $model;
-        });
+        return $this->models->search(fn($source) => $source['model'] === $model);
     }
 
     public function order($folder, $order)
@@ -46,9 +44,9 @@ class FileBrowser
 
     public function remove($folders)
     {
-        collect($folders)->each(function ($folder) {
-            $this->models->forget($folder);
-        });
+        collect($folders)->each(fn ($folder) => (
+            $this->models->forget($folder)
+        ));
     }
 
     public function all()
