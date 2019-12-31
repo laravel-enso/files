@@ -32,9 +32,9 @@ class UploadManager
 
     private function checkExisting()
     {
-        $existing = collect($this->files)->map(function ($file) {
-            return $file->getClientOriginalName();
-        })->intersect($this->existingFiles());
+        $existing = collect($this->files)
+            ->map(fn($file) => $file->getClientOriginalName())
+            ->intersect($this->existingFiles());
 
         if ($existing->isNotEmpty()) {
             throw FileException::duplicates($existing->implode(', '));
