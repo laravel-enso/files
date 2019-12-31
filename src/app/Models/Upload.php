@@ -1,13 +1,13 @@
 <?php
 
-namespace LaravelEnso\Files\app\Models;
+namespace LaravelEnso\Files\App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use LaravelEnso\Files\app\Contracts\Attachable;
-use LaravelEnso\Files\app\Contracts\AuthorizesFileAccess;
-use LaravelEnso\Files\app\Services\UploadManager;
-use LaravelEnso\Files\app\Traits\FilePolicies;
-use LaravelEnso\Files\app\Traits\HasFile;
+use LaravelEnso\Files\App\Contracts\Attachable;
+use LaravelEnso\Files\App\Contracts\AuthorizesFileAccess;
+use LaravelEnso\Files\App\Services\UploadManager;
+use LaravelEnso\Files\App\Traits\FilePolicies;
+use LaravelEnso\Files\App\Traits\HasFile;
 
 class Upload extends Model implements Attachable, AuthorizesFileAccess
 {
@@ -17,7 +17,6 @@ class Upload extends Model implements Attachable, AuthorizesFileAccess
 
     public static function store(array $files)
     {
-        return (new UploadManager($files))
-            ->handle();
+        return (new UploadManager($files))->handle();
     }
 }

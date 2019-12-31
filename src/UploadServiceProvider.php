@@ -2,7 +2,7 @@
 
 namespace LaravelEnso\Files;
 
-use LaravelEnso\Files\app\Models\Upload;
+use LaravelEnso\Files\App\Models\Upload;
 
 class UploadServiceProvider extends FileServiceProvider
 {

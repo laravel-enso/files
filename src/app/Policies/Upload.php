@@ -1,12 +1,12 @@
 <?php
 
-namespace LaravelEnso\Files\app\Policies;
+namespace LaravelEnso\Files\App\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
-use LaravelEnso\Core\app\Models\User;
-use LaravelEnso\Files\app\Models\Upload;
+use LaravelEnso\Core\App\Models\User;
+use LaravelEnso\Files\App\Models\Upload as Model;
 
-class UploadPolicy
+class Upload
 {
     use HandlesAuthorization;
 
@@ -17,22 +17,22 @@ class UploadPolicy
         }
     }
 
-    public function view(User $user, Upload $upload)
+    public function view(User $user, Model $upload)
     {
         return $this->ownsUpload($user, $upload);
     }
 
-    public function share(User $user, Upload $upload)
+    public function share(User $user, Model $upload)
     {
         return $this->ownsUpload($user, $upload);
     }
 
-    public function destroy(User $user, Upload $upload)
+    public function destroy(User $user, Model $upload)
     {
         return $this->ownsUpload($user, $upload);
     }
 
-    private function ownsUpload(User $user, Upload $upload)
+    private function ownsUpload(User $user, Model $upload)
     {
         return $user->id === (int) $upload->created_by;
     }

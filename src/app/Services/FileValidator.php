@@ -1,38 +1,42 @@
 <?php
 
-namespace LaravelEnso\Files\app\Services;
+namespace LaravelEnso\Files\App\Services;
 
-use LaravelEnso\Files\app\Exceptions\File as FileException;
-use Symfony\Component\HttpFoundation\File\File;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
+use LaravelEnso\Files\App\Exceptions\File as FileException;
 
 class FileValidator
 {
     protected $file;
 
-    private $extensions;
-    private $mimeTypes;
+    private array $extensions;
+    private array $mimeTypes;
 
-    public function __construct(File $file, array $extensions, array $mimeTypes)
+    public function __construct($file, array $extensions, array $mimeTypes)
     {
         $this->file = $file;
         $this->extensions = $extensions;
         $this->mimeTypes = $mimeTypes;
     }
 
-    public function handle()
+    public function handle(): void
     {
         $this->validateExtension()
             ->validateMimeType();
     }
 
-    private function validateExtension()
+    private function validateExtension(): self
     {
-        if (collect($this->extensions)->isNotEmpty() &&
-            ! collect($this->extensions)
-                ->contains($this->file->getClientOriginalExtension())) {
+        $valid = (new Collection($this->extensions));
+
+        $extension = $this->file instanceof UploadedFile
+            ? $this->file->getClientOriginalExtension()
+            : $this->file->getExtension();
+
+        if ($valid->isNotEmpty() && ! $valid->contains($extension)) {
             throw FileException::invalidExtension(
-                $this->file->getClientOriginalExtension(),
-                implode(', ', $this->extensions)
+                $extension, implode(', ', $this->extensions)
             );
         }
 
@@ -41,12 +45,15 @@ class FileValidator
 
     private function validateMimeType()
     {
-        if (collect($this->mimeTypes)->isNotEmpty() &&
-            ! collect($this->mimeTypes)
-                ->contains($this->file->getClientMimeType())) {
+        $valid = (new Collection($this->mimeTypes));
+
+        $mimeType = $this->file instanceof UploadedFile
+            ? $this->file->getClientMimeType()
+            : $this->file->getMimeType();
+
+        if ($valid->isNotEmpty() && ! $valid->contains($mimeType)) {
             throw FileException::invalidMimeType(
-                $this->file->getClientMimeType(),
-                implode(', ', $this->mimeTypes),
+                $mimeType, implode(', ', $this->mimeTypes),
             );
         }
 

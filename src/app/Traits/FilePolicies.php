@@ -1,8 +1,8 @@
 <?php
 
-namespace LaravelEnso\Files\app\Traits;
+namespace LaravelEnso\Files\App\Traits;
 
-use LaravelEnso\Core\app\Models\User;
+use LaravelEnso\Core\App\Models\User;
 
 trait FilePolicies
 {

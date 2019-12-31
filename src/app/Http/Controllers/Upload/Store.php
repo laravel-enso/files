@@ -1,10 +1,10 @@
 <?php
 
-namespace LaravelEnso\Files\app\Http\Controllers\Upload;
+namespace LaravelEnso\Files\App\Http\Controllers\Upload;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use LaravelEnso\Files\app\Models\Upload;
+use LaravelEnso\Files\App\Models\Upload;
 
 class Store extends Controller
 {

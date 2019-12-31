@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelEnso\Files\app\Facades;
+namespace LaravelEnso\Files\App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

@@ -3,7 +3,7 @@
 namespace LaravelEnso\Files;
 
 use Illuminate\Support\ServiceProvider;
-use LaravelEnso\Files\app\Services\FileBrowser;
+use LaravelEnso\Files\App\Services\FileBrowser;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,14 +32,12 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/config' => config_path('enso'),
-        ], 'enso-config');
+        ], ['files-config', 'enso-config']);
 
         $this->publishes([
-            __DIR__.'/config' => config_path('enso'),
-        ], 'files-config');
-
-        $this->publishes([
-            __DIR__.'/../stubs/FileServiceProvider.stub' => app_path('Providers/FileServiceProvider.php'),
+            __DIR__.'/../stubs/FileServiceProvider.stub' => app_path(
+                'Providers/FileServiceProvider.php'
+            ),
         ], 'file-provider');
     }
 }

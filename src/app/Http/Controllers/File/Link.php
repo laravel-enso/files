@@ -1,10 +1,10 @@
 <?php
 
-namespace LaravelEnso\Files\app\Http\Controllers\File;
+namespace LaravelEnso\Files\App\Http\Controllers\File;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Routing\Controller;
-use LaravelEnso\Files\app\Models\File;
+use LaravelEnso\Files\App\Models\File;
 
 class Link extends Controller
 {

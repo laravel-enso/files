@@ -1,26 +1,19 @@
 <?php
 
-namespace LaravelEnso\Files\app\Traits;
+namespace LaravelEnso\Files\App\Traits;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\File as IlluminateFile;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
-use LaravelEnso\Core\app\Models\User;
-use LaravelEnso\Files\app\Models\File;
-use LaravelEnso\Files\app\Services\Files;
+use LaravelEnso\Core\App\Models\User;
+use LaravelEnso\Files\App\Models\File;
+use LaravelEnso\Files\App\Services\Files;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 trait HasFile
 {
-    protected static function bootHasFile()
-    {
-        self::deleting(function ($model) {
-            (new Files($model))->delete();
-        });
-    }
-
     public function file(): Relation
     {
         return $this->morphOne(File::class, 'attachable');
@@ -104,5 +97,10 @@ trait HasFile
         return property_exists($this, 'optimizeImages')
             ? $this->optimizeImages
             : false;
+    }
+
+    protected static function bootHasFile()
+    {
+        self::deleting(fn ($model) => (new Files($model))->delete());
     }
 }

@@ -1,56 +1,62 @@
 <?php
 
-namespace LaravelEnso\Files\app\Services;
+namespace LaravelEnso\Files\App\Services;
+
+use Illuminate\Support\Collection;
 
 class FileBrowser
 {
-    private $models;
+    private Collection $models;
 
     public function __construct()
     {
-        $this->models = collect();
+        $this->models = new Collection();
     }
 
-    public function register($models)
+    public function register($models): void
     {
         $this->models = $this->models->merge($models);
     }
 
-    public function folders()
+    public function folders(): Collection
     {
         return $this->models->sortBy('order')->keys();
     }
 
-    public function models()
+    public function models(): Collection
     {
         return $this->models->pluck('model');
     }
 
-    public function folder($model)
+    public function folder($model): string
     {
-        return $this->models->search(fn($source) => $source['model'] === $model);
+        return $this->models->search(fn ($source) => $source['model'] === $model);
     }
 
-    public function order($folder, $order)
+    public function remove($folders): void
     {
-        $this->models = $this->models->map(function ($source, $key) use ($folder, $order) {
-            if ($folder === $key) {
-                $source['order'] = $order;
-            }
-
-            return $source;
-        });
+        (new Collection($folders))
+            ->each(fn ($folder) => $this->models->forget($folder));
     }
 
-    public function remove($folders)
-    {
-        collect($folders)->each(fn ($folder) => (
-            $this->models->forget($folder)
-        ));
-    }
-
-    public function all()
+    public function all(): Collection
     {
         return $this->models;
+    }
+
+    public function order($folder, $order): void
+    {
+        $this->models = $this->models
+            ->map(fn ($config, $current) => $this
+                ->updateOrder($folder, $order, $config, $current));
+    }
+
+    private function updateOrder($folder, $order, $config, $current)
+    {
+        if ($folder === $current) {
+            $config['order'] = $order;
+        }
+
+        return $config;
     }
 }

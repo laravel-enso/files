@@ -1,11 +1,11 @@
 <?php
 
-namespace LaravelEnso\Files\app\Http\Responses;
+namespace LaravelEnso\Files\App\Http\Responses;
 
 use Illuminate\Contracts\Support\Responsable;
-use LaravelEnso\Files\app\Http\Resources\Collection;
-use LaravelEnso\Files\app\Http\Resources\File as Resource;
-use LaravelEnso\Files\app\Models\File;
+use LaravelEnso\Files\App\Http\Resources\Collection;
+use LaravelEnso\Files\App\Http\Resources\File as Resource;
+use LaravelEnso\Files\App\Models\File;
 
 class Files implements Responsable
 {

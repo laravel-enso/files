@@ -1,25 +1,26 @@
 <?php
 
-namespace LaravelEnso\Files\app\Services;
+namespace LaravelEnso\Files\App\Services;
 
 use Illuminate\Support\Facades\Validator;
-use LaravelEnso\ImageTransformer\app\Services\ImageTransformer;
+use LaravelEnso\ImageTransformer\App\Services\ImageTransformer;
+use Symfony\Component\HttpFoundation\File\File;
 
 class ImageProcessor
 {
-    private $file;
-    private $optimize;
-    private $resize;
-    private $transformer;
+    private File $file;
+    private bool $optimize;
+    private array $resize;
+    private ImageTransformer $transformer;
 
-    public function __construct($file, $optimize, $resize)
+    public function __construct(File $file, bool $optimize, array $resize)
     {
         $this->file = $file;
         $this->optimize = $optimize;
         $this->resize = $resize;
     }
 
-    public function handle()
+    public function handle(): void
     {
         if ($this->isImage()) {
             if ($this->optimize) {
@@ -34,7 +35,7 @@ class ImageProcessor
         }
     }
 
-    private function isImage()
+    private function isImage(): bool
     {
         return Validator::make(
             ['file' => $this->file],

@@ -1,7 +1,10 @@
 <?php
 
-Route::prefix('files')->as('files.')
-    ->namespace('File')
+use Illuminate\Support\Facades\Route;
+
+Route::namespace('File')
+    ->prefix('files')
+    ->as('files.')
     ->group(function () {
         Route::get('', 'Index')->name('index');
         Route::get('link/{file}', 'Link')->name('link');

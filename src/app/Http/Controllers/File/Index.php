@@ -1,9 +1,9 @@
 <?php
 
-namespace LaravelEnso\Files\app\Http\Controllers\File;
+namespace LaravelEnso\Files\App\Http\Controllers\File;
 
 use Illuminate\Routing\Controller;
-use LaravelEnso\Files\app\Http\Responses\Files;
+use LaravelEnso\Files\App\Http\Responses\Files;
 
 class Index extends Controller
 {

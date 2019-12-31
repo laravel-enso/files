@@ -1,13 +1,13 @@
 <?php
 
-namespace LaravelEnso\Files\app\Models;
+namespace LaravelEnso\Files\App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use LaravelEnso\Files\app\Facades\FileBrowser;
-use LaravelEnso\Files\app\Traits\FilePolicies;
-use LaravelEnso\TrackWho\app\Traits\CreatedBy;
+use LaravelEnso\Files\App\Facades\FileBrowser;
+use LaravelEnso\Files\App\Traits\FilePolicies;
+use LaravelEnso\TrackWho\App\Traits\CreatedBy;
 
 class File extends Model
 {
@@ -46,16 +46,14 @@ class File extends Model
     public function scopeVisible($query)
     {
         $query->hasMorph(
-            'attachable',
-            FileBrowser::models()->toArray()
+            'attachable', FileBrowser::models()->toArray()
         );
     }
 
     public function scopeForUser($query, $user)
     {
-        return $user->isAdmin() || $user->isSupervisor()
-            ? $query
-            : $query->whereCreatedBy($user->id);
+        return $query->when($user->isAdmin() || $user->isSupervisor(), fn ($query) => $query
+            ->whereCreatedBy($user->id));
     }
 
     public function scopeOrdered($query)
@@ -65,21 +63,16 @@ class File extends Model
 
     public function scopeBetween($query, $interval)
     {
-        $query->when(! empty($interval->min), fn($query) => (
-            $query->where(
-                'created_at', '>=', Carbon::parse($interval->min)
-            )
-        ))->when(! empty($interval->max), fn($query) => (
-            $query->where(
-                'created_at', '<=', Carbon::parse($interval->max)
-            )
+        $query->when($interval->min, fn ($query) => $query->where(
+            'created_at', '>=', Carbon::parse($interval->min)
+        ))->when($interval->max, fn ($query) => $query->where(
+            'created_at', '<=', Carbon::parse($interval->max)
         ));
     }
 
     public function scopeFilter($query, $search)
     {
-        if (! empty($search)) {
-            $query->where('original_name', 'LIKE', '%'.$search.'%');
-        }
+        return $query->when($search, fn ($query) => $query
+            ->where('original_name', 'LIKE', '%'.$search.'%'));
     }
 }

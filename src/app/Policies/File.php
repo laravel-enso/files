@@ -1,13 +1,13 @@
 <?php
 
-namespace LaravelEnso\Files\app\Policies;
+namespace LaravelEnso\Files\App\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
-use LaravelEnso\Core\app\Models\User;
-use LaravelEnso\Files\app\Contracts\AuthorizesFileAccess;
-use LaravelEnso\Files\app\Models\File;
+use LaravelEnso\Core\App\Models\User;
+use LaravelEnso\Files\App\Contracts\AuthorizesFileAccess;
+use LaravelEnso\Files\App\Models\File as Model;
 
-class FilePolicy
+class File
 {
     use HandlesAuthorization;
 
@@ -18,28 +18,28 @@ class FilePolicy
         }
     }
 
-    public function view(User $user, File $file)
+    public function view(User $user, Model $file)
     {
         return $file->attachable instanceof AuthorizesFileAccess
             ? $file->attachable->viewableBy($user)
             : $this->ownsFile($user, $file);
     }
 
-    public function share(User $user, File $file)
+    public function share(User $user, Model $file)
     {
         return $file->attachable instanceof AuthorizesFileAccess
             ? $file->attachable->shareableBy($user)
             : $this->ownsFile($user, $file);
     }
 
-    public function destroy(User $user, File $file)
+    public function destroy(User $user, Model $file)
     {
         return $file->attachable instanceof AuthorizesFileAccess
             ? $file->attachable->destroyableBy($user)
             : $this->ownsFile($user, $file);
     }
 
-    protected function ownsFile(User $user, File $file)
+    protected function ownsFile(User $user, Model $file)
     {
         return $user->id === (int) $file->created_by;
     }

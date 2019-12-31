@@ -1,25 +1,25 @@
 <?php
 
-namespace LaravelEnso\Files\app\Services;
+namespace LaravelEnso\Files\App\Services;
 
 use Illuminate\Http\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use LaravelEnso\Core\app\Models\User;
-use LaravelEnso\Files\app\Contracts\Attachable;
+use LaravelEnso\Core\App\Models\User;
+use LaravelEnso\Files\App\Contracts\Attachable;
 use Symfony\Component\HttpFoundation\File\File as BaseFile;
 
 class Files
 {
-    private $attachable;
-    private $file;
-    private $disk;
-    private $extensions;
-    private $mimeTypes;
-    private $optimize;
-    private $resize;
+    private Attachable $attachable;
+    private BaseFile $file;
+    private string $disk;
+    private array $extensions;
+    private array $mimeTypes;
+    private bool $optimize;
+    private array $resize;
 
     public function __construct(Attachable $attachable)
     {

@@ -1,9 +1,9 @@
 <?php
 
-namespace LaravelEnso\Files\app\Http\Resources;
+namespace LaravelEnso\Files\App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use LaravelEnso\TrackWho\app\Http\Resources\TrackWho;
+use LaravelEnso\TrackWho\App\Http\Resources\TrackWho;
 
 class File extends JsonResource
 {
