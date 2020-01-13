@@ -52,7 +52,7 @@ class File extends Model
 
     public function scopeForUser($query, $user)
     {
-        return $query->when($user->isAdmin() || $user->isSupervisor(), fn ($query) => $query
+        $query->when(! $user->isAdmin() && ! $user->isSupervisor(), fn ($query) => $query
             ->whereCreatedBy($user->id));
     }
 
