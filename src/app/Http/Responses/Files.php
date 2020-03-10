@@ -22,7 +22,7 @@ class Files implements Responsable
                     ->skip($request->get('offset'))
                     ->take(config('enso.files.paginate'))
                     ->get()
-                )
-            );
+            )
+        );
     }
 }

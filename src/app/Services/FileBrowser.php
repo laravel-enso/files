@@ -33,6 +33,13 @@ class FileBrowser
         return $this->models->search(fn ($source) => $source['model'] === $model);
     }
 
+    public function model($folder): string
+    {
+        return $this->models->has($folder)
+            ? $this->models->get($folder)['model']
+            : null;
+    }
+
     public function remove($folders): void
     {
         (new Collection($folders))
