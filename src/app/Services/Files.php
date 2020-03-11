@@ -117,7 +117,9 @@ class Files
     private function validateFile()
     {
         (new FileValidator(
-            $this->file, $this->extensions, $this->mimeTypes
+            $this->file,
+            $this->extensions,
+            $this->mimeTypes
         ))->handle();
 
         return $this;
@@ -126,7 +128,9 @@ class Files
     private function validateUploadedFile()
     {
         (new UploadedFileValidator(
-            $this->file, $this->extensions, $this->mimeTypes
+            $this->file,
+            $this->extensions,
+            $this->mimeTypes
         ))->handle();
 
         return $this;
@@ -135,7 +139,9 @@ class Files
     private function processImage()
     {
         (new ImageProcessor(
-            $this->file, $this->optimize, $this->resize
+            $this->file,
+            $this->optimize,
+            $this->resize
         ))->handle();
 
         return $this;
@@ -158,8 +164,8 @@ class Files
             $this->attachable->file()->create([
                 'original_name' => $this->file->getClientOriginalName(),
                 'saved_name' => $this->file->hashName(),
-                'size' => $this->file->getClientSize(),
-                'mime_type' => $this->file->getClientMimeType(),
+                'size' => $this->file->getSize(),
+                'mime_type' => $this->file->getMimeType(),
             ]);
 
             $this->file->store(
