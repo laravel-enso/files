@@ -23,14 +23,14 @@ class ImageProcessor
     public function handle(): void
     {
         if ($this->isImage()) {
-            if ($this->optimize) {
-                $this->transformer()->optimize();
-            }
-
             if (! empty($this->resize)) {
                 $this->transformer()
                     ->width($this->resize['width'])
                     ->height($this->resize['height']);
+            }
+
+            if ($this->optimize) {
+                $this->transformer()->optimize();
             }
         }
     }
