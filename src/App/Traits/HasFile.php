@@ -49,17 +49,6 @@ trait HasFile
             ->upload($file);
     }
 
-    public function ensureFolderExists()
-    {
-        $folder = $this->folder();
-
-        if (! Storage::has($folder)) {
-            Storage::makeDirectory($folder);
-        }
-
-        return $this;
-    }
-
     public function folder(): string
     {
         if (App::environment('testing')) {
