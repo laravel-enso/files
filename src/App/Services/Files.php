@@ -107,13 +107,6 @@ class Files
         return $this;
     }
 
-    public static function ensureFolderExists($folder)
-    {
-        if (! Storage::has($folder)) {
-            Storage::makeDirectory($folder);
-        }
-    }
-
     private function file(BaseFile $file)
     {
         $this->file = $file;
@@ -175,11 +168,8 @@ class Files
                 'mime_type' => $this->file->getMimeType(),
             ]);
 
-            $folder = $this->attachable->folder();
-            self::ensureFolderExists($folder);
-
             $this->file->store(
-                $folder,
+                $this->attachable->folder(),
                 ['disk' => $this->disk]
             );
         });
