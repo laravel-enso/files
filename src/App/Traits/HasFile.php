@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\File as IlluminateFile;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Storage;
 use LaravelEnso\Core\App\Models\User;
 use LaravelEnso\Files\App\Models\File;
 use LaravelEnso\Files\App\Services\Files;
