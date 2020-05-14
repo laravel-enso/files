@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\File as IlluminateFile;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Storage;
 use LaravelEnso\Core\App\Models\User;
 use LaravelEnso\Files\App\Models\File;
 use LaravelEnso\Files\App\Services\Files;
@@ -51,7 +52,13 @@ trait HasFile
     public function folder(): string
     {
         if (App::environment('testing')) {
-            return config('enso.files.paths.testing');
+            $directory =  config('enso.files.paths.testing');
+
+            if (!Storage::has($directory)) {
+                Storage::makeDirectory($directory);
+            }
+
+            return $directory;
         }
 
         return property_exists($this, 'folder')
