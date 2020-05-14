@@ -15,6 +15,8 @@ class Upload extends Model implements Attachable, AuthorizesFileAccess
 
     protected $optimizeImages = true;
 
+    protected $folder = 'files';
+
     public static function store(array $files)
     {
         return (new UploadManager($files))->handle();
