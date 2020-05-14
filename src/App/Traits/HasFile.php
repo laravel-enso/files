@@ -52,9 +52,9 @@ trait HasFile
     public function folder(): string
     {
         if (App::environment('testing')) {
-            $directory =  config('enso.files.paths.testing');
+            $directory = config('enso.files.paths.testing');
 
-            if (!Storage::has($directory)) {
+            if (! Storage::has($directory)) {
                 Storage::makeDirectory($directory);
             }
 
