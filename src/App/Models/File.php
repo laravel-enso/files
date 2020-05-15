@@ -45,9 +45,7 @@ class File extends Model
 
     public function scopeVisible($query)
     {
-        $query->hasMorph(
-            'attachable', FileBrowser::models()->toArray()
-        );
+        $query->whereIn('attachable_type', FileBrowser::models()->toArray());
     }
 
     public function scopeForUser($query, $user)

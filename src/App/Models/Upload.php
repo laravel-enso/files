@@ -8,10 +8,11 @@ use LaravelEnso\Files\App\Contracts\AuthorizesFileAccess;
 use LaravelEnso\Files\App\Services\UploadManager;
 use LaravelEnso\Files\App\Traits\FilePolicies;
 use LaravelEnso\Files\App\Traits\HasFile;
+use LaravelEnso\Helpers\App\Traits\CascadesMorphMap;
 
 class Upload extends Model implements Attachable, AuthorizesFileAccess
 {
-    use HasFile, FilePolicies;
+    use CascadesMorphMap, HasFile, FilePolicies;
 
     protected $optimizeImages = true;
 
