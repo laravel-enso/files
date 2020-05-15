@@ -2,10 +2,10 @@
 
 namespace LaravelEnso\Files;
 
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 use LaravelEnso\Files\App\Models\Upload;
 use LaravelEnso\Files\App\Services\FileBrowser;
-use Illuminate\Database\Eloquent\Relations\Relation;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,7 +30,6 @@ class AppServiceProvider extends ServiceProvider
 
         return $this;
     }
-
 
     private function mapMorphs()
     {
