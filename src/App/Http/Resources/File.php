@@ -3,7 +3,7 @@
 namespace LaravelEnso\Files\App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use LaravelEnso\TrackWho\App\Http\Resources\TrackWho;
+use LaravelEnso\Core\App\Http\Resources\User;
 
 class File extends JsonResource
 {
@@ -15,7 +15,7 @@ class File extends JsonResource
             'size' => $this->size,
             'mimeType' => $this->mime_type,
             'type' => $this->type(),
-            'owner' => new TrackWho($this->whenLoaded('createdBy')),
+            'owner' => new User($this->whenLoaded('createdBy')),
             'isDestroyable' => $this->destroyableBy($request->user()),
             'isShareable' => $this->shareableBy($request->user()),
             'isViewable' => $this->viewableBy($request->user()),
