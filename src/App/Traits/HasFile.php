@@ -65,6 +65,13 @@ trait HasFile
         return $this->folder;
     }
 
+    public function publicPath(): ?string
+    {
+        return $this->file
+            ? "{$this->folder()}/{$this->file->saved_name}"
+            : null;
+    }
+
     public function mimeTypes(): array
     {
         return property_exists($this, 'mimeTypes')
