@@ -2,10 +2,12 @@
 
 namespace LaravelEnso\Files;
 
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
-use LaravelEnso\Files\App\Models\Upload;
-use LaravelEnso\Files\App\Services\FileBrowser;
+use LaravelEnso\Core\Models\User;
+use LaravelEnso\DynamicMethods\Services\Methods;
+use LaravelEnso\Files\DynamicsRelations\Uploads;
+use LaravelEnso\Files\Models\Upload;
+use LaravelEnso\Files\Services\FileBrowser;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,20 +24,19 @@ class AppServiceProvider extends ServiceProvider
 
     private function load()
     {
-        $this->loadRoutesFrom(__DIR__.'/routes/api.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
 
-        $this->mergeConfigFrom(__DIR__.'/config/files.php', 'enso.files');
+        $this->mergeConfigFrom(__DIR__.'/../config/files.php', 'enso.files');
 
-        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         return $this;
     }
 
     private function mapMorphs()
     {
-        Relation::morphMap([
-            Upload::morphMapKey() => Upload::class,
-        ]);
+        Upload::morphMap();
+        Methods::bind(User::class, [Uploads::class]);
 
         return $this;
     }
@@ -43,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
     private function publish()
     {
         $this->publishes([
-            __DIR__.'/config' => config_path('enso'),
+            __DIR__.'/../config' => config_path('enso'),
         ], ['files-config', 'enso-config']);
 
         $this->publishes([

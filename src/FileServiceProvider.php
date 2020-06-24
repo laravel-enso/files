@@ -3,7 +3,7 @@
 namespace LaravelEnso\Files;
 
 use Illuminate\Support\ServiceProvider;
-use LaravelEnso\Files\App\Facades\FileBrowser;
+use LaravelEnso\Files\Facades\FileBrowser;
 
 class FileServiceProvider extends ServiceProvider
 {

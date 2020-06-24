@@ -3,14 +3,14 @@
 use Illuminate\Support\Facades\Config;
 use Tests\TestCase;
 use Illuminate\Http\UploadedFile;
-use LaravelEnso\Core\App\Models\User;
+use LaravelEnso\Core\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use LaravelEnso\Files\App\Services\Files;
-use LaravelEnso\Files\App\Traits\HasFile;
-use LaravelEnso\Files\App\Contracts\Attachable;
+use LaravelEnso\Files\Services\Files;
+use LaravelEnso\Files\Traits\HasFile;
+use LaravelEnso\Files\Contracts\Attachable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use LaravelEnso\Files\App\Exceptions\File;
+use LaravelEnso\Files\Exceptions\File;
 
 class FileManagerTest extends TestCase
 {
