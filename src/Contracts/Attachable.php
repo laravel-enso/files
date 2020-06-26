@@ -24,7 +24,7 @@ interface Attachable
 
     public function folder(): string;
 
-    public function publicPath(): ?string;
+    public function storagePath(): ?string;
 
     public function mimeTypes(): array;
 
