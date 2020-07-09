@@ -1,5 +1,6 @@
 # File Manager
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/379fdfd42f5e4c0f9670d673415db31b)](https://app.codacy.com/gh/laravel-enso/files?utm_source=github.com&utm_medium=referral&utm_content=laravel-enso/files&utm_campaign=Badge_Grade_Settings)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/0ad3f6e21d9e42279dedd5432602891b)](https://www.codacy.com/gh/laravel-enso/files?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=laravel-enso/files&amp;utm_campaign=Badge_Grade)
 [![StyleCI](https://github.styleci.io/repos/85492361/shield?branch=master)](https://github.styleci.io/repos/85492361)
 [![License](https://poser.pugx.org/laravel-enso/datatable/license)](https://packagist.org/packages/laravel-enso/datatable)
