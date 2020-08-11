@@ -35,7 +35,7 @@ trait HasFile
         return $this->file->temporaryLink();
     }
 
-    public function attach(IlluminateFile $file, string $originalName, ?User $user): void
+    public function attach(IlluminateFile $file, string $originalName, ?User $user = null): void
     {
         (new Files($this))->attach($file, $originalName, $user);
     }
