@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use LaravelEnso\Files\Http\Controllers\Upload\Store;
 use LaravelEnso\Files\Http\Controllers\Upload\Destroy;
+use LaravelEnso\Files\Http\Controllers\Upload\Store;
 
 Route::prefix('uploads')
     ->as('uploads.')
