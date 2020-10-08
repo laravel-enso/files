@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use LaravelEnso\Files\Http\Controllers\File\Share;
 
 Route::middleware(['api', 'auth', 'core'])
-    ->namespace('LaravelEnso\Files\Http\Controllers')
     ->prefix('api/core')
     ->as('core.')
     ->group(function () {
@@ -12,9 +12,8 @@ Route::middleware(['api', 'auth', 'core'])
     });
 
 Route::middleware(['signed', 'bindings'])
-    ->namespace('LaravelEnso\Files\Http\Controllers\File')
     ->prefix('api/core/files')
     ->as('core.files.')
     ->group(function () {
-        Route::get('share/{file}', 'Share')->name('share');
+        Route::get('share/{file}', Share::class)->name('share');
     });
