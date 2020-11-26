@@ -11,23 +11,30 @@ use Illuminate\Support\Facades\Storage;
 use LaravelEnso\Core\Models\User;
 use LaravelEnso\Files\Models\File;
 use LaravelEnso\Files\Services\Files;
+use LaravelEnso\Helpers\Traits\CascadesMorphMap;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 trait HasFile
 {
+    use CascadesMorphMap;
+
     public function file(): Relation
     {
-        return $this->morphOne(File::class, 'attachable');
+        return $this->morphOne(File::class, 'attachable')
+            ->withDefault([
+                'attachable_type' => $this->morphMapKey(),
+                'attachable_id' => $this->id,
+            ]);
     }
 
     public function inline(): StreamedResponse
     {
-        return (new Files($this))->inline();
+        return $this->file->inline();
     }
 
     public function download(): StreamedResponse
     {
-        return (new Files($this))->download();
+        return $this->file->download();
     }
 
     public function temporaryLink(): string
@@ -37,17 +44,12 @@ trait HasFile
 
     public function attach(IlluminateFile $file, string $originalName, ?User $user = null): void
     {
-        (new Files($this))->attach($file, $originalName, $user);
+        $this->file->attach($file, $originalName, $user);
     }
 
     public function upload(UploadedFile $file): void
     {
-        (new Files($this))
-            ->mimeTypes($this->mimeTypes())
-            ->extensions($this->extensions())
-            ->optimize($this->optimizeImages())
-            ->resize($this->resizeImages())
-            ->upload($file);
+        $this->file->upload($file);
     }
 
     public function folder(): string
@@ -68,7 +70,7 @@ trait HasFile
     public function storagePath(): ?string
     {
         return $this->file
-            ? "{$this->folder()}/{$this->file->saved_name}"
+            ? $this->file->path
             : null;
     }
 
@@ -102,6 +104,6 @@ trait HasFile
 
     protected static function bootHasFile()
     {
-        self::deleting(fn ($model) => (new Files($model))->delete());
+        self::deleting(fn ($model) => $model->file->delete());
     }
 }

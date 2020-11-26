@@ -93,7 +93,7 @@ class FileManagerTest extends TestCase
 
         $manager->upload($this->file);
 
-        $response = $manager->inline($this->file->hashname());
+        $response = $this->testModel->inline($this->file->hashname());
 
         $this->assertEquals(200, $response->getStatusCode());
     }
@@ -105,10 +105,7 @@ class FileManagerTest extends TestCase
 
         $manager->upload($this->file);
 
-        $response = $manager->download(
-            $this->testModel->file->original_name,
-            $this->testModel->file->saved_name
-        );
+        $response = $this->testModel->download();
 
         $this->assertEquals(200, $response->getStatusCode());
     }

@@ -4,8 +4,14 @@ namespace LaravelEnso\Files\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\File as IlluminateFile;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use LaravelEnso\Core\Models\User;
 use LaravelEnso\Files\Facades\FileBrowser;
+use LaravelEnso\Files\Services\Files;
 use LaravelEnso\Files\Traits\FilePolicies;
 use LaravelEnso\TrackWho\Traits\CreatedBy;
 
@@ -36,11 +42,7 @@ class File extends Model
 
     public function path()
     {
-        return Storage::path(
-            $this->attachable->folder()
-            .DIRECTORY_SEPARATOR
-            .$this->saved_name
-        );
+        return Storage::disk($this->disk)->path($this->path);
     }
 
     public function scopeVisible($query)
@@ -50,7 +52,7 @@ class File extends Model
 
     public function scopeForUser($query, $user)
     {
-        $query->when(! $user->isAdmin() && ! $user->isSupervisor(), fn ($query) => $query
+        $query->when(! $user->isAdmin() && ! $user->isSupervisor(), fn($query) => $query
             ->whereCreatedBy($user->id));
     }
 
@@ -61,16 +63,57 @@ class File extends Model
 
     public function scopeBetween($query, $interval)
     {
-        $query->when($interval->min, fn ($query) => $query->where(
+        $query->when($interval->min, fn($query) => $query->where(
             'created_at', '>=', Carbon::parse($interval->min)
-        ))->when($interval->max, fn ($query) => $query->where(
+        ))->when($interval->max, fn($query) => $query->where(
             'created_at', '<=', Carbon::parse($interval->max)
         ));
     }
 
     public function scopeFilter($query, $search)
     {
-        return $query->when($search, fn ($query) => $query
+        return $query->when($search, fn($query) => $query
             ->where('original_name', 'LIKE', '%'.$search.'%'));
+    }
+
+    public function attach(IlluminateFile $file, string $originalName, ?User $user): void
+    {
+        (new Files($this->attachable))->attach($file, $originalName, $user);
+    }
+
+    public function upload(UploadedFile $file): void
+    {
+        (new Files($this->attachable))
+            ->mimeTypes($this->attachable->mimeTypes())
+            ->extensions($this->attachable->extensions())
+            ->optimize($this->attachable->optimizeImages())
+            ->resize($this->attachable->resizeImages())
+            ->upload($file);
+    }
+
+    public function delete()
+    {
+        return DB::transaction(function () {
+            $result = parent::delete();
+
+            Storage::disk($this->disk)->delete($this->path);
+
+            return $result;
+        });
+    }
+
+    public function download()
+    {
+        return Storage::disk($this->disk)
+            ->download(
+                $this->path,
+                Str::ascii($this->original_name)
+            );
+    }
+
+    public function inline()
+    {
+        return Storage::disk($this->disk)
+            ->response($this->path);
     }
 }

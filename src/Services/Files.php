@@ -5,8 +5,6 @@ namespace LaravelEnso\Files\Services;
 use Illuminate\Http\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use LaravelEnso\Core\Models\User;
 use LaravelEnso\Files\Contracts\Attachable;
 use Symfony\Component\HttpFoundation\File\File as BaseFile;
@@ -20,6 +18,7 @@ class Files
     private array $mimeTypes;
     private bool $optimize;
     private array $resize;
+    private string $separator;
 
     public function __construct(Attachable $attachable)
     {
@@ -29,31 +28,7 @@ class Files
         $this->mimeTypes = [];
         $this->optimize = false;
         $this->resize = [];
-    }
-
-    public function inline()
-    {
-        return Storage::disk($this->disk)
-            ->response($this->attachedFile());
-    }
-
-    public function download()
-    {
-        return Storage::disk($this->disk)
-            ->download(
-                $this->attachedFile(),
-                Str::ascii($this->attachable->file->original_name)
-            );
-    }
-
-    public function delete()
-    {
-        if ($this->attachable->file) {
-            DB::transaction(function () {
-                Storage::disk($this->disk)->delete($this->attachedFile());
-                $this->attachable->file->delete();
-            });
-        }
+        $this->separator = DIRECTORY_SEPARATOR;
     }
 
     public function attach(File $file, string $originalName, ?User $user)
@@ -151,7 +126,8 @@ class Files
     {
         $this->attachable->file()->create([
             'original_name' => $originalName,
-            'saved_name' => $this->file->getBaseName(),
+            'disk' => $this->disk,
+            'path' => "{$this->attachable->folder()}{$this->separator}{$this->file->getBaseName()}",
             'size' => $this->file->getSize(),
             'mime_type' => $this->file->getMimeType(),
             'created_by' => optional($user)->id,
@@ -163,7 +139,8 @@ class Files
         DB::transaction(function () {
             $this->attachable->file()->create([
                 'original_name' => $this->file->getClientOriginalName(),
-                'saved_name' => $this->file->hashName(),
+                'disk' => $this->disk,
+                'path' => "{$this->attachable->folder()}{$this->separator}{$this->file->hashName()}",
                 'size' => $this->file->getSize(),
                 'mime_type' => $this->file->getMimeType(),
             ]);
@@ -173,12 +150,5 @@ class Files
                 ['disk' => $this->disk]
             );
         });
-    }
-
-    private function attachedFile()
-    {
-        return $this->attachable->folder()
-            .DIRECTORY_SEPARATOR
-            .$this->attachable->file->saved_name;
     }
 }
