@@ -52,7 +52,7 @@ class File extends Model
 
     public function scopeForUser($query, $user)
     {
-        $query->when(! $user->isAdmin() && ! $user->isSupervisor(), fn($query) => $query
+        $query->when(! $user->isAdmin() && ! $user->isSupervisor(), fn ($query) => $query
             ->whereCreatedBy($user->id));
     }
 
@@ -63,16 +63,16 @@ class File extends Model
 
     public function scopeBetween($query, $interval)
     {
-        $query->when($interval->min, fn($query) => $query->where(
+        $query->when($interval->min, fn ($query) => $query->where(
             'created_at', '>=', Carbon::parse($interval->min)
-        ))->when($interval->max, fn($query) => $query->where(
+        ))->when($interval->max, fn ($query) => $query->where(
             'created_at', '<=', Carbon::parse($interval->max)
         ));
     }
 
     public function scopeFilter($query, $search)
     {
-        return $query->when($search, fn($query) => $query
+        return $query->when($search, fn ($query) => $query
             ->where('original_name', 'LIKE', '%'.$search.'%'));
     }
 
