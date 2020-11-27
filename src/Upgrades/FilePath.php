@@ -5,7 +5,6 @@ namespace LaravelEnso\Files\Upgrades;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use LaravelEnso\Files\Facades\FileBrowser;
 use LaravelEnso\Files\Models\File;
 use LaravelEnso\Upgrade\Contracts\MigratesData;
 use LaravelEnso\Upgrade\Contracts\MigratesPostDataMigration;
