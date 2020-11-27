@@ -32,8 +32,6 @@ class FilePath implements MigratesTable, MigratesData, MigratesPostDataMigration
             ->distinct('attachable_type')
             ->pluck('attachable_type');
 
-        //LaravelEnso\Files\Models\File::whereAttachableType('document')->doesntHave('attachable')->count()
-
         $types->each(function (string $type) {
             $folder = FileBrowser::folder($type);
 
