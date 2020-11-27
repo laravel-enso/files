@@ -3,31 +3,30 @@
 namespace LaravelEnso\Files\Traits;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Http\File as IlluminateFile;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use LaravelEnso\Core\Models\User;
 use LaravelEnso\Files\Models\File;
-use LaravelEnso\Files\Services\Files;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 trait HasFile
 {
     public function file(): Relation
     {
-        return $this->morphOne(File::class, 'attachable');
+        return $this->morphOne(File::class, 'attachable')
+            ->withDefault();
     }
 
     public function inline(): StreamedResponse
     {
-        return (new Files($this))->inline();
+        return $this->file->inline();
     }
 
     public function download(): StreamedResponse
     {
-        return (new Files($this))->download();
+        return $this->file->download();
     }
 
     public function temporaryLink(): string
@@ -35,19 +34,14 @@ trait HasFile
         return $this->file->temporaryLink();
     }
 
-    public function attach(IlluminateFile $file, string $originalName, ?User $user = null): void
+    public function attach(string $path, string $originalName, ?User $user = null): void
     {
-        (new Files($this))->attach($file, $originalName, $user);
+        $this->file->attach($path, $originalName, $user);
     }
 
     public function upload(UploadedFile $file): void
     {
-        (new Files($this))
-            ->mimeTypes($this->mimeTypes())
-            ->extensions($this->extensions())
-            ->optimize($this->optimizeImages())
-            ->resize($this->resizeImages())
-            ->upload($file);
+        $this->file->upload($this, $file);
     }
 
     public function folder(): string
@@ -68,7 +62,7 @@ trait HasFile
     public function storagePath(): ?string
     {
         return $this->file
-            ? "{$this->folder()}/{$this->file->saved_name}"
+            ? $this->file->path
             : null;
     }
 
@@ -102,6 +96,6 @@ trait HasFile
 
     protected static function bootHasFile()
     {
-        self::deleting(fn ($model) => (new Files($model))->delete());
+        self::deleting(fn ($model) => $model->file->delete());
     }
 }

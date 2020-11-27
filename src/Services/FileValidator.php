@@ -4,16 +4,18 @@ namespace LaravelEnso\Files\Services;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use LaravelEnso\Files\Exceptions\File;
 use LaravelEnso\Files\Exceptions\File as FileException;
+use Symfony\Component\HttpFoundation\File\File as BaseFile;
 
 class FileValidator
 {
-    protected $file;
+    protected BaseFile $file;
 
     private array $extensions;
     private array $mimeTypes;
 
-    public function __construct($file, array $extensions, array $mimeTypes)
+    public function __construct(BaseFile $file, array $extensions, array $mimeTypes)
     {
         $this->file = $file;
         $this->extensions = $extensions;
@@ -22,8 +24,18 @@ class FileValidator
 
     public function handle(): void
     {
-        $this->validateExtension()
+        $this->validateFile()
+            ->validateExtension()
             ->validateMimeType();
+    }
+
+    private function validateFile(): self
+    {
+        if (! $this->file->isValid()) {
+            throw File::uploadError($this->file->getClientOriginalName());
+        }
+
+        return $this;
     }
 
     private function validateExtension(): self
@@ -47,9 +59,7 @@ class FileValidator
     {
         $valid = (new Collection($this->mimeTypes));
 
-        $mimeType = $this->file instanceof UploadedFile
-            ? $this->file->getClientMimeType()
-            : $this->file->getMimeType();
+        $mimeType = $this->file->getMimeType();
 
         if ($valid->isNotEmpty() && ! $valid->contains($mimeType)) {
             throw FileException::invalidMimeType(

@@ -9,6 +9,6 @@ class Share extends Controller
 {
     public function __invoke(File $file)
     {
-        return $file->attachable->download();
+        return $file->download();
     }
 }
