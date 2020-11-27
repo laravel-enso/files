@@ -14,6 +14,6 @@ class Show extends Controller
     {
         $this->authorize('view', $file);
 
-        return $file->attachable->inline();
+        return $file->inline();
     }
 }

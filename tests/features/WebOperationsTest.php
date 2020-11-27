@@ -6,13 +6,12 @@ use Illuminate\Http\UploadedFile;
 use LaravelEnso\Core\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use LaravelEnso\Files\Services\Files;
 use LaravelEnso\Files\Traits\HasFile;
 use LaravelEnso\Files\Contracts\Attachable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaravelEnso\Files\Exceptions\File;
 
-class FileManagerTest extends TestCase
+class WebOperationsTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -53,45 +52,41 @@ class FileManagerTest extends TestCase
     /** @test */
     public function cant_upload_file_with_invalid_extension()
     {
+        $invalidExtensionFile = UploadedFile::fake()->image('picture.jpg');
+
         $this->expectException(File::class);
 
         $this->expectExceptionMessage(
             File::invalidExtension(
-                $this->file->getClientOriginalExtension(),
-                'jpg'
+                $invalidExtensionFile->getClientOriginalExtension(),
+                'png'
             )->getMessage()
         );
 
-
-        (new Files($this->testModel))
-            ->extensions(['jpg'])
-            ->upload($this->file);
+        $this->testModel->upload($invalidExtensionFile);
     }
 
     /** @test */
     public function cant_upload_file_with_invalid_mime_type()
     {
+        $invalidMimeFile = UploadedFile::fake()->create('doc.png', 0, 'application/msword');
+
         $this->expectException(File::class);
 
         $this->expectExceptionMessage(
             File::invalidMimeType(
-                $this->file->getClientMimeType(),
-                'application/msword'
+                $invalidMimeFile->getMimeType(),
+                'image/png'
             )->getMessage()
         );
 
-
-        (new Files($this->testModel))
-            ->mimeTypes(['application/msword'])
-            ->upload($this->file);
+       $this->testModel->upload($invalidMimeFile);
     }
 
     /** @test */
     public function can_display_file_inline()
     {
-        $manager = new Files($this->testModel);
-
-        $manager->upload($this->file);
+        $this->testModel->upload($this->file);
 
         $response = $this->testModel->inline($this->file->hashname());
 
@@ -101,9 +96,7 @@ class FileManagerTest extends TestCase
     /** @test */
     public function can_download_file()
     {
-        $manager = new Files($this->testModel);
-
-        $manager->upload($this->file);
+        $this->testModel->upload($this->file);
 
         $response = $this->testModel->download();
 

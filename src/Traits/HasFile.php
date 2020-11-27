@@ -10,21 +10,14 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use LaravelEnso\Core\Models\User;
 use LaravelEnso\Files\Models\File;
-use LaravelEnso\Files\Services\Files;
-use LaravelEnso\Helpers\Traits\CascadesMorphMap;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 trait HasFile
 {
-    use CascadesMorphMap;
-
     public function file(): Relation
     {
         return $this->morphOne(File::class, 'attachable')
-            ->withDefault([
-                'attachable_type' => $this->morphMapKey(),
-                'attachable_id' => $this->id,
-            ]);
+            ->withDefault();
     }
 
     public function inline(): StreamedResponse
@@ -49,7 +42,7 @@ trait HasFile
 
     public function upload(UploadedFile $file): void
     {
-        $this->file->upload($file);
+        $this->file->upload($this, $file);
     }
 
     public function folder(): string

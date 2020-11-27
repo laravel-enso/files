@@ -13,27 +13,22 @@ use LaravelEnso\Upgrade\Contracts\MigratesPostDataMigration;
 use LaravelEnso\Upgrade\Contracts\MigratesTable;
 use LaravelEnso\Upgrade\Helpers\Table;
 
-class FileDiskPath implements MigratesTable, MigratesData, MigratesPostDataMigration
+class FilePath implements MigratesTable, MigratesData, MigratesPostDataMigration
 {
     public function isMigrated(): bool
     {
-        return Table::hasColumn('files', 'is_active');
+        return Table::hasColumn('files', 'path');
     }
 
     public function migrateTable(): void
     {
         Schema::table('files', function (Blueprint $table) {
-            $table->string('disk')->after('original_name')->nullable();
-            $table->string('path')->after('disk')->nullable();
+            $table->string('path')->after('original_name')->nullable();
         });
     }
 
     public function migrateData(): void
     {
-        File::whereNull('disk')->update([
-            'disk' => Config::get('filesystems.default'),
-        ]);
-
         $types = File::select('attachable_type')
             ->distinct('attachable_type')
             ->pluck('attachable_type');
@@ -42,19 +37,16 @@ class FileDiskPath implements MigratesTable, MigratesData, MigratesPostDataMigra
 
         $types->each(function (string $type) {
             $folder = FileBrowser::folder($type);
-            $separator = DIRECTORY_SEPARATOR;
 
-            File::whereAttachableType($type)
-                ->update([
-                    'path' => DB::raw("CONCAT('{$folder}','{$separator}', saved_name)"),
-                ]);
+            File::whereAttachableType($type)->update([
+                'path' => DB::raw("CONCAT('{$folder}/', saved_name)"),
+            ]);
         });
     }
 
     public function migratePostDataMigration(): void
     {
         Schema::table('files', function (Blueprint $table) {
-            $table->string('disk')->nullable(false)->change();
             $table->string('path')->nullable(false)->change();
             $table->dropColumn(['saved_name']);
         });

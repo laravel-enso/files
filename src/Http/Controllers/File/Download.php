@@ -14,6 +14,6 @@ class Download extends Controller
     {
         $this->authorize('view', $file);
 
-        return $file->attachable->download();
+        return $file->download();
     }
 }
