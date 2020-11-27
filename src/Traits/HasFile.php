@@ -35,9 +35,9 @@ trait HasFile
         return $this->file->temporaryLink();
     }
 
-    public function attach(IlluminateFile $file, string $originalName, ?User $user = null): void
+    public function attach(string $path, string $originalName, ?User $user = null): void
     {
-        $this->file->attach($file, $originalName, $user);
+        $this->file->attach($path, $originalName, $user);
     }
 
     public function upload(UploadedFile $file): void

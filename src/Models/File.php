@@ -82,13 +82,13 @@ class File extends Model
             ->where('original_name', 'LIKE', '%'.$search.'%'));
     }
 
-    public function attach(IlluminateFile $file, string $originalName, ?User $user): self
+    public function attach(string $path, string $originalName, ?User $user): self
     {
-        $prefix = Storage::getAdapter()->getPathPrefix();
+        $file = new IlluminateFile(Storage::path($path));
 
         $this->fill([
             'original_name' => $originalName,
-            'path' => Str::of($file->getPathname())->replaceFirst($prefix, ''),
+            'path' => $path,
             'size' => $file->getSize(),
             'mime_type' => $file->getMimeType(),
             'created_by' => optional($user)->id,

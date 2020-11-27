@@ -3,7 +3,6 @@
 namespace LaravelEnso\Files\Contracts;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Http\File;
 use Illuminate\Http\UploadedFile;
 use LaravelEnso\Core\Models\User;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -20,7 +19,7 @@ interface Attachable
 
     public function upload(UploadedFile $file): void;
 
-    public function attach(File $file, string $originalName, ?User $user): void;
+    public function attach(string $path, string $originalName, ?User $user): void;
 
     public function folder(): string;
 
