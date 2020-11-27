@@ -44,7 +44,7 @@ class FilePath implements MigratesTable, MigratesData, MigratesPostDataMigration
 
         File::whereAttachableType('rejectedImport')
             ->with('attachable')
-            ->each(fn(File $file) => $file->update([
+            ->each(fn (File $file) => $file->update([
                 'path' => "{$file->attachable->folder()}/{$file->saved_name}",
             ]));
     }
