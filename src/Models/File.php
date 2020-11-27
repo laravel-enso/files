@@ -58,7 +58,7 @@ class File extends Model
 
     public function scopeForUser($query, $user)
     {
-        $query->when(! $user->isAdmin() && ! $user->isSupervisor(), fn($query) => $query
+        $query->when(! $user->isAdmin() && ! $user->isSupervisor(), fn ($query) => $query
             ->whereCreatedBy($user->id));
     }
 
@@ -78,7 +78,7 @@ class File extends Model
 
     public function scopeFilter($query, $search)
     {
-        return $query->when($search, fn($query) => $query
+        return $query->when($search, fn ($query) => $query
             ->where('original_name', 'LIKE', '%'.$search.'%'));
     }
 

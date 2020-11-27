@@ -3,7 +3,6 @@
 namespace LaravelEnso\Files\Traits;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Http\File as IlluminateFile;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
