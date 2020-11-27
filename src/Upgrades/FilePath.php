@@ -33,7 +33,9 @@ class FilePath implements MigratesTable, MigratesData, MigratesPostDataMigration
             ->pluck('attachable_type');
 
         $types->each(function (string $type) {
-            $folder = FileBrowser::folder($type);
+            $folder = File::whereAttachableType($type)
+                ->has('attachable')
+                ->first()->attachable->folder();
 
             File::whereAttachableType($type)->update([
                 'path' => DB::raw("CONCAT('{$folder}/', saved_name)"),
