@@ -28,6 +28,7 @@ class FilePath implements MigratesTable, MigratesData, MigratesPostDataMigration
     public function migrateData(): void
     {
         $types = File::select('attachable_type')
+            ->where('attachable_type', '!=', 'rejectedImport')
             ->distinct('attachable_type')
             ->pluck('attachable_type');
 
@@ -40,6 +41,12 @@ class FilePath implements MigratesTable, MigratesData, MigratesPostDataMigration
                 'path' => DB::raw("CONCAT('{$folder}/', saved_name)"),
             ]);
         });
+
+        File::whereAttachableType('rejectedImport')
+            ->with('attachable')
+            ->each(fn (File $file) => $file->update([
+                'path' => "{$file->attachable->folder()}/{$file->saved_name}",
+            ]));
     }
 
     public function migratePostDataMigration(): void
