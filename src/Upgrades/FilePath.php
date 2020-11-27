@@ -3,7 +3,6 @@
 namespace LaravelEnso\Files\Upgrades;
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use LaravelEnso\Files\Facades\FileBrowser;

@@ -70,9 +70,9 @@ class File extends Model
     public function scopeBetween($query, $interval)
     {
         $query
-            ->when($interval->min, fn($query) => $query
+            ->when($interval->min, fn ($query) => $query
                 ->where('created_at', '>=', Carbon::parse($interval->min)))
-            ->when($interval->max, fn($query) => $query
+            ->when($interval->max, fn ($query) => $query
                 ->where('created_at', '<=', Carbon::parse($interval->max)));
     }
 
@@ -103,7 +103,7 @@ class File extends Model
             throw Exception::uploadError($file->getClientOriginalName());
         }
 
-        $this->validate($file, $attachable->extensions(),  $attachable->mimeTypes());
+        $this->validate($file, $attachable->extensions(), $attachable->mimeTypes());
 
         if ($this->isImage($file)) {
             $this->processImage($file, $attachable->optimizeImages(), $attachable->resizeImages());
