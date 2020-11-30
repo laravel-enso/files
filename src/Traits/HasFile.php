@@ -96,6 +96,10 @@ trait HasFile
 
     protected static function bootHasFile()
     {
-        self::deleting(fn ($model) => $model->file->delete());
+        self::deleting(function ($model) {
+            if ($model->file->exists) {
+                $model->file->delete();
+            }
+        });
     }
 }
