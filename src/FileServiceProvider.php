@@ -7,10 +7,13 @@ use LaravelEnso\Files\Facades\FileBrowser;
 
 class FileServiceProvider extends ServiceProvider
 {
-    public $register = [];
-
     public function boot()
     {
-        FileBrowser::register($this->register);
+        FileBrowser::register($this->folders());
+    }
+
+    public function folders(): array
+    {
+        return [];
     }
 }

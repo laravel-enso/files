@@ -2,6 +2,7 @@
 
 namespace LaravelEnso\Files\Upgrades;
 
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -20,32 +21,16 @@ class FilePath implements MigratesTable, MigratesData, MigratesPostDataMigration
 
     public function migrateTable(): void
     {
-        Schema::table('files', function (Blueprint $table) {
-            $table->string('path')->after('original_name')->nullable();
-        });
+        Schema::table('files', fn ($table) => $table
+            ->string('path')->after('original_name')->nullable());
     }
 
     public function migrateData(): void
     {
-        $types = File::select('attachable_type')
-            ->where('attachable_type', '!=', 'rejectedImport')
-            ->distinct('attachable_type')
-            ->pluck('attachable_type');
-
-        $types->each(function (string $type) {
-            $folder = File::whereAttachableType($type)
-                ->has('attachable')
-                ->first()->attachable->folder();
-
-            File::whereAttachableType($type)->update([
-                'path' => DB::raw("CONCAT('{$folder}/', saved_name)"),
-            ]);
-        });
-
-        File::whereAttachableType('rejectedImport')
-            ->with('attachable')
-            ->each(fn (File $file) => $file->update([
-                'path' => "{$file->attachable->folder()}/{$file->saved_name}",
+        File::distinct('attachable_type')
+            ->pluck('attachable_type')
+            ->each(fn (string $type) => File::whereAttachableType($type)->update([
+                'path' => DB::raw("CONCAT('{$this->folder($type)}', '/', saved_name)"),
             ]));
     }
 
@@ -53,7 +38,14 @@ class FilePath implements MigratesTable, MigratesData, MigratesPostDataMigration
     {
         Schema::table('files', function (Blueprint $table) {
             $table->string('path')->nullable(false)->change();
-            $table->dropColumn(['saved_name']);
+            $table->dropColumn('saved_name');
         });
+    }
+
+    private function folder(string $type)
+    {
+        $model = Relation::getMorphedModel($type);
+
+        return (new $model())->folder();
     }
 }

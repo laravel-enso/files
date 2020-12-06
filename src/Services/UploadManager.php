@@ -51,17 +51,17 @@ class UploadManager
 
     private function uploadFile($file): void
     {
-        $upload = tap(Upload::create())
-            ->upload($file);
+        $upload = Upload::create();
+        $file = $upload->file->upload($file);
 
         $this->uploadedFiles->push(new Resource(
-            $upload->file->load(['attachable', 'createdBy.avatar']))
-        );
+            $file->load(['attachable', 'createdBy.avatar'])
+        ));
     }
 
     private function existingFiles(): Collection
     {
-        return File::forUser(Auth::user())
+        return File::for(Auth::user())
             ->whereAttachableType(Upload::class)
             ->pluck('original_name');
     }

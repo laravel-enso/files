@@ -22,17 +22,11 @@ class Collection extends ResourceCollection
 
     private function filteredSpaceUsed()
     {
-        return round(
-            $this->collection->sum('size') / 1000
-        );
+        return round($this->collection->sum('size') / 1000);
     }
 
     private function totalSpaceUsed($request)
     {
-        return round(
-            $request->user()->files()
-                ->visible()
-                ->sum('size') / 1000
-        );
+        return round($request->user()->files()->browsable()->sum('size') / 1000);
     }
 }

@@ -6,13 +6,11 @@ use LaravelEnso\Files\Models\Upload;
 
 class UploadServiceProvider extends FileServiceProvider
 {
-    public function boot()
+    public function folders(): array
     {
-        $this->register['uploads'] = [
+        return ['uploads' => [
             'model' => Upload::morphMapKey(),
             'order' => 80,
-        ];
-
-        parent::boot();
+        ]];
     }
 }

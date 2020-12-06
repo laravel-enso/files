@@ -1,34 +1,34 @@
 <?php
 
-use Illuminate\Support\Facades\Config;
-use Tests\TestCase;
-use Illuminate\Http\UploadedFile;
-use LaravelEnso\Core\Models\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
-use LaravelEnso\Files\Traits\HasFile;
-use LaravelEnso\Files\Contracts\Attachable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
+use LaravelEnso\Core\Models\User;
+use LaravelEnso\Files\Contracts\Attachable;
 use LaravelEnso\Files\Exceptions\File;
+use LaravelEnso\Files\Traits\HasFile;
+use Tests\TestCase;
 
-class WebOperationsTest extends TestCase
+class FileTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $testModel;
+    private $model;
     private $file;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->withoutExceptionHandling();
-
         $this->seed()
             ->actingAs(User::first());
 
         $this->file = UploadedFile::fake()->image('picture.png');
-        $this->testModel = $this->model();
+        $this->createTestTable();
+        $this->model = AttachableModel::create();
     }
 
     public function tearDown(): void
@@ -40,55 +40,62 @@ class WebOperationsTest extends TestCase
     /** @test */
     public function can_upload_file()
     {
-        $this->testModel->upload($this->file);
+        $this->model->file->upload($this->file);
 
-        $this->assertNotNull($this->testModel->file);
+        $this->assertNotNull($this->model->file);
 
-        Storage::assertExists(
-            $this->testModel->folder().DIRECTORY_SEPARATOR.$this->testModel->file->saved_name
-        );
+        Storage::assertExists($this->model->file->path);
+    }
+
+    /** @test */
+    public function can_attach_file()
+    {
+        $folder = Config::get('enso.files.testingFolder');
+        $filename = 'test.txt';
+        Storage::put("{$folder}/$filename", 'test');
+        $this->model->file->attach("{$folder}/$filename", $filename);
+
+        $this->assertNotNull($this->model->file);
+
+        Storage::assertExists($this->model->file->path);
     }
 
     /** @test */
     public function cant_upload_file_with_invalid_extension()
     {
-        $invalidExtensionFile = UploadedFile::fake()->image('picture.jpg');
+        $file = UploadedFile::fake()->image('picture.jpg');
 
         $this->expectException(File::class);
 
         $this->expectExceptionMessage(
-            File::invalidExtension(
-                $invalidExtensionFile->getClientOriginalExtension(),
-                'png'
-            )->getMessage()
+            File::invalidExtension($file->getClientOriginalExtension(), 'png')
+                ->getMessage()
         );
 
-        $this->testModel->upload($invalidExtensionFile);
+        $this->model->file->upload($file);
     }
 
     /** @test */
     public function cant_upload_file_with_invalid_mime_type()
     {
-        $invalidMimeFile = UploadedFile::fake()->create('doc.png', 0, 'application/msword');
+        $file = UploadedFile::fake()->create('doc.png', 0, 'application/msword');
 
         $this->expectException(File::class);
 
         $this->expectExceptionMessage(
-            File::invalidMimeType(
-                $invalidMimeFile->getMimeType(),
-                'image/png'
-            )->getMessage()
+            File::invalidMimeType($file->getMimeType(), 'image/png')
+                ->getMessage()
         );
 
-       $this->testModel->upload($invalidMimeFile);
+        $this->model->file->upload($file);
     }
 
     /** @test */
     public function can_display_file_inline()
     {
-        $this->testModel->upload($this->file);
+        $this->model->file->upload($this->file);
 
-        $response = $this->testModel->inline($this->file->hashname());
+        $response = $this->model->file->inline($this->file->hashname());
 
         $this->assertEquals(200, $response->getStatusCode());
     }
@@ -96,18 +103,11 @@ class WebOperationsTest extends TestCase
     /** @test */
     public function can_download_file()
     {
-        $this->testModel->upload($this->file);
+        $this->model->file->upload($this->file);
 
-        $response = $this->testModel->download();
+        $response = $this->model->file->download();
 
         $this->assertEquals(200, $response->getStatusCode());
-    }
-
-    private function model()
-    {
-        $this->createTestTable();
-
-        return AttachableModel::create();
     }
 
     private function createTestTable()

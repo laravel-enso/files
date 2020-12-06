@@ -3,6 +3,7 @@
 namespace LaravelEnso\Files\Http\Responses;
 
 use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Support\Facades\Config;
 use LaravelEnso\Files\Http\Resources\Collection;
 use LaravelEnso\Files\Http\Resources\File as Resource;
 use LaravelEnso\Files\Models\File;
@@ -13,14 +14,13 @@ class Files implements Responsable
     {
         return new Collection(
             Resource::collection(
-                File::visible()
+                File::latest()->browsable()
                     ->with(['createdBy.avatar', 'attachable'])
-                    ->forUser($request->user())
-                    ->between(json_decode($request->get('interval')))
+                    ->for($request->user())
+                    ->between(json_decode($request->get('interval'), true))
                     ->filter($request->get('query'))
-                    ->ordered()
                     ->skip($request->get('offset'))
-                    ->take(config('enso.files.paginate'))
+                    ->take(Config::get('enso.files.paginate'))
                     ->get()
             )
         );

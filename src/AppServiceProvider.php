@@ -3,9 +3,6 @@
 namespace LaravelEnso\Files;
 
 use Illuminate\Support\ServiceProvider;
-use LaravelEnso\Core\Models\User;
-use LaravelEnso\DynamicMethods\Services\Methods;
-use LaravelEnso\Files\DynamicRelations\Uploads;
 use LaravelEnso\Files\Models\Upload;
 use LaravelEnso\Files\Services\FileBrowser;
 
@@ -18,8 +15,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->load()
-            ->mapMorphs()
-            ->publish();
+            ->publish()
+            ->mapMorphs();
     }
 
     private function load()
@@ -29,14 +26,6 @@ class AppServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/files.php', 'enso.files');
 
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-
-        return $this;
-    }
-
-    private function mapMorphs()
-    {
-        Upload::morphMap();
-        Methods::bind(User::class, [Uploads::class]);
 
         return $this;
     }
@@ -52,5 +41,12 @@ class AppServiceProvider extends ServiceProvider
                 'Providers/FileServiceProvider.php'
             ),
         ], 'file-provider');
+
+        return $this;
+    }
+
+    private function mapMorphs()
+    {
+        Upload::morphMap();
     }
 }

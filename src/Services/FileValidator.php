@@ -48,7 +48,8 @@ class FileValidator
 
         if ($valid->isNotEmpty() && ! $valid->contains($extension)) {
             throw FileException::invalidExtension(
-                $extension, implode(', ', $this->extensions)
+                $extension,
+                implode(', ', $this->extensions)
             );
         }
 
@@ -63,7 +64,8 @@ class FileValidator
 
         if ($valid->isNotEmpty() && ! $valid->contains($mimeType)) {
             throw FileException::invalidMimeType(
-                $mimeType, implode(', ', $this->mimeTypes),
+                $mimeType,
+                implode(', ', $this->mimeTypes),
             );
         }
 

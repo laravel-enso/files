@@ -6,10 +6,11 @@ use LaravelEnso\Files\FileServiceProvider as ServiceProvider;
 
 class FileServiceProvider extends ServiceProvider
 {
-    public $register = [
-        // 'folder' => [
+    public function folders(): array
+    {
+        // return ['folder' => [
         //    'model' => Model::class,
         //    'order' => 100,
-        // ]
-    ];
+        // ]];
+    }
 }

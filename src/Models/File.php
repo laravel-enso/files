@@ -3,15 +3,17 @@
 namespace LaravelEnso\Files\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\File as IlluminateFile;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use LaravelEnso\Core\Models\User;
-use LaravelEnso\Files\Contracts\Attachable;
 use LaravelEnso\Files\Exceptions\File as Exception;
 use LaravelEnso\Files\Facades\FileBrowser;
 use LaravelEnso\Files\Services\FileValidator;
@@ -32,84 +34,80 @@ class File extends Model
         return $this->morphTo();
     }
 
-    public function temporaryLink()
+    public function temporaryLink(): string
     {
-        return url()->temporarySignedRoute(
-            'core.files.share',
-            now()->addSeconds(config('enso.files.linkExpiration')),
-            ['file' => $this->id]
-        );
+        $limit = Config::get('enso.files.linkExpiration');
+        $expires = Carbon::now()->addSeconds($limit);
+        $args = ['core.files.share', $expires, ['file' => $this->id]];
+
+        return URL::temporarySignedRoute(...$args);
     }
 
-    public function type()
+    public function type(): string
     {
         return FileBrowser::folder($this->attachable_type);
     }
 
-    public function path()
+    public function path(): string
     {
         return Storage::path($this->path);
     }
 
-    public function scopeVisible($query) //TODO browsable
+    public function scopeBrowsable(Builder $query): Builder
     {
-        $query->whereIn('attachable_type', FileBrowser::models()->toArray());
+        return $query->whereIn('attachable_type', FileBrowser::models());
     }
 
-    public function scopeForUser($query, $user)
+    public function scopeFor(Builder $query, User $user): Builder
     {
-        $query->when(! $user->isAdmin() && ! $user->isSupervisor(), fn ($query) => $query
+        $inferiorRole = ! $user->isAdmin() && ! $user->isSupervisor();
+
+        return $query->when($inferiorRole, fn ($query) => $query
             ->whereCreatedBy($user->id));
     }
 
-    public function scopeOrdered($query) //TODO replace cu latest
+    public function scopeBetween(Builder $query, array $interval): Builder
     {
-        $query->orderBy('created_at', 'desc');
+        return $query
+            ->when($interval['min'], fn ($query) => $query
+                ->where('created_at', '>=', Carbon::parse($interval['min'])))
+            ->when($interval['max'], fn ($query) => $query
+                ->where('created_at', '<=', Carbon::parse($interval['max'])));
     }
 
-    public function scopeBetween($query, $interval)
-    {
-        $query
-            ->when($interval->min, fn ($query) => $query
-                ->where('created_at', '>=', Carbon::parse($interval->min)))
-            ->when($interval->max, fn ($query) => $query
-                ->where('created_at', '<=', Carbon::parse($interval->max)));
-    }
-
-    public function scopeFilter($query, $search)
+    public function scopeFilter(Builder $query, ?string $search): Builder
     {
         return $query->when($search, fn ($query) => $query
             ->where('original_name', 'LIKE', '%'.$search.'%'));
     }
 
-    public function attach(string $path, string $originalName, ?User $user): self
+    public function attach(string $path, string $filename): self
     {
         $file = new IlluminateFile(Storage::path($path));
 
         $this->fill([
-            'original_name' => $originalName,
+            'original_name' => $filename,
             'path' => $path,
             'size' => $file->getSize(),
             'mime_type' => $file->getMimeType(),
-            'created_by' => optional($user)->id,
         ])->save();
 
         return $this;
     }
 
-    public function upload(Attachable $attachable, UploadedFile $file): self
+    public function upload(UploadedFile $file): self
     {
         if (! $file->isValid()) {
             throw Exception::uploadError($file->getClientOriginalName());
         }
 
-        $this->validate($file, $attachable->extensions(), $attachable->mimeTypes());
+        $this->validate($file);
 
         if ($this->isImage($file)) {
-            $this->processImage($file, $attachable->optimizeImages(), $attachable->resizeImages());
+            $this->processImage($file);
         }
 
-        return $this->store($file, $attachable->folder());
+        return $this->store($file, $this->attachable->folder());
     }
 
     public function delete()
@@ -131,18 +129,20 @@ class File extends Model
         return Storage::response($this->path);
     }
 
-    public function validate(BaseFile $file, array $extensions, array $mimeTypes): self
+    public function validate(BaseFile $file): void
     {
-        (new FileValidator($file, $extensions, $mimeTypes))->handle();
+        $extensions = $this->attachable->extensions();
+        $mimeTypes = $this->attachable->mimeTypes();
 
-        return $this;
+        (new FileValidator($file, $extensions, $mimeTypes))->handle();
     }
 
-    public function processImage(BaseFile $file, bool $optimize, array $resize): self
+    public function processImage(BaseFile $file): void
     {
-        (new ImageProcessor($file, $optimize, $resize))->handle();
+        $optimizeImages = $this->attachable->optimizeImages();
+        $resizeImages = $this->attachable->resizeImages();
 
-        return $this;
+        (new ImageProcessor($file, $optimizeImages, $resizeImages))->handle();
     }
 
     public function isImage(BaseFile $file): bool
@@ -151,7 +151,7 @@ class File extends Model
 
         return Validator::make(
             ['file' => $file],
-            ['file' => 'image|mimetypes:'.$mimeTypes]
+            ['file' => "image|mimetypes:{$mimeTypes}"]
         )->passes();
     }
 
