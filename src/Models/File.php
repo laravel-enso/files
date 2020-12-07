@@ -107,7 +107,20 @@ class File extends Model
             $this->processImage($file);
         }
 
-        return $this->store($file, $this->attachable->folder());
+        DB::transaction(function () use ($file) {
+            $folder = $this->attachable->folder();
+
+            $this->fill([
+                'original_name' => $file->getClientOriginalName(),
+                'path' => "{$folder}/{$file->hashName()}",
+                'size' => $file->getSize(),
+                'mime_type' => $file->getMimeType(),
+            ])->save();
+
+            $file->store($folder);
+        });
+
+        return $this;
     }
 
     public function delete()
@@ -153,21 +166,5 @@ class File extends Model
             ['file' => $file],
             ['file' => "image|mimetypes:{$mimeTypes}"]
         )->passes();
-    }
-
-    public function store(UploadedFile $file, string $folder): self
-    {
-        DB::transaction(function () use ($file, $folder) {
-            $this->fill([
-                'original_name' => $file->getClientOriginalName(),
-                'path' => "{$folder}/{$file->hashName()}",
-                'size' => $file->getSize(),
-                'mime_type' => $file->getMimeType(),
-            ])->save();
-
-            $file->store($folder);
-        });
-
-        return $this;
     }
 }
