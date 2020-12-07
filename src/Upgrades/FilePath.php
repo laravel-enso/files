@@ -4,8 +4,12 @@ namespace LaravelEnso\Files\Upgrades;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use LaravelEnso\DataImport\Models\RejectedImport;
 use LaravelEnso\Files\Models\File;
 use LaravelEnso\Upgrade\Contracts\MigratesData;
 use LaravelEnso\Upgrade\Contracts\MigratesPostDataMigration;
@@ -32,6 +36,8 @@ class FilePath implements MigratesTable, MigratesData, MigratesPostDataMigration
             ->each(fn (string $type) => File::whereAttachableType($type)->update([
                 'path' => DB::raw("CONCAT('{$this->folder($type)}', '/', saved_name)"),
             ]));
+
+        RejectedImport::all()->each(fn ($rejected) => $this->handle($rejected));
     }
 
     public function migratePostDataMigration(): void
@@ -42,7 +48,21 @@ class FilePath implements MigratesTable, MigratesData, MigratesPostDataMigration
         });
     }
 
-    private function folder(string $type)
+    private function handle(RejectedImport $rejected): void
+    {
+        $folder = "{$rejected->folder()}/rejected_{$rejected->id}";
+
+        $path = Collection::wrap(Storage::files($folder))
+            ->first(fn ($file) => Str::of($file)->endsWith('.xlsx'));
+
+        $xlsx = Str::of($path)->explode('/')->last();
+
+        Storage::move($path, "imports/{$xlsx}");
+
+        Storage::deleteDirectory($folder);
+    }
+
+    private function folder(string $type): string
     {
         $model = Relation::getMorphedModel($type);
 
