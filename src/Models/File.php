@@ -48,11 +48,6 @@ class File extends Model
         return FileBrowser::folder($this->attachable_type);
     }
 
-    public function path(): string
-    {
-        return Storage::path($this->path);
-    }
-
     public function scopeBrowsable(Builder $query): Builder
     {
         return $query->whereIn('attachable_type', FileBrowser::models());
