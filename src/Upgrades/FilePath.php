@@ -57,7 +57,10 @@ class FilePath implements MigratesTable, MigratesData, MigratesPostDataMigration
 
         $xlsx = Str::of($path)->explode('/')->last();
 
-        Storage::move($path, "imports/{$xlsx}");
+        if ($xlsx) {
+            Storage::move($path, "imports/{$xlsx}");
+        }
+
         Storage::deleteDirectory($folder);
     }
 
