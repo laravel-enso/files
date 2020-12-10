@@ -22,6 +22,7 @@ use LaravelEnso\Files\Traits\FilePolicies;
 use LaravelEnso\ImageTransformer\Services\ImageTransformer;
 use LaravelEnso\TrackWho\Traits\CreatedBy;
 use Symfony\Component\HttpFoundation\File\File as BaseFile;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class File extends Model
 {
@@ -125,14 +126,14 @@ class File extends Model
         return parent::delete();
     }
 
-    public function download()
+    public function download(): StreamedResponse
     {
         $name = Str::ascii($this->original_name);
 
         return Storage::download($this->path, $name);
     }
 
-    public function inline()
+    public function inline(): StreamedResponse
     {
         return Storage::response($this->path);
     }
