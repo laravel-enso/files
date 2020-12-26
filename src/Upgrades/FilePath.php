@@ -37,7 +37,9 @@ class FilePath implements MigratesTable, MigratesData, MigratesPostDataMigration
                 'path' => DB::raw("CONCAT('{$this->folder($type)}', '/', saved_name)"),
             ]));
 
-        RejectedImport::all()->each(fn ($rejected) => $this->handle($rejected));
+        if (class_exists(RejectedImport::class)) {
+            RejectedImport::all()->each(fn ($rejected) => $this->handle($rejected));
+        }
     }
 
     public function migratePostDataMigration(): void
