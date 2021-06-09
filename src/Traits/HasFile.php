@@ -18,17 +18,15 @@ trait HasFile
 
     public function folder(): string
     {
-        if (App::environment('testing')) {
-            $directory = Config::get('enso.files.testingFolder');
+        $directory = App::environment('testing')
+            ? Config::get('enso.files.testingFolder')
+            : $this->folder;
 
-            if (! Storage::has($directory)) {
-                Storage::makeDirectory($directory);
-            }
-
-            return $directory;
+        if (! Storage::has($directory)) {
+            Storage::makeDirectory($directory);
         }
 
-        return $this->folder;
+        return $directory;
     }
 
     public function mimeTypes(): array

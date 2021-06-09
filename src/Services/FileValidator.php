@@ -10,16 +10,11 @@ use Symfony\Component\HttpFoundation\File\File as BaseFile;
 
 class FileValidator
 {
-    protected BaseFile $file;
-
-    private array $extensions;
-    private array $mimeTypes;
-
-    public function __construct(BaseFile $file, array $extensions, array $mimeTypes)
-    {
-        $this->file = $file;
-        $this->extensions = $extensions;
-        $this->mimeTypes = $mimeTypes;
+    public function __construct(
+        protected BaseFile $file,
+        private array $extensions,
+        private array $mimeTypes
+    ) {
     }
 
     public function handle(): void
@@ -40,17 +35,15 @@ class FileValidator
 
     private function validateExtension(): self
     {
-        $valid = (new Collection($this->extensions));
+        $valid = new Collection($this->extensions);
 
         $extension = $this->file instanceof UploadedFile
             ? $this->file->getClientOriginalExtension()
             : $this->file->getExtension();
 
         if ($valid->isNotEmpty() && ! $valid->contains($extension)) {
-            throw FileException::invalidExtension(
-                $extension,
-                implode(', ', $this->extensions)
-            );
+            $extensions = implode(', ', $this->extensions);
+            throw FileException::invalidExtension($extension, $extensions);
         }
 
         return $this;
@@ -58,15 +51,13 @@ class FileValidator
 
     private function validateMimeType()
     {
-        $valid = (new Collection($this->mimeTypes));
+        $valid = new Collection($this->mimeTypes);
 
         $mimeType = $this->file->getMimeType();
 
         if ($valid->isNotEmpty() && ! $valid->contains($mimeType)) {
-            throw FileException::invalidMimeType(
-                $mimeType,
-                implode(', ', $this->mimeTypes),
-            );
+            $mimeTypes = implode(', ', $this->mimeTypes);
+            throw FileException::invalidMimeType($mimeType, $mimeTypes);
         }
 
         return $this;

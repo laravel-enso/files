@@ -2,7 +2,7 @@
 
 namespace LaravelEnso\Files\Contracts;
 
-use LaravelEnso\Core\Models\User;
+use LaravelEnso\Users\Models\User;
 
 interface AuthorizesFileAccess
 {

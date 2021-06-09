@@ -6,10 +6,10 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
-use LaravelEnso\Core\Models\User;
 use LaravelEnso\Files\Contracts\Attachable;
 use LaravelEnso\Files\Exceptions\File;
 use LaravelEnso\Files\Traits\HasFile;
+use LaravelEnso\Users\Models\User;
 use Tests\TestCase;
 
 class FileTest extends TestCase

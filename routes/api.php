@@ -7,8 +7,8 @@ Route::middleware(['api', 'auth', 'core'])
     ->prefix('api/core')
     ->as('core.')
     ->group(function () {
-        require 'app/files.php';
-        require 'app/uploads.php';
+        require __DIR__.'/app/files.php';
+        require __DIR__.'/app/uploads.php';
     });
 
 Route::middleware(['signed', 'bindings'])

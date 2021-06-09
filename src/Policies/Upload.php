@@ -3,8 +3,8 @@
 namespace LaravelEnso\Files\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
-use LaravelEnso\Core\Models\User;
 use LaravelEnso\Files\Models\Upload as Model;
+use LaravelEnso\Users\Models\User;
 
 class Upload
 {

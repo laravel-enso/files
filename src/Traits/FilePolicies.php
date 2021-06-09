@@ -2,7 +2,7 @@
 
 namespace LaravelEnso\Files\Traits;
 
-use LaravelEnso\Core\Models\User;
+use LaravelEnso\Users\Models\User;
 
 trait FilePolicies
 {

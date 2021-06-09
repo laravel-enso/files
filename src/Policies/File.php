@@ -3,9 +3,9 @@
 namespace LaravelEnso\Files\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
-use LaravelEnso\Core\Models\User;
 use LaravelEnso\Files\Contracts\AuthorizesFileAccess;
 use LaravelEnso\Files\Models\File as Model;
+use LaravelEnso\Users\Models\User;
 
 class File
 {

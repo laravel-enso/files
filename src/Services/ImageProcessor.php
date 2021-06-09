@@ -8,16 +8,13 @@ use Symfony\Component\HttpFoundation\File\File;
 
 class ImageProcessor
 {
-    private File $file;
-    private bool $optimize;
-    private array $resize;
     private ImageTransformer $transformer;
 
-    public function __construct(File $file, bool $optimize, array $resize)
-    {
-        $this->file = $file;
-        $this->optimize = $optimize;
-        $this->resize = $resize;
+    public function __construct(
+        private File $file,
+        private bool $optimize,
+        private array $resize
+    ) {
     }
 
     public function handle(): void

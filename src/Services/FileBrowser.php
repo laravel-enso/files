@@ -42,7 +42,7 @@ class FileBrowser
 
     public function remove($folders): void
     {
-        (new Collection($folders))
+        Collection::wrap($folders)
             ->each(fn ($folder) => $this->models->forget($folder));
     }
 

@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use LaravelEnso\Core\Models\User;
 use LaravelEnso\Files\Exceptions\File as Exception;
 use LaravelEnso\Files\Facades\FileBrowser;
 use LaravelEnso\Files\Services\FileValidator;
@@ -21,6 +20,7 @@ use LaravelEnso\Files\Services\ImageProcessor;
 use LaravelEnso\Files\Traits\FilePolicies;
 use LaravelEnso\ImageTransformer\Services\ImageTransformer;
 use LaravelEnso\TrackWho\Traits\CreatedBy;
+use LaravelEnso\Users\Models\User;
 use Symfony\Component\HttpFoundation\File\File as BaseFile;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
