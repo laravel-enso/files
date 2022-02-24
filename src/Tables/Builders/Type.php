@@ -8,7 +8,7 @@ use LaravelEnso\Tables\Contracts\Table;
 
 class Type implements Table
 {
-    private const TemplatePath = __DIR__ . '/../Templates/types.json';
+    private const TemplatePath = __DIR__.'/../Templates/types.json';
 
     public function query(): Builder
     {
