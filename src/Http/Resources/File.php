@@ -3,25 +3,36 @@
 namespace LaravelEnso\Files\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
+use LaravelEnso\Helpers\Services\DiskSize;
 use LaravelEnso\Users\Http\Resources\User;
 
 class File extends JsonResource
 {
     public function toArray($request)
     {
-        return $this->id
-            ? [
-                'id' => $this->id,
-                'name' => $this->original_name,
-                'size' => $this->size,
-                'mimeType' => $this->mime_type,
-                'type' => $this->type(),
-                'owner' => new User($this->whenLoaded('createdBy')),
-                'isDestroyable' => $this->destroyableBy($request->user()),
-                'isShareable' => $this->shareableBy($request->user()),
-                'isViewable' => $this->viewableBy($request->user()),
-                'createdAt' => $this->created_at->toDatetimeString(),
-            ]
-            : null;
+        $accessible = $request->user()->can('access', $this->resource);
+
+        return [
+            'id' => $this->id,
+            'name' => $this->original_name,
+            'size' => DiskSize::forHumans($this->size),
+            'mimeType' => $this->mime_type,
+            'type' => new Type($this->whenLoaded('type')),
+            'owner' => new User($this->whenLoaded('createdBy')),
+            'isFavorite' => (bool) $this->whenLoaded('favorite'),
+            'isDestroyable' => $request->user()->can('destroy', $this->resource),
+            'isAccessible' => $accessible,
+            'isViewable' => $accessible && $this->isImage(),
+            'createdAt' => $this->created_at->toDatetimeString(),
+        ];
+    }
+
+    private function isImage(): bool
+    {
+        $mimeType = Str::of($this->mime_type);
+
+        return $mimeType->startsWith('image')
+            || $mimeType->is('application/pdf');
     }
 }

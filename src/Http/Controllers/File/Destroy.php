@@ -4,6 +4,7 @@ namespace LaravelEnso\Files\Http\Controllers\File;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use LaravelEnso\Files\Models\File;
 
 class Destroy extends Controller
@@ -14,6 +15,6 @@ class Destroy extends Controller
     {
         $this->authorize('destroy', $file);
 
-        $file->attachable->delete();
+        DB::transaction(fn () => $file->delete(true));
     }
 }

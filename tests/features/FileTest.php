@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use LaravelEnso\Files\Contracts\Attachable;
 use LaravelEnso\Files\Exceptions\File;
-use LaravelEnso\Files\Traits\HasFile;
 use LaravelEnso\Users\Models\User;
 use Tests\TestCase;
 
@@ -44,7 +43,7 @@ class FileTest extends TestCase
 
         $this->assertNotNull($this->model->file);
 
-        Storage::assertExists($this->model->file->path);
+        Storage::assertExists($this->model->file->path());
     }
 
     /** @test */
@@ -52,12 +51,16 @@ class FileTest extends TestCase
     {
         $folder = Config::get('enso.files.testingFolder');
         $filename = 'test.txt';
-        Storage::put("{$folder}/$filename", 'test');
-        $this->model->file->attach("{$folder}/$filename", $filename);
+
+        Storage::put("{$folder}/{$filename}", 'test');
+
+        $file = File::attach($this->model, $filename, $filename);
+
+        $this->model->file()->associate($file)->save();
 
         $this->assertNotNull($this->model->file);
 
-        Storage::assertExists($this->model->file->path);
+        Storage::assertExists($this->model->file->path());
     }
 
     /** @test */
@@ -128,8 +131,6 @@ class FileTest extends TestCase
 
 class AttachableModel extends Model implements Attachable
 {
-    use HasFile;
-
     protected $mimeTypes = ['image/png'];
     protected $extensions = ['png'];
 }

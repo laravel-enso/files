@@ -9,12 +9,15 @@ class CreateFilesTable extends Migration
     public function up()
     {
         Schema::create('files', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
 
-            $table->morphs('attachable');
+            $table->unsignedBigInteger('type_id')->nullable();
+            $table->foreign('type_id')->references('id')->on('file_types');
+
+            $table->nullableMorphs('attachable');
 
             $table->string('original_name')->index();
-            $table->string('path');
+            $table->string('saved_name');
             $table->integer('size');
             $table->string('mime_type')->nullable();
 

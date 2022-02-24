@@ -7,17 +7,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\File as IlluminateFile;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use LaravelEnso\Files\Exceptions\File as Exception;
-use LaravelEnso\Files\Facades\FileBrowser;
-use LaravelEnso\Files\Services\FileValidator;
+use LaravelEnso\Files\Contracts\Attachable;
 use LaravelEnso\Files\Services\ImageProcessor;
-use LaravelEnso\Files\Traits\FilePolicies;
+use LaravelEnso\Files\Services\Upload;
 use LaravelEnso\ImageTransformer\Services\ImageTransformer;
 use LaravelEnso\TrackWho\Traits\CreatedBy;
 use LaravelEnso\Users\Models\User;
@@ -26,7 +24,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class File extends Model
 {
-    use CreatedBy, FilePolicies;
+    use CreatedBy;
 
     protected $guarded = ['id'];
 
@@ -35,31 +33,49 @@ class File extends Model
         return $this->morphTo();
     }
 
-    public function temporaryLink(): string
+    public function type()
     {
-        $limit = Config::get('enso.files.linkExpiration');
+        return $this->belongsTo(Type::class);
+    }
+
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function favorite()
+    {
+        return $this->hasOne(Favorite::class)
+            ->whereUserId(Auth::id());
+    }
+
+    public function temporaryLink(?int $minutes = null): string
+    {
+        $limit = $minutes ?? Config::get('enso.files.linkExpiration');
         $expires = Carbon::now()->addSeconds($limit);
         $args = ['core.files.share', $expires, ['file' => $this->id]];
 
         return URL::temporarySignedRoute(...$args);
     }
 
-    public function type(): string
-    {
-        return FileBrowser::folder($this->attachable_type);
-    }
-
     public function scopeBrowsable(Builder $query): Builder
     {
-        return $query->whereIn('attachable_type', FileBrowser::models());
+        return $query->whereHas('type', fn ($type) => $type->browsable());
+    }
+
+    public function scopeWithData(Builder $query): Builder
+    {
+        $attrs = ['type', 'createdBy.person', 'createdBy.avatar', 'favorite'];
+
+        return $query->with($attrs);
     }
 
     public function scopeFor(Builder $query, User $user): Builder
     {
-        $inferiorRole = ! $user->isAdmin() && ! $user->isSupervisor();
+        $super = $user->isAdmin() || $user->isSupervisor();
 
-        return $query->when($inferiorRole, fn ($query) => $query
-            ->whereCreatedBy($user->id));
+        return $query->browsable()->withData()
+            ->when(! $super, fn ($query) => $query->whereCreatedBy($user->id));
     }
 
     public function scopeBetween(Builder $query, array $interval): Builder
@@ -77,73 +93,62 @@ class File extends Model
             ->where('original_name', 'LIKE', '%'.$search.'%'));
     }
 
-    public function attach(string $path, string $filename): self
+    public function name(): string
     {
-        $file = new IlluminateFile(Storage::path($path));
+        return Str::ascii($this->original_name);
+    }
 
-        $this->fill([
+    public function folder(): string
+    {
+        return $this->type->folder;
+    }
+
+    public function path(): string
+    {
+        return "{$this->folder()}/{$this->saved_name}";
+    }
+
+    public static function attach(Attachable $attachable, string $savedName, string $filename, ?int $createdBy): self
+    {
+        $type = Type::for($attachable::class);
+        $file = new IlluminateFile(Storage::path("{$type->folder}/{$savedName}"));
+
+        return self::create([
+            'type_id' => $type->id,
             'original_name' => $filename,
-            'path' => $path,
+            'saved_name' => $savedName,
             'size' => $file->getSize(),
             'mime_type' => $file->getMimeType(),
-        ])->save();
-
-        return $this;
+            'created_by' => $createdBy,
+        ]);
     }
 
-    public function upload(UploadedFile $file): self
+    public static function upload(Attachable $attachable, UploadedFile $file): self
     {
-        if (! $file->isValid()) {
-            throw Exception::uploadError($file->getClientOriginalName());
-        }
-
-        $this->validate($file);
-
-        if ($this->isImage($file)) {
-            $this->processImage($file);
-        }
-
-        DB::transaction(function () use ($file) {
-            $folder = $this->attachable->folder();
-
-            $this->fill([
-                'original_name' => $file->getClientOriginalName(),
-                'path' => "{$folder}/{$file->hashName()}",
-                'size' => $file->getSize(),
-                'mime_type' => $file->getMimeType(),
-            ])->save();
-
-            $file->store($folder);
-        });
-
-        return $this;
+        return (new Upload($attachable, $file))->handle();
     }
 
-    public function delete()
+    public function delete(bool $parent = false)
     {
-        Storage::delete($this->path);
+        if ($parent) {
+            $this->type->model::whereFileId($this->id)->first()->delete();
+        }
+
+        $this->favorites->each->delete();
+
+        Storage::delete($this->path());
 
         return parent::delete();
     }
 
     public function download(): StreamedResponse
     {
-        $name = Str::ascii($this->original_name);
-
-        return Storage::download($this->path, $name);
+        return Storage::download($this->path(), $this->name());
     }
 
     public function inline(): StreamedResponse
     {
-        return Storage::response($this->path);
-    }
-
-    public function validate(BaseFile $file): void
-    {
-        $extensions = $this->attachable->extensions();
-        $mimeTypes = $this->attachable->mimeTypes();
-
-        (new FileValidator($file, $extensions, $mimeTypes))->handle();
+        return Storage::response($this->path());
     }
 
     public function processImage(BaseFile $file): void

@@ -19,7 +19,7 @@
         }
     ],
     "require": {
-        "laravel-enso/core": "^7.0",
+        "laravel-enso/core": "^8.0",
         "laravel-enso/helpers": "^2.0",
         "laravel-enso/image-transformer": "^2.0",
         "laravel-enso/migrator": "^2.0",
@@ -27,7 +27,9 @@
     },
     "autoload": {
         "psr-4": {
-            "LaravelEnso\\Files\\": "src/"
+            "LaravelEnso\\Files\\": "src/",
+            "LaravelEnso\\Files\\Database\\Factories\\": "database/factories/",
+            "LaravelEnso\\Files\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "extra": {
@@ -35,12 +37,9 @@
             "providers": [
                 "LaravelEnso\\Files\\AppServiceProvider",
                 "LaravelEnso\\Files\\AuthServiceProvider",
-                "LaravelEnso\\Files\\FileServiceProvider",
+                "LaravelEnso\\Files\\EnumServiceProvider",
                 "LaravelEnso\\Files\\UploadServiceProvider"
-            ],
-            "aliases": {
-                "FileBrowser": "LaravelEnso\\Files\\Facades\\FileBrowser"
-            }
+            ]
         }
     }
 }

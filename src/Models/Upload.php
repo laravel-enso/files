@@ -3,23 +3,33 @@
 namespace LaravelEnso\Files\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use LaravelEnso\Files\Contracts\Attachable;
-use LaravelEnso\Files\Contracts\AuthorizesFileAccess;
-use LaravelEnso\Files\Services\UploadManager;
-use LaravelEnso\Files\Traits\FilePolicies;
-use LaravelEnso\Files\Traits\HasFile;
-use LaravelEnso\Helpers\Traits\CascadesMorphMap;
+use LaravelEnso\Files\Http\Resources\File as Resource;
 
-class Upload extends Model implements Attachable, AuthorizesFileAccess
+class Upload extends Model implements Attachable
 {
-    use CascadesMorphMap, HasFile, FilePolicies;
-
-    protected $optimizeImages = true;
-
-    protected $folder = 'files';
+    public function file(): Relation
+    {
+        return $this->belongsTo(File::class);
+    }
 
     public static function store(array $files)
     {
-        return (new UploadManager($files))->handle();
+        return DB::transaction(fn () => Collection::wrap($files)
+            ->map(fn ($file) => self::upload($file)))
+            ->values();
+    }
+
+    private static function upload($file): Resource
+    {
+        $upload = self::create();
+        $file = File::upload($upload, $file);
+        $upload->file()->associate($file)->save();
+        $file->load('createdBy.person', 'createdBy.avatar', 'type');
+
+        return new Resource($file);
     }
 }

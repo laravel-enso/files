@@ -1,0 +1,66 @@
+{
+    "routePrefix": "administration.fileTypes",
+    "crtNo": true,
+    "buttons": [
+        "excel",
+        "create",
+        "edit",
+        "destroy"
+    ],
+    "columns": [
+        {
+            "label": "Name",
+            "name": "name",
+            "data": "file_types.name",
+            "meta": [
+                "searchable",
+                "sortable"
+            ]
+        },
+        {
+            "label": "Icon",
+            "name": "icon",
+            "data": "file_types.icon",
+            "meta": [
+                "icon",
+                "sortable"
+            ]
+        },
+        {
+            "label": "Model",
+            "name": "model",
+            "data": "file_types.model",
+            "meta": [
+                "searchable",
+                "sortable"
+            ]
+        },
+        {
+            "label": "Folder",
+            "name": "folder",
+            "data": "file_types.folder",
+            "meta": [
+                "searchable",
+                "sortable"
+            ]
+        },
+        {
+            "label": "Is Browsable",
+            "name": "is_browsable",
+            "data": "file_types.is_browsable",
+            "meta": [
+                "boolean",
+                "sortable"
+            ]
+        },
+        {
+            "label": "Is System",
+            "name": "is_system",
+            "data": "file_types.is_system",
+            "meta": [
+                "boolean",
+                "sortable"
+            ]
+        }
+    ]
+}

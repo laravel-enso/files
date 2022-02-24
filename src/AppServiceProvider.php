@@ -3,20 +3,18 @@
 namespace LaravelEnso\Files;
 
 use Illuminate\Support\ServiceProvider;
-use LaravelEnso\Files\Models\Upload;
-use LaravelEnso\Files\Services\FileBrowser;
+use LaravelEnso\DynamicMethods\Services\Methods;
+use LaravelEnso\Files\Dynamics\Relations\FavoriteFiles;
+use LaravelEnso\Users\Models\User;
 
 class AppServiceProvider extends ServiceProvider
 {
-    public $singletons = [
-        'file-browser' => FileBrowser::class,
-    ];
-
     public function boot()
     {
         $this->load()
-            ->publish()
-            ->mapMorphs();
+            ->publish();
+
+        Methods::bind(User::class, [FavoriteFiles::class]);
     }
 
     private function load()
@@ -37,16 +35,9 @@ class AppServiceProvider extends ServiceProvider
         ], ['files-config', 'enso-config']);
 
         $this->publishes([
-            __DIR__.'/../stubs/FileServiceProvider.stub' => app_path(
-                'Providers/FileServiceProvider.php'
-            ),
-        ], 'file-provider');
+            __DIR__.'/../database/factories' => database_path('factories'),
+        ], ['files-factory', 'enso-factories']);
 
         return $this;
-    }
-
-    private function mapMorphs()
-    {
-        Upload::morphMap();
     }
 }

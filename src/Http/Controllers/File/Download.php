@@ -12,7 +12,7 @@ class Download extends Controller
 
     public function __invoke(File $file)
     {
-        $this->authorize('view', $file);
+        $this->authorize('access', $file);
 
         return $file->download();
     }
