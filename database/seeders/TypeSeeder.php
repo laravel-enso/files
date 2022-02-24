@@ -20,21 +20,20 @@ class TypeSeeder extends Seeder
 {
     public function run()
     {
-        $this
-            // ->avatars()
-            //     ->recent()
-            //     ->favorites()
-            //     ->sharedWithYou()
-            //     ->sharedByYou()
-            //     ->uploads()
-            //     ->exports()
-            // ->imports()
-            // ->rejectedImports()
-            // ->documents()
-            // ->productPictures()
-            // ->brands()
-            // ->carouselSlides()
-            // ->howToPosters()
+        $this->avatars()
+            ->recent()
+            ->favorites()
+            ->sharedWithYou()
+            ->sharedByYou()
+            ->uploads()
+            ->exports()
+            ->imports()
+            ->rejectedImports()
+            ->documents()
+            ->productPictures()
+            ->brands()
+            ->carouselSlides()
+            ->howToPosters()
             ->howToVideos();
     }
 
