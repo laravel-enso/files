@@ -12,7 +12,7 @@ use LaravelEnso\Upgrade\Contracts\MigratesData;
 
 class MoveFiles implements MigratesData
 {
-    private const ToMove = ['files', 'imports', 'pictures', 'carousel', 'wiki_logos', 'howToVideos'];
+    private const ToMove = ['files', 'imports', 'pictures', 'carousel', 'wiki_logos', 'howToVideos', 'portalIcons'];
 
     public function isMigrated(): bool
     {
