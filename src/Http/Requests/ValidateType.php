@@ -5,7 +5,6 @@ namespace LaravelEnso\Files\Http\Requests;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Unique;
 use ReflectionClass;
 
 class ValidateType extends FormRequest

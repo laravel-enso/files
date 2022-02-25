@@ -13,7 +13,7 @@ class Validate
     private ?array $mimeTypes;
 
     public function __construct(
-        protected File | UploadedFile $file
+        protected File|UploadedFile $file
     ) {
         $this->extensions = null;
         $this->mimeTypes = null;
