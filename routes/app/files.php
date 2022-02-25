@@ -8,9 +8,9 @@ use LaravelEnso\Files\Http\Controllers\File\Favorite;
 use LaravelEnso\Files\Http\Controllers\File\Favorites;
 use LaravelEnso\Files\Http\Controllers\File\Index;
 use LaravelEnso\Files\Http\Controllers\File\Link;
+use LaravelEnso\Files\Http\Controllers\File\MakePrivate;
+use LaravelEnso\Files\Http\Controllers\File\MakePublic;
 use LaravelEnso\Files\Http\Controllers\File\Recent;
-use LaravelEnso\Files\Http\Controllers\File\SharedByYou;
-use LaravelEnso\Files\Http\Controllers\File\SharedWithYou;
 use LaravelEnso\Files\Http\Controllers\File\Show;
 
 Route::prefix('files')
@@ -24,7 +24,7 @@ Route::prefix('files')
         Route::get('browse/{type}', Browse::class)->name('browse');
         Route::get('recent', Recent::class)->name('recent');
         Route::get('favorites', Favorites::class)->name('favorites');
-        Route::get('sharedByYou', SharedByYou::class)->name('sharedByYou');
-        Route::get('sharedWithYou', SharedWithYou::class)->name('sharedWithYou');
+        Route::patch('makePublic/{file}', MakePublic::class)->name('makePublic');
+        Route::patch('makePrivate/{file}', MakePrivate::class)->name('makePrivate');
         Route::patch('favorite/{file}', Favorite::class)->name('favorite');
     });

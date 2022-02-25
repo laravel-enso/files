@@ -5,6 +5,8 @@ namespace LaravelEnso\Files\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use LaravelEnso\Files\Contracts\Attachable;
+use LaravelEnso\Files\Contracts\PublicFile;
 use LaravelEnso\Rememberable\Traits\Rememberable;
 use LaravelEnso\Tables\Traits\TableCache;
 
@@ -33,6 +35,16 @@ class Type extends Model
     public function scopeOrdered(Builder $query): Builder
     {
         return $query->orderByDesc('is_system')->orderBy('id');
+    }
+
+    public function model(): Attachable
+    {
+        return new $this->model;
+    }
+
+    public function isPublic(): bool
+    {
+        return $this->model() instanceof PublicFile;
     }
 
     public static function for(string $model): self

@@ -69,13 +69,15 @@ class Upload
     private function upload(): File
     {
         $folder = $this->folder();
+        $type = Type::for($this->attachable::class);
 
         $model = File::create([
-            'type_id' => Type::for($this->attachable::class)->id,
+            'type_id' => $type->id,
             'original_name' => $this->file->getClientOriginalName(),
             'saved_name' => $this->file->hashName(),
             'size' => $this->file->getSize(),
             'mime_type' => $this->file->getMimeType(),
+            'is_public' => $type->isPublic(),
         ]);
 
         $this->file->store($folder);

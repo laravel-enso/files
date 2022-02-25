@@ -11,7 +11,7 @@ class CreateFilesTable extends Migration
         Schema::create('files', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('type_id')->nullable();
+            $table->unsignedBigInteger('type_id');
             $table->foreign('type_id')->references('id')->on('file_types');
 
             $table->nullableMorphs('attachable');
@@ -20,6 +20,8 @@ class CreateFilesTable extends Migration
             $table->string('saved_name');
             $table->integer('size');
             $table->string('mime_type')->nullable();
+
+            $table->boolean('is_public');
 
             $table->integer('created_by')->unsigned()->nullable();
             $table->foreign('created_by')->references('id')->on('users');

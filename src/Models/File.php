@@ -28,6 +28,8 @@ class File extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = ['is_public' => 'boolean'];
+
     public function attachable()
     {
         return $this->morphTo();
@@ -108,7 +110,7 @@ class File extends Model
         return "{$this->folder()}/{$this->saved_name}";
     }
 
-    public static function attach(Attachable $attachable, string $savedName, string $filename, ?int $createdBy): self
+    public static function attach(Attachable $attachable, string $savedName, string $filename): self
     {
         $type = Type::for($attachable::class);
         $file = new IlluminateFile(Storage::path("{$type->folder}/{$savedName}"));
@@ -119,7 +121,7 @@ class File extends Model
             'saved_name' => $savedName,
             'size' => $file->getSize(),
             'mime_type' => $file->getMimeType(),
-            'created_by' => $createdBy,
+            'is_public' => $type->isPublic(),
         ]);
     }
 

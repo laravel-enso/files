@@ -3,7 +3,6 @@
 namespace LaravelEnso\Files\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
-use LaravelEnso\Files\Contracts\PublicFile;
 use LaravelEnso\Files\Models\File as Model;
 use LaravelEnso\Users\Models\User;
 
@@ -20,11 +19,12 @@ class File
 
     public function access(User $user, Model $file)
     {
-        return $this->ownsFile($user, $file)
-            || new $file->type->model() instanceof PublicFile;
+        return $file->is_public
+            || $this->ownsFile($user, $file)
+            || new $file->type->isPublic();
     }
 
-    public function destroy(User $user, Model $file)
+    public function manage(User $user, Model $file)
     {
         return $this->ownsFile($user, $file);
     }

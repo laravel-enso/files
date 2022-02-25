@@ -4,10 +4,10 @@ namespace LaravelEnso\Files\Http\Controllers\File;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
+use LaravelEnso\Files\Http\Resources\File as Resource;
 use LaravelEnso\Files\Models\File;
 
-class Destroy extends Controller
+class MakePublic extends Controller
 {
     use AuthorizesRequests;
 
@@ -15,6 +15,8 @@ class Destroy extends Controller
     {
         $this->authorize('manage', $file);
 
-        DB::transaction(fn () => $file->delete(true));
+        $file->update(['is_public' => true]);
+
+        return new Resource($file);
     }
 }

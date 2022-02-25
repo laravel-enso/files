@@ -14,7 +14,7 @@ class Permissions implements MigratesStructure
         ['name' => 'core.files.browse', 'description' => 'Browse file type', 'is_default' => true],
         ['name' => 'core.files.recent', 'description' => 'Browse recent files', 'is_default' => true],
         ['name' => 'core.files.favorites', 'description' => 'Browse favorites files', 'is_default' => true],
-        ['name' => 'core.files.sharedWithYou', 'description' => 'Browse files shared with user', 'is_default' => true],
-        ['name' => 'core.files.sharedByYou', 'description' => 'Browse files shared by user', 'is_default' => true],
+        ['name' => 'core.files.makePublic', 'description' => 'Make file public', 'is_default' => true],
+        ['name' => 'core.files.makePrivate', 'description' => 'Make file private', 'is_default' => true],
     ];
 }

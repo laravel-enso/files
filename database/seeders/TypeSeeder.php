@@ -20,11 +20,10 @@ class TypeSeeder extends Seeder
 {
     public function run()
     {
+        return;
         $this->avatars()
             ->recent()
             ->favorites()
-            ->sharedWithYou()
-            ->sharedByYou()
             ->uploads()
             ->exports()
             ->imports()
@@ -70,38 +69,6 @@ class TypeSeeder extends Seeder
             'endpoint' => 'favorites',
             'description' => 'User Favorites',
             'is_browsable' => true,
-            'is_system' => true,
-        ]);
-
-        return $this;
-    }
-
-    private function sharedWithYou(): self
-    {
-        Type::factory()->create([
-            'name' => 'Shared with You',
-            'folder' => null,
-            'model' => null,
-            'icon' => 'share',
-            'endpoint' => 'sharedWithYou',
-            'description' => 'Shared with User',
-            'is_browsable' => false,
-            'is_system' => true,
-        ]);
-
-        return $this;
-    }
-
-    private function sharedByYou(): self
-    {
-        Type::factory()->create([
-            'name' => 'Shared by You',
-            'folder' => null,
-            'model' => null,
-            'icon' => 'share-alt',
-            'endpoint' => 'sharedByYou',
-            'description' => 'Shared by User',
-            'is_browsable' => false,
             'is_system' => true,
         ]);
 
@@ -183,7 +150,10 @@ class TypeSeeder extends Seeder
     private function brands(): self
     {
         if (class_exists(Brand::class)) {
-            Type::factory()->model(Brand::class)->create();
+            Type::factory()->model(Brand::class)->create([
+                'is_browsable' => true,
+                'icon' => 'copyright',
+            ]);
         }
 
         return $this;
