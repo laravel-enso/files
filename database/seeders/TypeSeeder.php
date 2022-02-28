@@ -20,7 +20,6 @@ class TypeSeeder extends Seeder
 {
     public function run()
     {
-        return;
         $this->avatars()
             ->recent()
             ->favorites()

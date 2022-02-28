@@ -9,14 +9,18 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use LaravelEnso\Files\Models\File;
 use LaravelEnso\Upgrade\Contracts\MigratesData;
+use LaravelEnso\Upgrade\Helpers\Table;
 
 class MoveFiles implements MigratesData
 {
-    private const ToMove = ['files', 'imports', 'pictures', 'carousel', 'wiki_logos', 'howToVideos', 'portalIcons'];
+    private const ToMove = [
+        'files', 'imports', 'pictures', 'carousel', 'wiki_logos',
+        'howToVideos', 'portalIcons',
+    ];
 
     public function isMigrated(): bool
     {
-        return $this->notMoved()->doesntExist();
+        return Table::hasColumn('files', 'saved_name') && $this->notMoved()->doesntExist();
     }
 
     public function migrateData(): void

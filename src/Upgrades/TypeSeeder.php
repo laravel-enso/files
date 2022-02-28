@@ -4,6 +4,7 @@ namespace LaravelEnso\Files\Upgrades;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use LaravelEnso\Documents\Models\Document;
 use LaravelEnso\Files\Database\Seeders\TypeSeeder as Seeder;
@@ -16,7 +17,7 @@ class TypeSeeder implements MigratesData, MigratesPostDataMigration
 {
     public function isMigrated(): bool
     {
-        return Type::query()->exists();
+        return Schema::hasTable('file_types') && Type::query()->exists();
     }
 
     public function migrateData(): void

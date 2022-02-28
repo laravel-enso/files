@@ -62,7 +62,7 @@ class Validate
         return $this;
     }
 
-    private function mimeType()
+    private function mimeType(): self
     {
         $valid = new Collection($this->mimeTypes);
         $mimeType = $this->file->getMimeType();

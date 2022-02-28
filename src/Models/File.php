@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\File as IlluminateFile;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
@@ -100,20 +101,15 @@ class File extends Model
         return Str::ascii($this->original_name);
     }
 
-    public function folder(): string
-    {
-        return $this->type->folder;
-    }
-
     public function path(): string
     {
-        return "{$this->folder()}/{$this->saved_name}";
+        return "{$this->type->folder()}/{$this->saved_name}";
     }
 
     public static function attach(Attachable $attachable, string $savedName, string $filename): self
     {
         $type = Type::for($attachable::class);
-        $file = new IlluminateFile(Storage::path("{$type->folder}/{$savedName}"));
+        $file = new IlluminateFile(Storage::path($type->path($savedName)));
 
         return self::create([
             'type_id' => $type->id,
