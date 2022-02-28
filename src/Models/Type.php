@@ -60,7 +60,7 @@ class Type extends Model
     {
         $folder = App::runningUnitTests()
             ? Config::get('enso.files.testingFolder')
-            :  $this->folder;
+            : $this->folder;
 
         if (! Storage::has($folder)) {
             Storage::makeDirectory($folder);

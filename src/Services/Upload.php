@@ -53,7 +53,7 @@ class Upload
 
     private function process(): self
     {
-        if (!$this->isSupportedImage()) {
+        if (! $this->isSupportedImage()) {
             return $this;
         }
 
