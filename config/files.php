@@ -23,7 +23,7 @@ return [
         'webshopCarouselSlide' => 'carouselSlide',
     ],
     'nonStandardFolders' => [
-        'files', 'imports', 'carousel', 'howToVideos', 'webshopCarouselSlide'
+        'files', 'imports', 'carousel', 'howToVideos', 'webshopCarouselSlide',
     ],
     'upgrade' => [
         'avatar' => Avatar::class,

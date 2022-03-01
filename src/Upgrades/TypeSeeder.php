@@ -19,10 +19,9 @@ class TypeSeeder implements MigratesData
     {
         $seeder = Seeder::class;
 
-        Artisan::call("db:seed", [
+        Artisan::call('db:seed', [
             '--class' => $seeder,
             '--force' => true,
         ]);
     }
-
 }

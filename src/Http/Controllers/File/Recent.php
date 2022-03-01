@@ -5,7 +5,6 @@ namespace LaravelEnso\Files\Http\Controllers\File;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Config;
 use LaravelEnso\Files\Http\Resources\File as Resource;
 use LaravelEnso\Files\Models\File;
 

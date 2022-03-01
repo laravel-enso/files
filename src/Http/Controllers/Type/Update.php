@@ -3,7 +3,6 @@
 namespace LaravelEnso\Files\Http\Controllers\Type;
 
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use LaravelEnso\Files\Http\Requests\ValidateType;
 use LaravelEnso\Files\Models\Type;
