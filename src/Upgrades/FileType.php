@@ -5,9 +5,10 @@ namespace LaravelEnso\Files\Upgrades;
 use Illuminate\Support\Facades\Schema;
 use LaravelEnso\Upgrade\Contracts\MigratesTable;
 use LaravelEnso\Upgrade\Contracts\Prioritization;
+use LaravelEnso\Upgrade\Contracts\ShouldRunManually;
 use LaravelEnso\Upgrade\Helpers\Table;
 
-class FileType implements MigratesTable, Prioritization
+class FileType implements MigratesTable, Prioritization, ShouldRunManually
 {
     public function priority(): int
     {

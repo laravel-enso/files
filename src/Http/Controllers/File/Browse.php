@@ -14,7 +14,11 @@ class Browse extends Controller
 
     public function __invoke(Request $request, Type $type)
     {
-        $files = $type->files()->for($request->user())->get();
+        $files = $type->files()
+            ->for($request->user())
+            ->between(json_decode($request->get('interval'), true))
+            ->filter($request->get('query'))
+            ->get();
 
         return File::collection($files);
     }

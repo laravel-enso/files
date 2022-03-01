@@ -12,7 +12,7 @@ class RenameFilePath implements MigratesTable, Prioritization, ShouldRunManually
 {
     public function priority(): int
     {
-        return 107;
+        return 99;
     }
 
     public function isMigrated(): bool
