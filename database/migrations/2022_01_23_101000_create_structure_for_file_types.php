@@ -2,7 +2,7 @@
 
 use LaravelEnso\Migrator\Database\Migration;
 
-class CreateStructureForFileTypes extends Migration
+return new class extends Migration
 {
     protected array $permissions = [
         ['name' => 'administration.fileTypes.tableData', 'description' => 'Get table data for file types', 'is_default' => false],
@@ -21,4 +21,4 @@ class CreateStructureForFileTypes extends Migration
     ];
 
     protected ?string $parentMenu = 'Administration';
-}
+};

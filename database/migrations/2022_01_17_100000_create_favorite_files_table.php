@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFavoriteFilesTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -27,4 +27,4 @@ class CreateFavoriteFilesTable extends Migration
     {
         Schema::dropIfExists('favorite_files');
     }
-}
+};

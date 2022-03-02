@@ -2,7 +2,7 @@
 
 use LaravelEnso\Migrator\Database\Migration;
 
-class CreateStructureForFiles extends Migration
+return new class extends Migration
 {
     protected array $permissions = [
         ['name' => 'core.files.index', 'description' => 'List files', 'is_default' => true],
@@ -21,4 +21,4 @@ class CreateStructureForFiles extends Migration
     protected array $menu = [
         'name' => 'Files', 'icon' => 'folder-open', 'route' => 'core.files.index', 'order_index' => 255, 'has_children' => false,
     ];
-}
+};
