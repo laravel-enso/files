@@ -50,7 +50,7 @@ class DropMorphModels implements MigratesTable, Prioritization, ShouldRunManuall
         Schema::table($table, function (Blueprint $table) use ($after) {
             $table->unsignedBigInteger('file_id')->nullable()->after($after);
             $table->foreign('file_id')->references('id')->on('files')
-                ->onUpdate('restrict')->onDelete('cascade');
+                ->onUpdate('restrict')->onDelete('restrict');
         });
 
         return $this;
