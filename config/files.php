@@ -17,6 +17,7 @@ return [
     'storageLimit' => 500000,
     'paginate' => (int) env('FILES_PAGINATION', 50),
     'testingFolder' => 'testing',
+    'onDeleteSetNull' => ['avatars', 'webshop_brands'],
     'renameFolders' => [
         'dataImport' => 'import',
         'dataExport' => 'export',

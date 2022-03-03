@@ -46,11 +46,14 @@ class DropMorphModels implements MigratesTable, Prioritization, ShouldRunManuall
     {
         $table = $this->table($model);
         $after = $this->afterColumn($table);
+        $onDelete = in_array($table, Config::get('enso.files.onDeleteSetNull'))
+            ? 'SET NULL'
+            : 'restrict';
 
-        Schema::table($table, function (Blueprint $table) use ($after) {
+        Schema::table($table, function (Blueprint $table) use ($after, $onDelete) {
             $table->unsignedBigInteger('file_id')->nullable()->after($after);
             $table->foreign('file_id')->references('id')->on('files')
-                ->onUpdate('restrict')->onDelete('restrict');
+                ->onUpdate('restrict')->onDelete($onDelete);
         });
 
         return $this;
