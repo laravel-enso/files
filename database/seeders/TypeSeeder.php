@@ -7,7 +7,7 @@ use LaravelEnso\Avatars\Models\Avatar;
 use LaravelEnso\DataExport\Models\Export;
 use LaravelEnso\DataImport\Models\Import;
 use LaravelEnso\DataImport\Models\RejectedImport;
-use LaravelEnso\Documents\Http\Resources\Document;
+use LaravelEnso\Documents\Models\Document;
 use LaravelEnso\Files\Models\Type;
 use LaravelEnso\Files\Models\Upload;
 use LaravelEnso\HowTo\Models\Poster;
@@ -20,9 +20,8 @@ class TypeSeeder extends Seeder
 {
     public function run()
     {
-        return;
         $this->avatars()
-            ->recent()
+            ->recents()
             ->favorites()
             ->uploads()
             ->exports()
@@ -38,20 +37,20 @@ class TypeSeeder extends Seeder
 
     private function avatars(): self
     {
-        Type::factory()->model(Avatar::class);
+        Type::factory()->model(Avatar::class)->create();
 
         return $this;
     }
 
-    private function recent(): self
+    private function recents(): self
     {
         Type::factory()->create([
-            'name' => 'Recent',
+            'name' => 'Recents',
             'folder' => null,
             'model' => null,
             'icon' => 'folder-plus',
             'endpoint' => 'recent',
-            'description' => 'User Favorites',
+            'description' => 'Recent files',
             'is_browsable' => true,
             'is_system' => true,
         ]);
@@ -79,7 +78,7 @@ class TypeSeeder extends Seeder
     {
         Type::factory()->model(Upload::class)->create([
             'name' => 'Uploads',
-            'icon' => 'folder-upload',
+            'icon' => 'file-upload',
             'is_browsable' => true,
             'is_system' => false,
         ]);
@@ -140,7 +139,6 @@ class TypeSeeder extends Seeder
             Type::factory()->model(Picture::class)->create([
                 'icon' => 'image',
                 'is_browsable' => true,
-                'folder' => 'productPictures',
             ]);
         }
 

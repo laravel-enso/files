@@ -30,11 +30,6 @@ class File extends Model
 
     protected $casts = ['is_public' => 'boolean'];
 
-    public function attachable()
-    {
-        return $this->morphTo();
-    }
-
     public function type()
     {
         return $this->belongsTo(Type::class);
@@ -76,17 +71,25 @@ class File extends Model
     {
         $super = $user->isAdmin() || $user->isSupervisor();
 
-        return $query->browsable()->withData()
-            ->when(! $super, fn ($query) => $query->whereCreatedBy($user->id));
+        return $query->browsable()
+            ->withData()
+            ->when(! $super, fn ($query) => $query->whereCreatedBy($user->id))
+            ->latest('id')
+            ->paginated();
+    }
+
+    public function scopePaginated(Builder $query): Builder
+    {
+        return $query->limit(Config::get('enso.files.paginate'));
     }
 
     public function scopeBetween(Builder $query, array $interval): Builder
     {
         return $query
             ->when($interval['min'], fn ($query) => $query
-                ->where('created_at', '>=', Carbon::parse($interval['min'])))
+                ->where('files.created_at', '>=', Carbon::parse($interval['min'])))
             ->when($interval['max'], fn ($query) => $query
-                ->where('created_at', '<=', Carbon::parse($interval['max'])));
+                ->where('files.created_at', '<=', Carbon::parse($interval['max'])));
     }
 
     public function scopeFilter(Builder $query, ?string $search): Builder
@@ -100,20 +103,15 @@ class File extends Model
         return Str::ascii($this->original_name);
     }
 
-    public function folder(): string
-    {
-        return $this->type->folder;
-    }
-
     public function path(): string
     {
-        return "{$this->folder()}/{$this->saved_name}";
+        return "{$this->type->folder()}/{$this->saved_name}";
     }
 
-    public static function attach(Attachable $attachable, string $savedName, string $filename): self
+    public static function attach(Attachable $attachable, string $savedName, string $filename, ?int $userId = null): self
     {
         $type = Type::for($attachable::class);
-        $file = new IlluminateFile(Storage::path("{$type->folder}/{$savedName}"));
+        $file = new IlluminateFile(Storage::path($type->path($savedName)));
 
         return self::create([
             'type_id' => $type->id,
@@ -122,6 +120,7 @@ class File extends Model
             'size' => $file->getSize(),
             'mime_type' => $file->getMimeType(),
             'is_public' => $type->isPublic(),
+            'created_by' => $userId,
         ]);
     }
 

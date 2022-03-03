@@ -34,7 +34,7 @@ class TypeFactory extends Factory
 
         return $this->state(fn () => [
             'name' => $name,
-            'folder' => $name->lower(),
+            'folder' => $name->camel(),
             'model' => $model,
             'description' => "Enso {$name}",
         ]);

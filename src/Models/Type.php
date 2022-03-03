@@ -5,6 +5,9 @@ namespace LaravelEnso\Files\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Storage;
 use LaravelEnso\Files\Contracts\Attachable;
 use LaravelEnso\Files\Contracts\PublicFile;
 use LaravelEnso\Rememberable\Traits\Rememberable;
@@ -51,5 +54,23 @@ class Type extends Model
     {
         return self::cacheGetBy('model', $model)
             ?? self::factory()->model($model)->create();
+    }
+
+    public function folder(): string
+    {
+        $folder = App::runningUnitTests()
+            ? Config::get('enso.files.testingFolder')
+            : $this->folder;
+
+        if (! Storage::has($folder)) {
+            Storage::makeDirectory($folder);
+        }
+
+        return $folder;
+    }
+
+    public function path(string $filename): string
+    {
+        return "{$this->folder()}/{$filename}";
     }
 }

@@ -2,6 +2,7 @@
 
 namespace LaravelEnso\Files\Upgrades;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
@@ -29,6 +30,8 @@ class DropMorphModels implements MigratesTable, Prioritization, ShouldRunManuall
 
     public function migrateTable(): void
     {
+        Model::unsetEventDispatcher();
+
         $this->needUpgrade()
             ->each(fn ($model, $morphKey) => $this->process($model, $morphKey));
     }

@@ -1,13 +1,17 @@
 <?php
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use LaravelEnso\Files\Contracts\Attachable;
-use LaravelEnso\Files\Exceptions\File;
+use LaravelEnso\Files\Contracts\Extensions;
+use LaravelEnso\Files\Contracts\MimeTypes;
+use LaravelEnso\Files\Exceptions\File as Exception;
+use LaravelEnso\Files\Models\File;
 use LaravelEnso\Users\Models\User;
 use Tests\TestCase;
 
@@ -15,8 +19,8 @@ class FileTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $model;
-    private $file;
+    private AttachableModel $model;
+    private UploadedFile $file;
 
     protected function setUp(): void
     {
@@ -39,7 +43,8 @@ class FileTest extends TestCase
     /** @test */
     public function can_upload_file()
     {
-        $this->model->file->upload($this->file);
+        $file = File::upload($this->model, $this->file);
+        $this->model->file()->associate($file)->save();
 
         $this->assertNotNull($this->model->file);
 
@@ -66,37 +71,39 @@ class FileTest extends TestCase
     /** @test */
     public function cant_upload_file_with_invalid_extension()
     {
-        $file = UploadedFile::fake()->image('picture.jpg');
+        $file = UploadedFile::fake()->image('image.jpg');
 
-        $this->expectException(File::class);
+        $this->expectException(Exception::class);
 
         $this->expectExceptionMessage(
-            File::invalidExtension($file->getClientOriginalExtension(), 'png')
+            Exception::invalidExtension($file->getClientOriginalExtension(), 'png')
                 ->getMessage()
         );
 
-        $this->model->file->upload($file);
+        File::upload($this->model, $file);
     }
 
     /** @test */
     public function cant_upload_file_with_invalid_mime_type()
     {
-        $file = UploadedFile::fake()->create('doc.png', 0, 'application/msword');
+        $file = UploadedFile::fake()->create('doc.doc', 0, 'application/msword');
 
-        $this->expectException(File::class);
+        $this->expectException(Exception::class);
 
         $this->expectExceptionMessage(
-            File::invalidMimeType($file->getMimeType(), 'image/png')
+            Exception::invalidMimeType($file->getMimeType(), 'image/png')
                 ->getMessage()
         );
 
-        $this->model->file->upload($file);
+        $this->model->extension = 'doc';
+        File::upload($this->model, $file);
     }
 
     /** @test */
     public function can_display_file_inline()
     {
-        $this->model->file->upload($this->file);
+        $file = File::upload($this->model, $this->file);
+        $this->model->file()->associate($file)->save();
 
         $response = $this->model->file->inline($this->file->hashname());
 
@@ -106,17 +113,23 @@ class FileTest extends TestCase
     /** @test */
     public function can_download_file()
     {
-        $this->model->file->upload($this->file);
+        $file = File::upload($this->model, $this->file);
+        $this->model->file()->associate($file)->save();
 
         $response = $this->model->file->download();
 
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-    private function createTestTable()
+    private function createTestTable(): self
     {
         Schema::create('attachable_models', function ($table) {
             $table->increments('id');
+
+            $table->unsignedBigInteger('file_id')->nullable();
+            $table->foreign('file_id')->references('id')->on('files')
+                ->onUpdate('restrict')->onDelete('cascade');
+
             $table->timestamps();
         });
 
@@ -129,8 +142,22 @@ class FileTest extends TestCase
     }
 }
 
-class AttachableModel extends Model implements Attachable
+class AttachableModel extends Model implements Attachable, Extensions, MimeTypes
 {
-    protected $mimeTypes = ['image/png'];
-    protected $extensions = ['png'];
+    public string $extension = 'png';
+
+    public function file(): Relation
+    {
+        return $this->belongsTo(File::class);
+    }
+
+    public function extensions(): array
+    {
+        return [$this->extension];
+    }
+
+    public function mimeTypes(): array
+    {
+        return ['image/png'];
+    }
 }

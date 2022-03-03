@@ -13,7 +13,14 @@ class Favorites extends Controller
 
     public function __invoke(Request $request)
     {
-        $files = $request->user()->favoriteFiles()->withData()->get();
+        $files = $request->user()
+            ->favoriteFiles()
+            ->withData()
+            ->between(json_decode($request->get('interval'), true))
+            ->filter($request->get('query'))
+            ->paginated()
+            ->latest('id')
+            ->get();
 
         return File::collection($files);
     }

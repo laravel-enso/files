@@ -6,9 +6,10 @@ use Illuminate\Support\Facades\Schema;
 use LaravelEnso\Files\Models\File;
 use LaravelEnso\Upgrade\Contracts\MigratesData;
 use LaravelEnso\Upgrade\Contracts\MigratesTable;
+use LaravelEnso\Upgrade\Contracts\ShouldRunManually;
 use LaravelEnso\Upgrade\Helpers\Table;
 
-class FileIsPublic implements MigratesTable, MigratesData
+class FileIsPublic implements MigratesTable, MigratesData, ShouldRunManually
 {
     public function isMigrated(): bool
     {

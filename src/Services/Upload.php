@@ -3,6 +3,7 @@
 namespace LaravelEnso\Files\Services;
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
@@ -13,13 +14,17 @@ use LaravelEnso\Files\Contracts\OptimizesImages;
 use LaravelEnso\Files\Contracts\ResizesImages;
 use LaravelEnso\Files\Models\File;
 use LaravelEnso\Files\Models\Type;
+use LaravelEnso\ImageTransformer\Services\ImageTransformer;
 
 class Upload
 {
+    private Type $type;
+
     public function __construct(
         private Attachable $attachable,
         private UploadedFile $file
     ) {
+        $this->type = Type::for($this->attachable::class);
     }
 
     public function handle(): File
@@ -48,6 +53,10 @@ class Upload
 
     private function process(): self
     {
+        if (! $this->isSupportedImage()) {
+            return $this;
+        }
+
         if ($this->attachable instanceof ResizesImages) {
             $processor = (new Process($this->file))
                 ->width($this->attachable->imageWidth())
@@ -69,15 +78,14 @@ class Upload
     private function upload(): File
     {
         $folder = $this->folder();
-        $type = Type::for($this->attachable::class);
 
         $model = File::create([
-            'type_id' => $type->id,
+            'type_id' => $this->type->id,
             'original_name' => $this->file->getClientOriginalName(),
             'saved_name' => $this->file->hashName(),
             'size' => $this->file->getSize(),
             'mime_type' => $this->file->getMimeType(),
-            'is_public' => $type->isPublic(),
+            'is_public' => $this->type->isPublic(),
         ]);
 
         $this->file->store($folder);
@@ -96,5 +104,11 @@ class Upload
         }
 
         return $folder;
+    }
+
+    private function isSupportedImage(): bool
+    {
+        return Collection::wrap(ImageTransformer::SupportedMimeTypes)
+            ->contains($this->file->getMimeType());
     }
 }
