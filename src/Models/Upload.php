@@ -11,6 +11,8 @@ use LaravelEnso\Files\Http\Resources\File as Resource;
 
 class Upload extends Model implements Attachable
 {
+    protected $guarded = [];
+
     public function file(): Relation
     {
         return $this->belongsTo(File::class);
