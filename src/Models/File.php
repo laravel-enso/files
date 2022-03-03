@@ -26,7 +26,7 @@ class File extends Model
 {
     use CreatedBy;
 
-    protected $guarded = ['id'];
+    protected $guarded = [];
 
     protected $casts = ['is_public' => 'boolean'];
 
