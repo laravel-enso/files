@@ -15,7 +15,8 @@ class File extends JsonResource
 
         return [
             'id' => $this->id,
-            'name' => $this->original_name,
+            'name' => $this->name(),
+            'extension' => $this->extension(),
             'size' => DiskSize::forHumans($this->size),
             'mimeType' => $this->mime_type,
             'type' => new Type($this->whenLoaded('type')),

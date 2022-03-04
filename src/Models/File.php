@@ -98,9 +98,19 @@ class File extends Model
             ->where('original_name', 'LIKE', '%'.$search.'%'));
     }
 
-    public function name(): string
+    public function asciiName(): string
     {
         return Str::ascii($this->original_name);
+    }
+
+    public function name(): string
+    {
+        return Str::beforeLast($this->asciiName(), '.');
+    }
+
+    public function extension(): string
+    {
+        return Str::afterLast($this->asciiName(), '.');
     }
 
     public function path(): string
@@ -144,7 +154,7 @@ class File extends Model
 
     public function download(): StreamedResponse
     {
-        return Storage::download($this->path(), $this->name());
+        return Storage::download($this->path(), $this->asciiName());
     }
 
     public function inline(): StreamedResponse
