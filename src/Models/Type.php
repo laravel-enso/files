@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\File as FileFacade;
 use Illuminate\Support\Facades\Storage;
 use LaravelEnso\Files\Contracts\Attachable;
 use LaravelEnso\Files\Contracts\PublicFile;
@@ -72,5 +73,18 @@ class Type extends Model
     public function path(string $filename): string
     {
         return "{$this->folder()}/{$filename}";
+    }
+
+    public function move(): void
+    {
+        $from = Storage::path($this->getOriginal('folder'));
+        $to = Storage::path($this->folder);
+
+        if (FileFacade::isDirectory($to)) {
+            FileFacade::copyDirectory($from, $to);
+            FileFacade::deleteDirectory($from);
+        } else {
+            FileFacade::moveDirectory($from, $to);
+        }
     }
 }
