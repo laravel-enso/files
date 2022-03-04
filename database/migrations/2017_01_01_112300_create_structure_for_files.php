@@ -2,7 +2,8 @@
 
 use LaravelEnso\Migrator\Database\Migration;
 
-return new class extends Migration {
+return new class extends Migration
+{
     protected array $permissions = [
         ['name' => 'core.files.index', 'description' => 'List files', 'is_default' => true],
         ['name' => 'core.files.link', 'description' => 'Get file download temporary link', 'is_default' => true],
