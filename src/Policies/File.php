@@ -21,7 +21,7 @@ class File
     {
         return $file->is_public
             || $this->ownsFile($user, $file)
-            || new $file->type->isPublic();
+            || $file->type->isPublic();
     }
 
     public function manage(User $user, Model $file)
