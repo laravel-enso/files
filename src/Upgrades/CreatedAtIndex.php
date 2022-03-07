@@ -3,11 +3,10 @@
 namespace LaravelEnso\Files\Upgrades;
 
 use Illuminate\Support\Facades\Schema;
-use LaravelEnso\Upgrade\Contracts\BeforeMigration;
 use LaravelEnso\Upgrade\Contracts\MigratesTable;
 use LaravelEnso\Upgrade\Helpers\Table;
 
-class CreatedAtIndex implements MigratesTable, BeforeMigration
+class CreatedAtIndex implements MigratesTable
 {
     public function isMigrated(): bool
     {
