@@ -5,6 +5,7 @@ use LaravelEnso\DataExport\Models\Export;
 use LaravelEnso\DataImport\Models\Import;
 use LaravelEnso\DataImport\Models\RejectedImport;
 use LaravelEnso\Documents\Models\Document;
+use LaravelEnso\Emag\Models\AWB;
 use LaravelEnso\Files\Models\Upload;
 use LaravelEnso\HowTo\Models\Poster;
 use LaravelEnso\HowTo\Models\Video;
@@ -26,6 +27,7 @@ return [
         'files', 'imports', 'carousel', 'howToVideos', 'webshopCarouselSlide',
     ],
     'upgrade' => [
+        'awb' => AWB::class,
         'avatar' => Avatar::class,
         'dataExport' => Export::class,
         'upload' => Upload::class,
