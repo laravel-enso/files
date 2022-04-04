@@ -15,7 +15,7 @@ class Destroy extends Controller
         $type->delete();
 
         return [
-            'message'  => __('The file type was successfully deleted'),
+            'message' => __('The file type was successfully deleted'),
             'redirect' => 'administration.fileTypes.index',
         ];
     }
