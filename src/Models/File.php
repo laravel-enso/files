@@ -14,11 +14,13 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use LaravelEnso\Files\Contracts\Attachable;
+use LaravelEnso\Files\Contracts\CascadesFileDeletion;
 use LaravelEnso\Files\Services\ImageProcessor;
 use LaravelEnso\Files\Services\Upload;
 use LaravelEnso\ImageTransformer\Services\ImageTransformer;
 use LaravelEnso\TrackWho\Traits\CreatedBy;
 use LaravelEnso\Users\Models\User;
+use ReflectionClass;
 use Symfony\Component\HttpFoundation\File\File as BaseFile;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -139,10 +141,13 @@ class File extends Model
         return (new Upload($attachable, $file))->handle();
     }
 
-    public function delete(bool $parent = false)
+    public function delete()
     {
-        if ($parent) {
-            $this->type->model::whereFileId($this->id)->first()->delete();
+        $cascadesDeletion = (new ReflectionClass($this->type->model))
+            ->implementsInterface(CascadesFileDeletion::class);
+
+        if ($cascadesDeletion) {
+            $this->type->model::cascadeDeletion($this);
         }
 
         $this->favorites->each->delete();

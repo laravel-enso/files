@@ -7,15 +7,21 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use LaravelEnso\Files\Contracts\Attachable;
+use LaravelEnso\Files\Contracts\CascadesFileDeletion;
 use LaravelEnso\Files\Http\Resources\File as Resource;
 
-class Upload extends Model implements Attachable
+class Upload extends Model implements Attachable, CascadesFileDeletion
 {
     protected $guarded = [];
 
     public function file(): Relation
     {
         return $this->belongsTo(File::class);
+    }
+
+    public static function cascadeDeletion(File $file): void
+    {
+        self::whereFileId($file->id)->get()->delete();
     }
 
     public static function store(array $files)
