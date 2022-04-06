@@ -13,5 +13,10 @@ class Destroy extends Controller
     public function __invoke(Type $type)
     {
         $type->delete();
+
+        return [
+            'message' => __('The file type was successfully deleted'),
+            'redirect' => 'administration.fileTypes.index',
+        ];
     }
 }
