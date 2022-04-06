@@ -6,5 +6,5 @@ use LaravelEnso\Files\Models\File;
 
 interface CascadesFileDeletion
 {
-    public static function cascadeDeletion(File $file): void;
+    public static function cascadeFileDeletion(File $file): void;
 }

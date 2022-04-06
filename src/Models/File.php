@@ -147,7 +147,7 @@ class File extends Model
             ->implementsInterface(CascadesFileDeletion::class);
 
         if ($cascadesDeletion) {
-            $this->type->model::cascadeDeletion($this);
+            $this->type->model::cascadeFileDeletion($this);
         }
 
         $this->favorites->each->delete();
