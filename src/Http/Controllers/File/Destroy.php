@@ -15,6 +15,6 @@ class Destroy extends Controller
     {
         $this->authorize('manage', $file);
 
-        DB::transaction(fn () => $file->delete());
+        DB::transaction(fn () => $file->delete(true));
     }
 }

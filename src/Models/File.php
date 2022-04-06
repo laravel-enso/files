@@ -141,9 +141,10 @@ class File extends Model
         return (new Upload($attachable, $file))->handle();
     }
 
-    public function delete()
+    public function delete(bool $cascadable = false)
     {
-        $cascadesDeletion = (new ReflectionClass($this->type->model))
+        $cascadesDeletion = $cascadable
+            && (new ReflectionClass($this->type->model))
             ->implementsInterface(CascadesFileDeletion::class);
 
         if ($cascadesDeletion) {
