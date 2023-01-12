@@ -19,8 +19,9 @@
         }
     ],
     "require": {
-        "laravel-enso/core": "^8.0",
-        "laravel-enso/helpers": "^2.0",
+        "laravel-enso/core": "^9.0",
+        "laravel-enso/helpers": "^3.0",
+        "laravel-enso/dynamic-methods": "^3.0",
         "laravel-enso/image-transformer": "^2.0",
         "laravel-enso/migrator": "^2.0",
         "laravel-enso/track-who": "^2.0"
@@ -36,8 +37,7 @@
         "laravel": {
             "providers": [
                 "LaravelEnso\\Files\\AppServiceProvider",
-                "LaravelEnso\\Files\\AuthServiceProvider",
-                "LaravelEnso\\Files\\EnumServiceProvider"
+                "LaravelEnso\\Files\\AuthServiceProvider"
             ]
         }
     }
