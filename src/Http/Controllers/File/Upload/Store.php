@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelEnso\Files\Http\Controllers\Upload;
+namespace LaravelEnso\Files\Http\Controllers\File\Upload;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

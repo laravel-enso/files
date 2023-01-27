@@ -29,4 +29,6 @@ Route::prefix('files')
         Route::patch('makePublic/{file}', MakePublic::class)->name('makePublic');
         Route::patch('makePrivate/{file}', MakePrivate::class)->name('makePrivate');
         Route::patch('favorite/{file}', Favorite::class)->name('favorite');
+
+        require __DIR__.'/files/uploads.php';
     });

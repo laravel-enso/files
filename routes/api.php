@@ -8,7 +8,6 @@ Route::middleware(['api', 'auth', 'core'])
     ->as('core.')
     ->group(function () {
         require __DIR__.'/app/files.php';
-        require __DIR__.'/app/uploads.php';
     });
 
 Route::middleware(['api', 'auth', 'core'])
