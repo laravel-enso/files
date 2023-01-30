@@ -6,7 +6,6 @@ use LaravelEnso\Files\Http\Controllers\File\Destroy;
 use LaravelEnso\Files\Http\Controllers\File\Download;
 use LaravelEnso\Files\Http\Controllers\File\Favorite;
 use LaravelEnso\Files\Http\Controllers\File\Favorites;
-use LaravelEnso\Files\Http\Controllers\File\Index;
 use LaravelEnso\Files\Http\Controllers\File\Link;
 use LaravelEnso\Files\Http\Controllers\File\MakePrivate;
 use LaravelEnso\Files\Http\Controllers\File\MakePublic;
@@ -17,7 +16,6 @@ use LaravelEnso\Files\Http\Controllers\File\Update;
 Route::prefix('files')
     ->as('files.')
     ->group(function () {
-        Route::get('', Index::class)->name('index');
         Route::get('link/{file}', Link::class)->name('link');
         Route::get('download/{file}', Download::class)->name('download');
         Route::delete('{file}', Destroy::class)->name('destroy');
