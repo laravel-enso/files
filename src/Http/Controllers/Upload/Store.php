@@ -12,7 +12,7 @@ class Store extends Controller
     public function __invoke(Request $request, Upload $upload)
     {
         $files = $upload->store($request->allFiles());
-        $files->each->load('createdBy.person', 'createdBy.avatar', 'type');
+        $files->each->loadData();
 
         return File::collection($files);
     }

@@ -100,6 +100,13 @@ class File extends Model
             ->where('original_name', 'LIKE', '%'.$search.'%'));
     }
 
+    public function loadData(): self
+    {
+        $attrs = ['type', 'createdBy.person', 'createdBy.avatar', 'favorite'];
+
+        return $this->load($attrs);
+    }
+
     public function asciiName(): string
     {
         return Str::ascii($this->original_name);
