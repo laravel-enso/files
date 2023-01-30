@@ -14,6 +14,7 @@ class Type extends JsonResource
             'id' => $this->id,
             'name' => Str::title($this->name),
             'icon' => $this->icon,
+            'folder' => $this->folder,
             'endpoint' => $this->endpoint,
             'isBrowsable' => $this->is_browsable,
             'isSystem' => $this->is_system,

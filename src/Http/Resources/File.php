@@ -20,7 +20,7 @@ class File extends JsonResource
             'mimeType' => $this->mime_type,
             'type' => new Type($this->whenLoaded('type')),
             'owner' => new User($this->whenLoaded('createdBy')),
-            'isFavorite' => (bool) $this->whenLoaded('favorite'),
+            'isFavorite' => $this->relationLoaded('favorite') ? $this->favorite : false,
             'isManageable' => $request->user()->can('manage', $this->resource),
             'isAccessible' => $accessible,
             'isPublic' => $this->is_public,
