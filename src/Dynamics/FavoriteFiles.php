@@ -22,7 +22,7 @@ class FavoriteFiles implements Relation
 
     public function closure(): Closure
     {
-        return fn ($model) => $model->hasManyThrough(
+        return fn (User $model) => $model->hasManyThrough(
             File::class,
             Favorite::class,
             'user_id',
