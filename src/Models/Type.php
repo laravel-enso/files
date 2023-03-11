@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File as FileFacade;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use LaravelEnso\Files\Contracts\Attachable;
 use LaravelEnso\Files\Contracts\PublicFile;
 use LaravelEnso\Rememberable\Traits\Rememberable;
@@ -41,6 +42,13 @@ class Type extends Model
         return $query->orderByDesc('is_system')->orderBy('id');
     }
 
+    public function icon(): string | array
+    {
+        return Str::contains($this->icon, ' ')
+            ? explode(' ', $this->icon)
+            : $this->icon;
+    }
+
     public function model(): Attachable
     {
         return new $this->model;
@@ -63,7 +71,7 @@ class Type extends Model
             ? Config::get('enso.files.testingFolder')
             : $this->folder;
 
-        if (! Storage::has($folder)) {
+        if (!Storage::has($folder)) {
             Storage::makeDirectory($folder);
         }
 

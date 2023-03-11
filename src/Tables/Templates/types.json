@@ -23,6 +23,7 @@
             "data": "file_types.icon",
             "meta": [
                 "icon",
+                "method",
                 "sortable"
             ]
         },
