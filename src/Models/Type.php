@@ -42,7 +42,7 @@ class Type extends Model
         return $query->orderByDesc('is_system')->orderBy('id');
     }
 
-    public function icon(): string | array
+    public function icon(): string|array
     {
         return Str::contains($this->icon, ' ')
             ? explode(' ', $this->icon)
@@ -71,7 +71,7 @@ class Type extends Model
             ? Config::get('enso.files.testingFolder')
             : $this->folder;
 
-        if (!Storage::has($folder)) {
+        if (! Storage::has($folder)) {
             Storage::makeDirectory($folder);
         }
 
