@@ -52,7 +52,9 @@ class Validate
     private function extension(): self
     {
         $valid = new Collection($this->extensions);
-        $extension = $this->file->extension();
+        $extension = $this->file instanceof UploadedFile
+            ? $this->file->getClientOriginalExtension()
+            : $this->file->extension();
         $shouldThrow = $valid->isNotEmpty() && $valid->doesntContain($extension);
 
         if ($shouldThrow) {
