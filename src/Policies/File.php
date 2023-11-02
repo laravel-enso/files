@@ -12,7 +12,9 @@ class File
 
     public function before(User $user)
     {
-        return $user->isSuperior();
+        if ($user->isSuperior()) {
+            return true;
+        }
     }
 
     public function access(User $user, Model $file)
