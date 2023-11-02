@@ -71,7 +71,7 @@ class File extends Model
 
     public function scopeFor(Builder $query, User $user): Builder
     {
-        $super = $user->isAdmin() || $user->isSupervisor();
+        $super = $user->isSuperior();
 
         return $query->browsable()
             ->withData()
