@@ -12,7 +12,9 @@ class Upload
 
     public function before(User $user)
     {
-        return $user->isSuperior();
+        if ($user->isSuperior()) {
+            return true;
+        }
     }
 
     public function view(User $user, Model $upload)
