@@ -13,7 +13,7 @@ class TypeIsPublic implements MigratesTable, MigratesData
 {
     public function isMigrated(): bool
     {
-        return ! Table::hasColumn('file_types', 'is_public');
+        return Table::hasColumn('file_types', 'is_public');
     }
 
     public function migrateTable(): void
