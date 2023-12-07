@@ -39,9 +39,23 @@
                         "type": "input",
                         "content": "text"
                     }
+                }
+            ]
+        },
+        {
+            "columns": 3,
+            "fields": [
+                {
+                    "label": "Public",
+                    "name": "is_public",
+                    "value": false,
+                    "meta": {
+                        "type": "input",
+                        "content": "checkbox"
+                    }
                 },
                 {
-                    "label": "Is Browsable",
+                    "label": "Browsable",
                     "name": "is_browsable",
                     "value": false,
                     "meta": {
@@ -50,7 +64,7 @@
                     }
                 },
                 {
-                    "label": "Is System",
+                    "label": "System",
                     "name": "is_system",
                     "value": false,
                     "meta": {

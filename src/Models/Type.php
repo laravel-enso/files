@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\File as FileFacade;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use LaravelEnso\Files\Contracts\Attachable;
-use LaravelEnso\Files\Contracts\PublicFile;
 use LaravelEnso\Rememberable\Traits\Rememberable;
 use LaravelEnso\Tables\Traits\TableCache;
 
@@ -23,7 +22,10 @@ class Type extends Model
 
     protected $guarded = [];
 
-    protected $casts = ['is_browsable' => 'boolean', 'is_system' => 'boolean'];
+    protected $casts = [
+        'is_browsable' => 'boolean', 'is_system' => 'boolean',
+        'is_public' => 'boolean',
+    ];
 
     protected array $rememberableKeys = ['id', 'model'];
 
@@ -56,7 +58,7 @@ class Type extends Model
 
     public function isPublic(): bool
     {
-        return $this->model() instanceof PublicFile;
+        return $this->is_public;
     }
 
     public static function for(string $model): self

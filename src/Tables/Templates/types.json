@@ -46,7 +46,16 @@
             ]
         },
         {
-            "label": "Is Browsable",
+            "label": "Public",
+            "name": "is_public",
+            "data": "file_types.is_public",
+            "meta": [
+                "boolean",
+                "sortable"
+            ]
+        },
+        {
+            "label": "Browsable",
             "name": "is_browsable",
             "data": "file_types.is_browsable",
             "meta": [
@@ -55,7 +64,7 @@
             ]
         },
         {
-            "label": "Is System",
+            "label": "System",
             "name": "is_system",
             "data": "file_types.is_system",
             "meta": [

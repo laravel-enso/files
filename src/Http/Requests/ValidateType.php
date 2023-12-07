@@ -22,6 +22,7 @@ class ValidateType extends FormRequest
             'icon' => 'nullable|required_if:is_browsable,true|string',
             'folder' => 'required_with:model|string',
             'description' => 'nullable|string',
+            'is_public' => 'required|boolean',
             'is_browsable' => 'required|boolean',
             'is_system' => 'required|boolean',
         ];

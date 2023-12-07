@@ -14,7 +14,7 @@ class Type implements Table
     {
         return Model::select([
             'id', 'name', 'icon', 'folder', 'model',
-            'is_browsable', 'is_system',
+            'is_public',  'is_browsable', 'is_system',
         ]);
     }
 
