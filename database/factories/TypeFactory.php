@@ -19,6 +19,7 @@ class TypeFactory extends Factory
             'icon' => 'folder',
             'endpoint' => null,
             'description' => null,
+            'is_public' => false,
             'is_browsable' => false,
             'is_system' => false,
         ];
