@@ -69,13 +69,17 @@ class File extends Model
         return $query->with($attrs);
     }
 
+    public function scopePublic(Builder $query): Builder
+    {
+        return $query->whereIsPublic(true);
+    }
+
     public function scopeFor(Builder $query, User $user): Builder
     {
-        $super = $user->isSuperior();
-
         return $query->browsable()
             ->withData()
-            ->when(! $super, fn ($query) => $query->whereCreatedBy($user->id))
+            ->when(! $user->isSuperior(), fn ($query) => $query
+                ->whereCreatedBy($user->id)->orWhere->public())
             ->latest('id')
             ->paginated();
     }
