@@ -3,9 +3,6 @@
 namespace LaravelEnso\Files;
 
 use Illuminate\Support\ServiceProvider;
-use LaravelEnso\DynamicMethods\Services\Methods;
-use LaravelEnso\Files\Dynamics\Relations\FavoriteFiles;
-use LaravelEnso\Users\Models\User;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,8 +10,6 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->load()
             ->publish();
-
-        Methods::bind(User::class, [FavoriteFiles::class]);
     }
 
     private function load()
