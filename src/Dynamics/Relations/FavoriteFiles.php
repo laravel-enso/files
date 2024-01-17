@@ -14,6 +14,7 @@ class FavoriteFiles implements Relation
     {
         return [User::class];
     }
+
     public function name(): string
     {
         return 'favoriteFiles';
