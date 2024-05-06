@@ -13,7 +13,7 @@ class Type extends JsonResource
         return [
             'id' => $this->id,
             'name' => Str::title($this->name),
-            'icon' => $this->icon,
+            'icon' => $this->icon(),
             'folder' => $this->folder,
             'endpoint' => $this->endpoint,
             'isBrowsable' => $this->is_browsable,
