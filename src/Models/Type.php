@@ -22,11 +22,6 @@ class Type extends Model
 
     protected $guarded = [];
 
-    protected $casts = [
-        'is_browsable' => 'boolean', 'is_system' => 'boolean',
-        'is_public' => 'boolean',
-    ];
-
     protected array $rememberableKeys = ['id', 'model'];
 
     public function files()
@@ -96,5 +91,13 @@ class Type extends Model
         } else {
             FileFacade::moveDirectory($from, $to);
         }
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'is_browsable' => 'boolean', 'is_system' => 'boolean',
+            'is_public' => 'boolean',
+        ];
     }
 }

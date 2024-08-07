@@ -30,8 +30,6 @@ class File extends Model
 
     protected $guarded = [];
 
-    protected $casts = ['is_public' => 'boolean'];
-
     public function type()
     {
         return $this->belongsTo(Type::class);
@@ -195,5 +193,12 @@ class File extends Model
             ['file' => $file],
             ['file' => "image|mimetypes:{$mimeTypes}"]
         )->passes();
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'is_public' => 'boolean',
+        ];
     }
 }
