@@ -126,7 +126,7 @@ class FileTest extends TestCase
         Schema::create('attachable_models', function ($table) {
             $table->increments('id');
 
-            $table->unsignedBigInteger('file_id')->nullable();
+            $table->bigInteger('file_id')->unsigned()->nullable();
             $table->foreign('file_id')->references('id')->on('files')
                 ->onUpdate('restrict')->onDelete('restrict');
 

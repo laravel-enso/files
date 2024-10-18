@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('files', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('type_id');
+            $table->bigInteger('type_id')->unsigned();
             $table->foreign('type_id')->references('id')->on('file_types');
 
             $table->nullableMorphs('attachable');
