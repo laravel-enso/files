@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('files', function (Blueprint $table) {
             $table->id();
 
-            $table->bigInteger('type_id')->unsigned();
+            $table->unsignedBigInteger('type_id');
             $table->foreign('type_id')->references('id')->on('file_types');
 
             $table->nullableMorphs('attachable');
@@ -23,7 +23,7 @@ return new class extends Migration
 
             $table->boolean('is_public');
 
-            $table->integer('created_by')->unsigned()->nullable();
+            $table->unsignedInteger('created_by')->nullable();
             $table->foreign('created_by')->references('id')->on('users');
 
             $table->timestamps();
