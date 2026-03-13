@@ -2,20 +2,26 @@
 
 namespace LaravelEnso\Files\Enums;
 
-use LaravelEnso\Enums\Services\Enum;
+use LaravelEnso\Enums\Contracts\Frontend;
+use LaravelEnso\Enums\Contracts\Mappable;
 
-class TemporaryLinkDuration extends Enum
+enum TemporaryLinkDuration: int implements Mappable, Frontend
 {
-    public const FiveMinutes = 5 * 60;
-    public const OneHour = 60 * 60;
-    public const OneDay = 60 * 60 * 24;
+    case FiveMinutes = 5 * 60;
+    case OneHour = 60 * 60;
+    case OneDay = 60 * 60 * 24;
 
-    public static function data(): array
+    public function map(): string
     {
-        return [
+        return match ($this) {
             self::FiveMinutes => '5m',
             self::OneHour => '1h',
             self::OneDay => '24h',
-        ];
+        };
+    }
+
+    public static function registerBy(): string
+    {
+        return 'temporaryLinkDuration';
     }
 }

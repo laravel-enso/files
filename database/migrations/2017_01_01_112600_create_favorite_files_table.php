@@ -11,10 +11,10 @@ return new class extends Migration
         Schema::create('favorite_files', function (Blueprint $table) {
             $table->id();
 
-            $table->integer('user_id')->unsigned()->index();
+            $table->unsignedInteger('user_id')->index();
             $table->foreign('user_id')->references('id')->on('users');
 
-            $table->bigInteger('file_id')->unsigned()->index();
+            $table->unsignedBigInteger('file_id')->index();
             $table->foreign('file_id')->references('id')->on('files')
                 ->onUpdate('restrict')->onDelete('restrict');
 
