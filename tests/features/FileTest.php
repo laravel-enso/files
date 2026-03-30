@@ -14,6 +14,7 @@ use LaravelEnso\Files\Exceptions\File as Exception;
 use LaravelEnso\Files\Models\File;
 use LaravelEnso\Users\Models\User;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class FileTest extends TestCase
 {
@@ -40,7 +41,7 @@ class FileTest extends TestCase
         parent::tearDown();
     }
 
-    /** @test */
+    #[Test]
     public function can_upload_file()
     {
         $file = File::upload($this->model, $this->file);
@@ -51,7 +52,7 @@ class FileTest extends TestCase
         Storage::assertExists($this->model->file->path());
     }
 
-    /** @test */
+    #[Test]
     public function can_attach_file()
     {
         $folder = Config::get('enso.files.testingFolder');
@@ -68,7 +69,7 @@ class FileTest extends TestCase
         Storage::assertExists($this->model->file->path());
     }
 
-    /** @test */
+    #[Test]
     public function cant_upload_file_with_invalid_extension()
     {
         $file = UploadedFile::fake()->image('image.jpg');
@@ -83,7 +84,7 @@ class FileTest extends TestCase
         File::upload($this->model, $file);
     }
 
-    /** @test */
+    #[Test]
     public function cant_upload_file_with_invalid_mime_type()
     {
         $file = UploadedFile::fake()->create('doc.doc', 0, 'application/msword');
@@ -99,7 +100,7 @@ class FileTest extends TestCase
         File::upload($this->model, $file);
     }
 
-    /** @test */
+    #[Test]
     public function can_display_file_inline()
     {
         $file = File::upload($this->model, $this->file);
@@ -110,7 +111,7 @@ class FileTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function can_download_file()
     {
         $file = File::upload($this->model, $this->file);
