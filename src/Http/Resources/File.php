@@ -21,7 +21,8 @@ class File extends JsonResource
             'type' => new Type($this->whenLoaded('type')),
             'owner' => new User($this->whenLoaded('createdBy')),
             'isFavorite' => $this->relationLoaded('favorite') ? $this->favorite : false,
-            'isManageable' => $request->user()->can('manage', $this->resource),
+            'isManageable' => $request->user()
+                && $request->user()->can('manage', $this->resource),
             'isAccessible' => $accessible,
             'isPublic' => $this->is_public,
             'createdAt' => $this->created_at->toDatetimeString(),
