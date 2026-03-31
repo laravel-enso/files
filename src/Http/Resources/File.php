@@ -10,7 +10,8 @@ class File extends JsonResource
 {
     public function toArray($request)
     {
-        $accessible = $request->user()->can('access', $this->resource);
+        $accessible = $request->user()
+            && $request->user()->can('access', $this->resource);
 
         return [
             'id' => $this->id,
