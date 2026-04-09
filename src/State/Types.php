@@ -8,13 +8,13 @@ use LaravelEnso\Files\Models\Type;
 
 class Types implements ProvidesState
 {
-    public function mutation(): string
+    public function store(): string
     {
-        return 'files/set';
+        return 'files';
     }
 
-    public function state(): mixed
+    public function state(): array
     {
-        return Resource::collection(Type::ordered()->get());
+        return Resource::collection(Type::ordered()->get())->resolve();
     }
 }

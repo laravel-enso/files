@@ -15,7 +15,7 @@ class Recent extends Controller
     public function __invoke(Request $request)
     {
         $files = File::for($request->user())
-            ->between(json_decode($request->get('interval'), true))
+            ->between($request->get('interval'))
             ->filter($request->get('query'))
             ->get();
 

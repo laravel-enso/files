@@ -16,7 +16,7 @@ class Browse extends Controller
     {
         $files = $type->files()
             ->for($request->user())
-            ->between(json_decode($request->get('interval'), true))
+            ->between($request->get('interval'))
             ->filter($request->get('query'))
             ->get();
 
