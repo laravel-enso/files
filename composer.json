@@ -23,7 +23,7 @@
         "laravel-enso/helpers": "^4.0",
         "laravel-enso/image-transformer": "^2.5",
         "laravel-enso/migrator": "^2.0",
-        "laravel-enso/track-who": "^2.0"
+        "laravel-enso/track-who": "^3.0"
     },
     "autoload": {
         "psr-4": {
