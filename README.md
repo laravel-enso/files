@@ -91,6 +91,10 @@ Required Enso packages:
 - [`laravel-enso/migrator`](https://docs.laravel-enso.com/backend/migrator.html) [↗](https://github.com/laravel-enso/migrator)
 - [`laravel-enso/track-who`](https://docs.laravel-enso.com/backend/track-who.html) [↗](https://github.com/laravel-enso/track-who)
 
+Companion frontend package:
+
+- [`@enso-ui/files`](https://docs.laravel-enso.com/frontend/files.html) [↗](https://github.com/enso-ui/files)
+
 ## Contributions
 
 are welcome. Pull requests are great, but issues are good too.
