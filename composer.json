@@ -1,6 +1,6 @@
 {
     "name": "laravel-enso/files",
-    "description": "File manager dependency for Laravel Enso",
+    "description": "File management backend for Laravel Enso",
     "keywords": [
         "laravel-enso",
         "files",
