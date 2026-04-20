@@ -139,7 +139,8 @@ class FileTest extends TestCase
 
     private function cleanUp()
     {
-        Storage::deleteDirectory(Config::get('enso.files.testingFolder'));
+        File::query()->get()
+            ->each(fn (File $file) => Storage::delete($file->path()));
     }
 }
 

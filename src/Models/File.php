@@ -87,12 +87,12 @@ class File extends Model
         return $query->limit(Config::get('enso.files.paginate'));
     }
 
-    public function scopeBetween(Builder $query, array $interval): Builder
+    public function scopeBetween(Builder $query, ?array $interval = null): Builder
     {
         return $query
-            ->when($interval['min'], fn ($query) => $query
+            ->when($interval['min'] ?? null, fn ($query) => $query
                 ->where('files.created_at', '>=', Carbon::parse($interval['min'])))
-            ->when($interval['max'], fn ($query) => $query
+            ->when($interval['max'] ?? null, fn ($query) => $query
                 ->where('files.created_at', '<=', Carbon::parse($interval['max'])));
     }
 

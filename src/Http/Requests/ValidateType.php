@@ -35,12 +35,16 @@ class ValidateType extends FormRequest
 
     private function unique(string $attribute)
     {
-        Rule::unique('file_types', $attribute)
+        return Rule::unique('file_types', $attribute)
             ->ignore($this->route('type')?->id);
     }
 
     private function modelIsValid($validator): void
     {
+        if (! $this->filled('model')) {
+            return;
+        }
+
         $valid = class_exists($this->get('model'))
             && (new ReflectionClass($this->get('model')))
             ->isSubclassOf(Model::class);
