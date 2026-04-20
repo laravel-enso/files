@@ -13,8 +13,8 @@ use LaravelEnso\Files\Contracts\MimeTypes;
 use LaravelEnso\Files\Exceptions\File as Exception;
 use LaravelEnso\Files\Models\File;
 use LaravelEnso\Users\Models\User;
-use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class FileTest extends TestCase
 {

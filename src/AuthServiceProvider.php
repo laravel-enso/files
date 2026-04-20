@@ -12,7 +12,7 @@ class AuthServiceProvider extends ServiceProvider
 {
     protected $policies = [
         Upload::class => UploadPolicy::class,
-        File::class => FilePolicy::class,
+        File::class   => FilePolicy::class,
     ];
 
     public function boot()

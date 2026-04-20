@@ -14,19 +14,19 @@ class File extends JsonResource
             && $request->user()->can('access', $this->resource);
 
         return [
-            'id' => $this->id,
-            'name' => $this->name(),
-            'extension' => $this->extension(),
-            'size' => DiskSize::forHumans($this->size),
-            'mimeType' => $this->mime_type,
-            'type' => new Type($this->whenLoaded('type')),
-            'owner' => new User($this->whenLoaded('createdBy')),
-            'isFavorite' => $this->relationLoaded('favorite') ? $this->favorite : false,
+            'id'           => $this->id,
+            'name'         => $this->name(),
+            'extension'    => $this->extension(),
+            'size'         => DiskSize::forHumans($this->size),
+            'mimeType'     => $this->mime_type,
+            'type'         => new Type($this->whenLoaded('type')),
+            'owner'        => new User($this->whenLoaded('createdBy')),
+            'isFavorite'   => $this->relationLoaded('favorite') ? $this->favorite : false,
             'isManageable' => $request->user()
                 && $request->user()->can('manage', $this->resource),
             'isAccessible' => $accessible,
-            'isPublic' => $this->is_public,
-            'createdAt' => $this->created_at->toDatetimeString(),
+            'isPublic'     => $this->is_public,
+            'createdAt'    => $this->created_at->toDatetimeString(),
         ];
     }
 }

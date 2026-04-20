@@ -13,15 +13,15 @@ class TypeFactory extends Factory
     public function definition()
     {
         return [
-            'name' => null,
-            'folder' => 'null',
-            'model' => null,
-            'icon' => 'folder',
-            'endpoint' => null,
-            'description' => null,
-            'is_public' => false,
+            'name'         => null,
+            'folder'       => 'null',
+            'model'        => null,
+            'icon'         => 'folder',
+            'endpoint'     => null,
+            'description'  => null,
+            'is_public'    => false,
             'is_browsable' => false,
-            'is_system' => false,
+            'is_system'    => false,
         ];
     }
 
@@ -34,9 +34,9 @@ class TypeFactory extends Factory
             ->plural();
 
         return $this->state(fn () => [
-            'name' => $name,
-            'folder' => $name->camel(),
-            'model' => $model,
+            'name'        => $name,
+            'folder'      => $name->camel(),
+            'model'       => $model,
             'description' => "Enso {$name}",
         ]);
     }

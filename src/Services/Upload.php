@@ -53,7 +53,7 @@ class Upload
 
     private function process(): self
     {
-        if (! $this->isSupportedImage()) {
+        if (!$this->isSupportedImage()) {
             return $this;
         }
 
@@ -80,12 +80,12 @@ class Upload
         $folder = $this->folder();
 
         $model = File::create([
-            'type_id' => $this->type->id,
+            'type_id'       => $this->type->id,
             'original_name' => $this->file->getClientOriginalName(),
-            'saved_name' => $this->file->hashName(),
-            'size' => $this->file->getSize(),
-            'mime_type' => $this->file->getMimeType(),
-            'is_public' => $this->type->isPublic(),
+            'saved_name'    => $this->file->hashName(),
+            'size'          => $this->file->getSize(),
+            'mime_type'     => $this->file->getMimeType(),
+            'is_public'     => $this->type->isPublic(),
         ]);
 
         $this->file->store($folder);
@@ -99,7 +99,7 @@ class Upload
             ? Config::get('enso.files.testingFolder')
             : Type::for($this->attachable::class)->folder;
 
-        if (! Storage::has($folder)) {
+        if (!Storage::has($folder)) {
             Storage::makeDirectory($folder);
         }
 

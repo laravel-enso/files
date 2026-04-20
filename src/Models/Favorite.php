@@ -24,7 +24,7 @@ class Favorite extends Model
 
     public static function toggle(User $user, File $file)
     {
-        $isFavorite = ! static::for($user, $file)->first()?->delete();
+        $isFavorite = !static::for($user, $file)->first()?->delete();
 
         if ($isFavorite) {
             self::create([

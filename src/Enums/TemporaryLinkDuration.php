@@ -14,8 +14,8 @@ class TemporaryLinkDuration extends Enum
     {
         return [
             self::FiveMinutes => '5m',
-            self::OneHour => '1h',
-            self::OneDay => '24h',
+            self::OneHour     => '1h',
+            self::OneDay      => '24h',
         ];
     }
 }

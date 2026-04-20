@@ -11,7 +11,10 @@ use Tests\TestCase;
 
 class FileTypeCrudTest extends TestCase
 {
-    use Datatable, DestroyForm, EditForm, RefreshDatabase;
+    use Datatable;
+    use DestroyForm;
+    use EditForm;
+    use RefreshDatabase;
 
     private string $permissionGroup = 'administration.fileTypes';
     private Type $testModel;
@@ -24,14 +27,14 @@ class FileTypeCrudTest extends TestCase
             ->actingAs(User::first());
 
         $this->testModel = Type::factory()->make([
-            'name' => 'Manual Uploads',
-            'folder' => 'manualUploads',
-            'model' => null,
-            'icon' => 'folder',
-            'description' => 'Manual files',
-            'is_public' => false,
+            'name'         => 'Manual Uploads',
+            'folder'       => 'manualUploads',
+            'model'        => null,
+            'icon'         => 'folder',
+            'description'  => 'Manual files',
+            'is_public'    => false,
             'is_browsable' => false,
-            'is_system' => false,
+            'is_system'    => false,
         ]);
     }
 
@@ -53,7 +56,7 @@ class FileTypeCrudTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonFragment([
                 'redirect' => 'administration.fileTypes.edit',
-                'param' => ['type' => $type?->id],
+                'param'    => ['type' => $type?->id],
             ]);
 
         $this->assertNotNull($type);
@@ -65,7 +68,7 @@ class FileTypeCrudTest extends TestCase
     {
         $this->post(route($this->permissionGroup.'.store', [], false), [
             ...$this->testModel->toArray(),
-            'model' => 'App\\Models\\MissingModel',
+            'model'     => 'App\\Models\\MissingModel',
             'is_system' => true,
         ])->assertStatus(302)
             ->assertSessionHasErrors(['model']);

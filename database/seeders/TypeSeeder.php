@@ -45,14 +45,14 @@ class TypeSeeder extends Seeder
     private function recents(): self
     {
         Type::factory()->create([
-            'name' => 'Recents',
-            'folder' => null,
-            'model' => null,
-            'icon' => 'folder-plus',
-            'endpoint' => 'recent',
-            'description' => 'Recent files',
+            'name'         => 'Recents',
+            'folder'       => null,
+            'model'        => null,
+            'icon'         => 'folder-plus',
+            'endpoint'     => 'recent',
+            'description'  => 'Recent files',
             'is_browsable' => true,
-            'is_system' => true,
+            'is_system'    => true,
         ]);
 
         return $this;
@@ -61,14 +61,14 @@ class TypeSeeder extends Seeder
     private function favorites(): self
     {
         Type::factory()->create([
-            'name' => 'Favorites',
-            'folder' => null,
-            'model' => null,
-            'icon' => 'star',
-            'endpoint' => 'favorites',
-            'description' => 'User Favorites',
+            'name'         => 'Favorites',
+            'folder'       => null,
+            'model'        => null,
+            'icon'         => 'star',
+            'endpoint'     => 'favorites',
+            'description'  => 'User Favorites',
             'is_browsable' => true,
-            'is_system' => true,
+            'is_system'    => true,
         ]);
 
         return $this;
@@ -77,10 +77,10 @@ class TypeSeeder extends Seeder
     private function uploads(): self
     {
         Type::factory()->model(Upload::class)->create([
-            'name' => 'Uploads',
-            'icon' => 'file-upload',
+            'name'         => 'Uploads',
+            'icon'         => 'file-upload',
             'is_browsable' => true,
-            'is_system' => false,
+            'is_system'    => false,
         ]);
 
         return $this;
@@ -89,9 +89,9 @@ class TypeSeeder extends Seeder
     private function exports(): self
     {
         Type::factory()->model(Export::class)->create([
-            'icon' => 'file-export',
+            'icon'         => 'file-export',
             'is_browsable' => true,
-            'is_system' => false,
+            'is_system'    => false,
         ]);
 
         return $this;
@@ -101,7 +101,7 @@ class TypeSeeder extends Seeder
     {
         if (class_exists(Import::class)) {
             Type::factory()->model(Import::class)->create([
-                'icon' => 'file-import',
+                'icon'         => 'file-import',
                 'is_browsable' => true,
             ]);
         }
@@ -113,7 +113,7 @@ class TypeSeeder extends Seeder
     {
         if (class_exists(RejectedImport::class)) {
             Type::factory()->model(RejectedImport::class)->create([
-                'icon' => 'exclamation-triangle',
+                'icon'         => 'exclamation-triangle',
                 'is_browsable' => true,
             ]);
         }
@@ -125,7 +125,7 @@ class TypeSeeder extends Seeder
     {
         if (class_exists(Document::class)) {
             Type::factory()->model(Document::class)->create([
-                'icon' => 'file-contract',
+                'icon'         => 'file-contract',
                 'is_browsable' => true,
             ]);
         }
@@ -137,7 +137,7 @@ class TypeSeeder extends Seeder
     {
         if (class_exists(Picture::class)) {
             Type::factory()->model(Picture::class)->create([
-                'icon' => 'image',
+                'icon'         => 'image',
                 'is_browsable' => true,
             ]);
         }
@@ -150,7 +150,7 @@ class TypeSeeder extends Seeder
         if (class_exists(Brand::class)) {
             Type::factory()->model(Brand::class)->create([
                 'is_browsable' => true,
-                'icon' => 'copyright',
+                'icon'         => 'copyright',
             ]);
         }
 

@@ -2,8 +2,7 @@
 
 use LaravelEnso\Migrator\Database\Migration;
 
-return new class extends Migration
-{
+return new class() extends Migration {
     protected array $permissions = [
         ['name' => 'administration.fileTypes.tableData', 'description' => 'Get table data for file types', 'is_default' => false],
         ['name' => 'administration.fileTypes.exportExcel', 'description' => 'Export excel for file types', 'is_default' => false],

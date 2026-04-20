@@ -20,7 +20,7 @@ class ImageProcessor
     public function handle(): void
     {
         if ($this->isImage()) {
-            if (! empty($this->resize)) {
+            if (!empty($this->resize)) {
                 $this->transformer()
                     ->width($this->resize['width'])
                     ->height($this->resize['height']);

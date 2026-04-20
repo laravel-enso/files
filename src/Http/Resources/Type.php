@@ -11,14 +11,14 @@ class Type extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'name' => Str::title($this->name),
-            'icon' => $this->icon(),
-            'folder' => $this->folder,
-            'endpoint' => $this->endpoint,
+            'id'          => $this->id,
+            'name'        => Str::title($this->name),
+            'icon'        => $this->icon(),
+            'folder'      => $this->folder,
+            'endpoint'    => $this->endpoint,
             'isBrowsable' => $this->is_browsable,
-            'isSystem' => $this->is_system,
-            'isUpload' => $this->model === Upload::class,
+            'isSystem'    => $this->is_system,
+            'isUpload'    => $this->model === Upload::class,
         ];
     }
 }

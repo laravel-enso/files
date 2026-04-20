@@ -17,14 +17,14 @@ class ValidateType extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', $this->unique('name')],
-            'model' => ['nullable', 'required_if:is_system,true', 'string', $this->unique('model')],
-            'icon' => 'nullable|required_if:is_browsable,true|string',
-            'folder' => 'required_with:model|string',
-            'description' => 'nullable|string',
-            'is_public' => 'required|boolean',
+            'name'         => ['required', 'string', $this->unique('name')],
+            'model'        => ['nullable', 'required_if:is_system,true', 'string', $this->unique('model')],
+            'icon'         => 'nullable|required_if:is_browsable,true|string',
+            'folder'       => 'required_with:model|string',
+            'description'  => 'nullable|string',
+            'is_public'    => 'required|boolean',
             'is_browsable' => 'required|boolean',
-            'is_system' => 'required|boolean',
+            'is_system'    => 'required|boolean',
         ];
     }
 
@@ -41,7 +41,7 @@ class ValidateType extends FormRequest
 
     private function modelIsValid($validator): void
     {
-        if (! $this->filled('model')) {
+        if (!$this->filled('model')) {
             return;
         }
 
@@ -49,7 +49,7 @@ class ValidateType extends FormRequest
             && (new ReflectionClass($this->get('model')))
             ->isSubclassOf(Model::class);
 
-        if (! $valid) {
+        if (!$valid) {
             $validator->errors()->add('model', __('Model is not valid'));
         }
     }

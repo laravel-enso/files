@@ -76,7 +76,7 @@ class File extends Model
     {
         return $query->browsable()
             ->withData()
-            ->when(! $user->isSuperior(), fn ($query) => $query
+            ->when(!$user->isSuperior(), fn ($query) => $query
                 ->whereCreatedBy($user->id)->orWhere->public())
             ->latest('id')
             ->paginated();
@@ -135,13 +135,13 @@ class File extends Model
         $file = new IlluminateFile(Storage::path($type->path($savedName)));
 
         return self::create([
-            'type_id' => $type->id,
+            'type_id'       => $type->id,
             'original_name' => $filename,
-            'saved_name' => $savedName,
-            'size' => $file->getSize(),
-            'mime_type' => $file->getMimeType(),
-            'is_public' => $type->isPublic(),
-            'created_by' => $userId,
+            'saved_name'    => $savedName,
+            'size'          => $file->getSize(),
+            'mime_type'     => $file->getMimeType(),
+            'is_public'     => $type->isPublic(),
+            'created_by'    => $userId,
         ]);
     }
 

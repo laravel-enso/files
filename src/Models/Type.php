@@ -16,7 +16,9 @@ use LaravelEnso\Tables\Traits\TableCache;
 
 class Type extends Model
 {
-    use HasFactory, Rememberable, TableCache;
+    use HasFactory;
+    use Rememberable;
+    use TableCache;
 
     protected $table = 'file_types';
 
@@ -48,7 +50,7 @@ class Type extends Model
 
     public function model(): Attachable
     {
-        return new $this->model;
+        return new $this->model();
     }
 
     public function isPublic(): bool
@@ -68,7 +70,7 @@ class Type extends Model
             ? Config::get('enso.files.testingFolder')
             : $this->folder;
 
-        if (! Storage::has($folder)) {
+        if (!Storage::has($folder)) {
             Storage::makeDirectory($folder);
         }
 
@@ -97,7 +99,7 @@ class Type extends Model
     {
         return [
             'is_browsable' => 'boolean', 'is_system' => 'boolean',
-            'is_public' => 'boolean',
+            'is_public'    => 'boolean',
         ];
     }
 }

@@ -39,10 +39,10 @@ class Validate
     private function file(): self
     {
         if ($this->file instanceof File) {
-            if (! $this->file->isReadable()) {
+            if (!$this->file->isReadable()) {
                 throw Exception::attach($this->file);
             }
-        } elseif (! $this->file->isValid()) {
+        } elseif (!$this->file->isValid()) {
             throw Exception::upload($this->file);
         }
 

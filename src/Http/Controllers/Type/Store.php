@@ -13,9 +13,9 @@ class Store extends Controller
         $type->fill($request->validated())->save();
 
         return [
-            'message' => __('The file type was created!'),
+            'message'  => __('The file type was created!'),
             'redirect' => 'administration.fileTypes.edit',
-            'param' => ['type' => $type->id],
+            'param'    => ['type' => $type->id],
         ];
     }
 }

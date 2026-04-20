@@ -12,9 +12,9 @@ class Url extends JsonResource
         $appUrl = Config::get('app.url');
 
         return [
-            'id' => $this->id,
+            'id'   => $this->id,
             'path' => $this->path(),
-            'url' => "{$appUrl}/{$this->path()}",
+            'url'  => "{$appUrl}/{$this->path()}",
         ];
     }
 }
