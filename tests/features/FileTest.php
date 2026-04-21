@@ -19,7 +19,8 @@ use Tests\TestCase;
 
 class FileTest extends TestCase
 {
-    use EnsuresTestingFolder, RefreshDatabase;
+    use EnsuresTestingFolder;
+    use RefreshDatabase;
 
     private AttachableModel $model;
     private UploadedFile $file;

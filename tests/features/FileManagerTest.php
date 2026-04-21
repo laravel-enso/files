@@ -19,7 +19,8 @@ use Tests\TestCase;
 
 class FileManagerTest extends TestCase
 {
-    use EnsuresTestingFolder, RefreshDatabase;
+    use EnsuresTestingFolder;
+    use RefreshDatabase;
 
     private User $user;
     private ManagedAttachableModel $model;
