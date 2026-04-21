@@ -12,13 +12,14 @@ use LaravelEnso\Files\Contracts\Extensions;
 use LaravelEnso\Files\Contracts\MimeTypes;
 use LaravelEnso\Files\Exceptions\File as Exception;
 use LaravelEnso\Files\Models\File;
+use LaravelEnso\Helpers\Traits\EnsuresTestingFolder;
 use LaravelEnso\Users\Models\User;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class FileTest extends TestCase
 {
-    use RefreshDatabase;
+    use EnsuresTestingFolder, RefreshDatabase;
 
     private AttachableModel $model;
     private UploadedFile $file;
@@ -26,6 +27,8 @@ class FileTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->ensureTestingFolder();
 
         $this->seed()
             ->actingAs(User::first());

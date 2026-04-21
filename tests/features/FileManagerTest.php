@@ -12,13 +12,14 @@ use LaravelEnso\Files\Contracts\MimeTypes;
 use LaravelEnso\Files\Models\Favorite;
 use LaravelEnso\Files\Models\File;
 use LaravelEnso\Files\Models\Type;
+use LaravelEnso\Helpers\Traits\EnsuresTestingFolder;
 use LaravelEnso\Users\Models\User;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class FileManagerTest extends TestCase
 {
-    use RefreshDatabase;
+    use EnsuresTestingFolder, RefreshDatabase;
 
     private User $user;
     private ManagedAttachableModel $model;
@@ -28,6 +29,8 @@ class FileManagerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->ensureTestingFolder();
 
         $this->seed()
             ->actingAs($this->user = User::first());
