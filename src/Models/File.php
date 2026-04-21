@@ -78,8 +78,7 @@ class File extends Model
             ->withData()
             ->when(!$user->isSuperior(), fn ($query) => $query
                 ->whereCreatedBy($user->id)->orWhere->public())
-            ->latest('id')
-            ->paginated();
+            ->latest('id');
     }
 
     public function scopePaginated(Builder $query): Builder

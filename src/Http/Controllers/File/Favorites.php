@@ -2,22 +2,20 @@
 
 namespace LaravelEnso\Files\Http\Controllers\File;
 
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use LaravelEnso\Files\Http\Resources\File;
+use LaravelEnso\Files\Http\Requests\Browse as ValidateBrowse;
+use LaravelEnso\Files\Http\Resources\Files;
 
 class Favorites extends Controller
 {
-    use AuthorizesRequests;
-
-    public function __invoke(Request $request)
+    public function __invoke(ValidateBrowse $request)
     {
         $files = $request->user()->favoriteFiles()->withData()
-            ->between($request->get('interval'))
-            ->filter($request->get('query'))
-            ->paginated()->latest('id')->get();
+            ->between($request->input('interval'))
+            ->filter($request->string('query'))
+            ->latest('id')
+            ->paginate($request->integer('pagination'));
 
-        return File::collection($files);
+        return new Files($files);
     }
 }

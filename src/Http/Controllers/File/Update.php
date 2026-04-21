@@ -15,7 +15,7 @@ class Update extends Controller
     {
         $this->authorize('manage', $file);
 
-        $name = "{$request->get('name')}.{$file->extension()}";
+        $name = "{$request->string('name')}.{$file->extension()}";
 
         $file->update(['original_name' => $name]);
     }

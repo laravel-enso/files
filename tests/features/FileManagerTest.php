@@ -58,7 +58,11 @@ class FileManagerTest extends TestCase
             'file_id' => $this->file->id,
         ]);
 
-        $query = ['query' => 'document'];
+        $query = [
+            'page' => 1,
+            'pagination' => Config::get('enso.files.paginate')[0],
+            'query' => 'document',
+        ];
 
         $this->get(route('core.files.browse', ['type' => $this->type->id, ...$query], false))
             ->assertStatus(200)
@@ -71,6 +75,72 @@ class FileManagerTest extends TestCase
         $this->get(route('core.files.favorites', $query, false))
             ->assertStatus(200)
             ->assertJsonFragment(['id' => $this->file->id]);
+    }
+
+    #[Test]
+    public function returns_paginated_file_collections_without_links(): void
+    {
+        $files = collect([
+            $this->file,
+            $this->createFile('document-2.png'),
+            $this->createFile('document-3.png'),
+        ]);
+
+        $files->each(fn (File $file) => Favorite::create([
+            'user_id' => $this->user->id,
+            'file_id' => $file->id,
+        ]));
+
+        $query = [
+            'page' => 1,
+            'pagination' => Config::get('enso.files.paginate')[0],
+            'query' => 'document',
+        ];
+
+        $this->get(route('core.files.browse', ['type' => $this->type->id, ...$query], false))
+            ->assertStatus(200)
+            ->assertJsonCount(3, 'data')
+            ->assertJsonPath('meta.current_page', 1)
+            ->assertJsonPath('meta.per_page', $query['pagination'])
+            ->assertJsonPath('meta.total', 3)
+            ->assertJsonMissingPath('links');
+
+        $this->get(route('core.files.recent', $query, false))
+            ->assertStatus(200)
+            ->assertJsonCount(3, 'data')
+            ->assertJsonPath('meta.current_page', 1)
+            ->assertJsonPath('meta.per_page', $query['pagination'])
+            ->assertJsonPath('meta.total', 3)
+            ->assertJsonMissingPath('links');
+
+        $this->get(route('core.files.favorites', $query, false))
+            ->assertStatus(200)
+            ->assertJsonCount(3, 'data')
+            ->assertJsonPath('meta.current_page', 1)
+            ->assertJsonPath('meta.per_page', $query['pagination'])
+            ->assertJsonPath('meta.total', 3)
+            ->assertJsonMissingPath('links');
+    }
+
+    #[Test]
+    public function validates_page_and_pagination_for_file_indexes(): void
+    {
+        $query = [
+            'page' => 0,
+            'pagination' => 15,
+        ];
+
+        $this->getJson(route('core.files.browse', ['type' => $this->type->id, ...$query], false))
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['page', 'pagination']);
+
+        $this->getJson(route('core.files.recent', $query, false))
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['page', 'pagination']);
+
+        $this->getJson(route('core.files.favorites', $query, false))
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['page', 'pagination']);
     }
 
     #[Test]
@@ -124,6 +194,16 @@ class FileManagerTest extends TestCase
             $table->unsignedBigInteger('file_id')->nullable();
             $table->timestamps();
         });
+    }
+
+    private function createFile(string $name): File
+    {
+        $model = ManagedAttachableModel::create();
+        $file = File::upload($model, UploadedFile::fake()->image($name));
+
+        $model->file()->associate($file)->save();
+
+        return $file;
     }
 }
 

@@ -2,24 +2,22 @@
 
 namespace LaravelEnso\Files\Http\Controllers\File;
 
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use LaravelEnso\Files\Http\Resources\File;
+use LaravelEnso\Files\Http\Requests\Browse as ValidateBrowse;
+use LaravelEnso\Files\Http\Resources\Files;
 use LaravelEnso\Files\Models\Type;
 
 class Browse extends Controller
 {
-    use AuthorizesRequests;
-
-    public function __invoke(Request $request, Type $type)
+    public function __invoke(ValidateBrowse $request, Type $type)
     {
         $files = $type->files()
             ->for($request->user())
-            ->between($request->get('interval'))
-            ->filter($request->get('query'))
-            ->get();
+            ->between($request->input('interval'))
+            ->filter($request->string('query'))
+            ->latest('id')
+            ->paginate($request->integer('pagination'));
 
-        return File::collection($files);
+        return new Files($files);
     }
 }
