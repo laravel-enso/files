@@ -59,9 +59,9 @@ class FileManagerTest extends TestCase
         ]);
 
         $query = [
-            'page' => 1,
+            'page'       => 1,
             'pagination' => Config::get('enso.files.paginate')[0],
-            'query' => 'document',
+            'query'      => 'document',
         ];
 
         $this->get(route('core.files.browse', ['type' => $this->type->id, ...$query], false))
@@ -92,9 +92,9 @@ class FileManagerTest extends TestCase
         ]));
 
         $query = [
-            'page' => 1,
+            'page'       => 1,
             'pagination' => Config::get('enso.files.paginate')[0],
-            'query' => 'document',
+            'query'      => 'document',
         ];
 
         $this->get(route('core.files.browse', ['type' => $this->type->id, ...$query], false))
@@ -126,7 +126,7 @@ class FileManagerTest extends TestCase
     public function validates_page_and_pagination_for_file_indexes(): void
     {
         $query = [
-            'page' => 0,
+            'page'       => 0,
             'pagination' => 15,
         ];
 

@@ -15,7 +15,7 @@ class Browse extends FormRequest
     public function rules(): array
     {
         return [
-            'page' => ['required', 'integer', 'min:1'],
+            'page'       => ['required', 'integer', 'min:1'],
             'pagination' => ['required', 'integer', 'in:'.implode(',', Config::get('enso.files.paginate'))],
         ];
     }
